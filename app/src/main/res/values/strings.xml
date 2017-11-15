@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Genkidama</string>
+    <string name="att_string">attack</string>
 </resources>

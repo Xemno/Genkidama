@@ -1,11 +1,15 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
+import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.engine.GameEngine;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.SceneManager;
 
@@ -21,14 +25,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private SceneManager manager;
 
-    public GamePanel(Context context) {
-        super(context);
+
+
+    public GamePanel(Context context, /*AttributeSet attrs,*/ Activity activity) {
+        super(context/*, attrs*/);
 
         getHolder().addCallback(this);
 
         thread = new GameEngine(getHolder(), this);
 
-        manager = new SceneManager();
+        View v = getRootView();
+        manager = new SceneManager(activity);
 
         setFocusable(true);
     }
@@ -64,7 +71,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {  // Manages our touch inputs
 
-        manager.recieveTouch(event); // any touch event should be received by every scene
+        manager.receiveTouch(event); // any touch event should be received by every scene
 
         return true; // detect any touch
         //return super.onTouchEvent(event);
