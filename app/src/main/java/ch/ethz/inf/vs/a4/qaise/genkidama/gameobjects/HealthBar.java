@@ -3,64 +3,107 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
-/**
- * Created by Qais on 06-Nov-17.
- */
-
-//TODO: you might want to modify this class
+    /*  What we do:
+    *   We have two Rects: rectHealth and rectBorder.
+    *   rectBorder is the black "background" rectangle, which will also indicate how much health is missing
+    *   rectHealth is the green health border, which indicates how much health is still left
+    *
+    *   A third rectMissing can be added quickly
+    * */
 
 public class HealthBar implements GameObject {
+    private Player player;                   // player associated with this healthbar
+    private int currHealth, MaxHealth;       // health data of the player
 
+    private Rect rectHealth;                 // health rectangle r=[0-100%]
+    private Rect rectBorder;                 // missing health rectangle 1-r
 
-    private Player player; // player associated with this healthbar
-    private Rect rectangle1; // health rectangle r=[0-100%]
-    private Rect rectangle2; // missing health rectangle 1-r
-    private int color1; // color for health r
-    private int color2; // color for missing health 1-r
-    private int alphaValue1 = 200; // [0...255] // actual health
-    private int alphaValue2 = 100; // [0...255] // missing health
-    private Point point;
+    // paint values
+    private int colorHealth;                 // color for health r
 
-    public HealthBar() {
+    private final int COLOR_BORDER = Color.BLACK;                 // color for missing health 1-r
+    private final int ALPHA_HEALTH = 200;      // [0...255] // actual health
+    private final int ALPHA_BORDER = 100;      // [0...255] // missing health
+
+    // fixed position values, i.e. percentage of screen something should be
+    private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
+    private final int GAP_TOP_PART = 8;
+    private final int BACKGROUND_WIDTH_PART = 3;
+    private final int BACKGROUND_HEIGHT_PART = 12;
+    private final int BORDER_SIZE = 6;
+
+    // relative position values:
+    private int gapSide, gapTop;                                // parameters for drawing: position and size
+    private int backgroundWidth, backgroundHeight, healthWidth;
+    private int side;                                           // on which side the healthbar should be
+
+    public HealthBar(Player player) {
+        // Get player data
+        this.player = player;
+        currHealth = player.getCurrentHealth();
+        MaxHealth = player.getMaxHealth();
+        side = player.getSide();
+
+        colorHealth = Color.GREEN;
+
+        // Scaling size and position of the background part with final parameters above
+        gapSide = Constants.SCREEN_WIDTH/GAP_SIDE_PART;        // where you want the healthbar
+        gapTop = Constants.SCREEN_HEIGHT/GAP_TOP_PART;
+        backgroundWidth = Constants.SCREEN_WIDTH/ BACKGROUND_WIDTH_PART;         // how large it should be
+        backgroundHeight = Constants.SCREEN_HEIGHT/BACKGROUND_HEIGHT_PART;
+
+        // Health part has 2 pixel border and following width
+        healthWidth = currHealth* backgroundWidth /MaxHealth;
+
+        makeRect();
     }
 
-    public HealthBar(Player player, Point point) {
-        /*
-         * We might want to draw 2 rectangles for one healthbar.
-         * If the health is full then one rectangle has full length, the other 0 length.
-         * If the health gets less then we fill the other rectangle with the difference.
-         * Otherwise if we have only one rectangle we couldn't see the original full health of a player.
-         */
-
+    private void makeRect(){
+        // Distinguish on which side the player starts and initialize symmetrically
+        if(side == 0) {
+            // display on left side
+            rectBorder = new Rect(gapSide, gapTop,
+                    gapSide + 2*BORDER_SIZE + backgroundWidth, gapTop + backgroundHeight + 2*BORDER_SIZE);
+            rectHealth = new Rect(gapSide + BORDER_SIZE, gapTop + BORDER_SIZE,
+                    gapSide + BORDER_SIZE + healthWidth, gapTop + BORDER_SIZE + backgroundHeight);
+        } else {
+            // display on right side
+            rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2*BORDER_SIZE - backgroundWidth, gapTop,
+                    Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2*BORDER_SIZE);
+            rectHealth = new Rect(Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth, gapTop + BORDER_SIZE,
+                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + healthWidth, gapTop + BORDER_SIZE + backgroundHeight);
+        }
     }
 
     @Override
     public void draw(Canvas canvas) {
-        // draw health bar r
-//        Paint paint = new Paint();
-//        paint.setColor(color1);
-//        paint.setAlpha(alphaValue1);
-//        canvas.drawRect(rectangle1, paint);
+        Paint paint = new Paint();
+        paint.setColor(COLOR_BORDER);
+        paint.setAlpha(ALPHA_BORDER);
+        canvas.drawRect(rectBorder, paint);
 
-        // draw missing health bar 1-r
-//        paint.setColor(color2);
-//        paint.setAlpha(alphaValue2);
-//        canvas.drawRect(rectangle2, paint);
+        paint.setColor(colorHealth);
+        paint.setAlpha(ALPHA_HEALTH);
+        canvas.drawRect(rectHealth, paint);
     }
 
     @Override
     public void update() {
-        // can leave empty
-    }
+        currHealth = player.getCurrentHealth();
+        if (currHealth > MaxHealth/2) colorHealth = Color.GREEN;
+        else if (currHealth > 3*MaxHealth/10) colorHealth = Color.YELLOW;
+        else if (currHealth > 15*MaxHealth/100) colorHealth = Color.rgb(255, 165, 0);
+        else if (currHealth > 8*MaxHealth/100) colorHealth = Color.rgb(255, 85, 0);
+        else colorHealth = Color.RED;
 
-    public void update(int health) { //
-        // TODO: update healthbar by adjusting the right value of rectangle1 and left value of rectangle2
-
-
+        healthWidth = currHealth* backgroundWidth /MaxHealth;
+        if(side == 0)
+            rectHealth.right = gapSide + BORDER_SIZE + healthWidth;
+        else
+            rectHealth.right = Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + healthWidth;
     }
 }

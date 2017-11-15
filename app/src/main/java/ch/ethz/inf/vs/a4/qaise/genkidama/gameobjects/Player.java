@@ -16,23 +16,29 @@ public class Player implements GameObject {
 
     //    private Rect player;
     private String name;
-    private int currentHealth, maxHealth, strength, skill, defence, range, movement;
+    private int currentHealth, maxHealth;
+    private int currentCharge, maxCharge;
+    private final int CHARGE_AMOUNT = 5;
+
+    private int strength, skill, defence, range, movement;
 
     private Rect rectangle; // for collision detection
     private int color;
 
     private float posRatio; // used to calculate right position on different phones
 
-    final static int MIN_DMG = 5;
-    final static int MAX_DMG = 15;
+    final static int MIN_DMG = 10;
+    final static int MAX_DMG = 20;
 
-    public Player(Rect rectangle, int color, int maxHealth, int currentHealth) {
+    public Player(Rect rectangle, int color, int maxHealth, int currentHealth, int maxCharge, int currentCharge) {
         // TODO: create player and set invisible rectangle around for collision detection
 
        this.rectangle = rectangle;
        this.color = color;
        this.maxHealth = maxHealth;
        this.currentHealth = currentHealth;
+       this.maxCharge = maxCharge;
+       this.currentCharge = currentCharge;
     }
 
     // important to use the static method intersects instead of intersect. Else player rectangle gets smaller.
@@ -72,6 +78,20 @@ public class Player implements GameObject {
         return currentHealth;
     }
 
+    public int getMaxCharge() {
+        return maxCharge;
+    }
+
+    public int getCurrentCharge() {
+        return currentCharge;
+    }
+
+    // dummie method:
+    private int side;
+    public void setSide(int s) {side = s;}
+    public int getSide() {return side;}
+
+
     public void setCurrentHealth(int health){
         currentHealth = health;
     }
@@ -80,6 +100,8 @@ public class Player implements GameObject {
 
         if (collision) {
             int att_dmg = (int)(Math.random() * ((MAX_DMG - MIN_DMG) + 1)) +MIN_DMG; //calculates random value between MIN_DMG and MAX_DMG
+            if (currentCharge > maxCharge - CHARGE_AMOUNT) currentCharge = maxCharge;
+            else currentCharge += CHARGE_AMOUNT;
             int health = enemy.currentHealth - att_dmg;
             if (health > 0) {
                 enemy.setCurrentHealth(enemy.currentHealth - att_dmg);

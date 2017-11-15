@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
+import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.BaseFloor;
+import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.ChargeBar;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.HealthBar;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
@@ -32,12 +34,15 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
     private float x_old, x_new;
     //static final int MIN_DIST = 200;
     static final int MAX_HEALTH = 1000; //maybe put it into player class and don't give it as an argument
+    static final int MAX_CHARGE = 200;
 
     private Player player1, player2; // player2 should be the enemy player
     private HealthBar healthbar1, healthbar2;
+    private ChargeBar chargebar1, chargebar2;
     private Point playerPoint1, playerPoint2;
-    static final int FLOOR_HEIGHT = 200; //TODO: replace it with value from Constants class
 
+    static final int FLOOR_HEIGHT = 20; //TODO: replace it with value from Constants class
+    private BaseFloor floor;
 
     private Activity activity;
 
@@ -46,24 +51,37 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
 
     //TODO: make movement of player1 and player2 dependant on size of phone. Needs to be communicated with Server Messages
 
-
     public GamePlayScene(Activity activity) {
         this.activity = activity;
 
         /* Creating the ground on which the players move */
-        healthbar1 = new HealthBar();
-        player1 = new Player(new Rect(0,0,200,200), Color.RED, MAX_HEALTH, MAX_HEALTH);
+        player1 = new Player(new Rect(0,0,200,200), Color.RED, MAX_HEALTH, MAX_HEALTH, MAX_CHARGE, 0);
+        player1.setSide(0);
+        healthbar1 = new HealthBar(player1);
+        chargebar1 = new ChargeBar(player1);
 
         //create testplayer for test
-        healthbar2 = new HealthBar();
-        player2 = new Player(new Rect(200,200,400,400), Color.BLUE, MAX_HEALTH, MAX_HEALTH);
+        player2 = new Player(new Rect(200,200,400,400), Color.BLUE, MAX_HEALTH, MAX_HEALTH, MAX_CHARGE, 0);
+        player2.setSide(1);
+        healthbar2 = new HealthBar(player2);
+        chargebar2 = new ChargeBar(player2);
 
-        playerPoint1 = new Point(Constants.SCREEN_WIDTH/4,Constants.SCREEN_HEIGHT - FLOOR_HEIGHT - player1.getRectangle().height()/2);
+        playerPoint1 = new Point(Constants.SCREEN_WIDTH/4,Constants.SCREEN_HEIGHT - FLOOR_HEIGHT*Constants.SCREEN_HEIGHT/100 - player1.getRectangle().height()/2);
         player1.update(playerPoint1);
 
         //initialise enemy
-        playerPoint2 = new Point(3*Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT - FLOOR_HEIGHT - player2.getRectangle().height()/2);
+        playerPoint2 = new Point(3*Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT - FLOOR_HEIGHT*Constants.SCREEN_HEIGHT/100 - player2.getRectangle().height()/2);
         player2.update(playerPoint2);
+
+
+        //initialise basefloor
+        floor = new BaseFloor(FLOOR_HEIGHT);
+
+
+        //Button att_btn = (Button) findViewById(R.id.att_btn);
+        //Button att_btn = (Button)
+        //att_btn.setVisibility(Button.VISIBLE);
+
     }
 
 
@@ -81,6 +99,8 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
                 public void onClick(View view) {
                     if (collision){
                         player1.attack(player2, collision);
+                        healthbar2.update();
+                        chargebar1.update();
                     }
                 }
             });
@@ -103,9 +123,12 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
     @Override
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.WHITE); // BACKGROUND color
+        floor.draw(canvas);
         healthbar1.draw(canvas);
+        chargebar1.draw(canvas);
         player1.draw(canvas);
         healthbar2.draw(canvas);
+        chargebar2.draw(canvas);
         player2.draw(canvas);
         //System.out.println(player2.getCurrentHealth());
         Paint paint = new Paint();
@@ -149,8 +172,6 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
             case MotionEvent.ACTION_UP:
                 return;
         }
-
-
     }
 
 
