@@ -55,19 +55,28 @@ public class MainActivity extends AppCompatActivity {
         GamePanel gamePanel = new GamePanel(this, this);
         LinearLayout gameUI = new LinearLayout(this);
         Button att_btn = new Button(this);
+        Button super_btn = new Button(this);
 
-        att_btn.setWidth(200);
-        att_btn.setText("attack");
+        att_btn.setText(R.string.att_string);
         att_btn.setId(Constants.ATT_BTN);
+        att_btn.setBackgroundResource(R.drawable.roundedbutton);
+        att_btn.setVisibility(Button.INVISIBLE);
 
-        /*LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(200, 100);
-        params.weight = 1.0f;
-        params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+        super_btn.setText(R.string.special);
+        super_btn.setId(Constants.SUPER_BTN);
+        super_btn.setBackgroundResource(R.drawable.roundedbutton);
+        super_btn.setVisibility(Button.INVISIBLE);
 
-        att_btn.setLayoutParams(params);*/
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(175,175);
+        params.setMargins(12,8,12,8);
+
+        super_btn.setLayoutParams(params);
+        att_btn.setLayoutParams(params);
+
+        gameUI.setOrientation(LinearLayout.HORIZONTAL);
         gameUI.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
 
-
+        gameUI.addView(super_btn);
         gameUI.addView(att_btn);
 
         game.addView(gamePanel);

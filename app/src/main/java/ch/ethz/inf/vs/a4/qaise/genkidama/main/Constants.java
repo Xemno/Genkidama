@@ -11,4 +11,5 @@ public class Constants {
     public static int SCREEN_HEIGHT;
 
     public static int ATT_BTN = 1337;
+    public static int SUPER_BTN = 1338;
 }

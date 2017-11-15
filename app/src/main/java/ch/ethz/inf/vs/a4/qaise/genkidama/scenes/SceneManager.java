@@ -35,4 +35,8 @@ public class SceneManager {
     public void draw(Canvas canvas) {
         scenes.get(ACTIVE_SCENE).draw(canvas);
     }
+
+    /*public void terminate(){
+        scenes.get(ACTIVE_SCENE).terminate();
+    }*/
 }

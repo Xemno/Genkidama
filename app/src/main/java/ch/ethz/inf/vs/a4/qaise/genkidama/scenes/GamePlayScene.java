@@ -25,12 +25,12 @@ import static java.security.AccessController.getContext;
  * where the game starts and the palyers can play.
  */
 
-public class GamePlayScene extends Activity implements Scene{
+public class GamePlayScene /*extends Activity*/ implements Scene{
 
     //TODO: create the main game here
 
     private float x_old, x_new;
-    static final int MIN_DIST = 200;
+    //static final int MIN_DIST = 200;
     static final int MAX_HEALTH = 1000; //maybe put it into player class and don't give it as an argument
 
     private Player player1, player2; // player2 should be the enemy player
@@ -48,8 +48,6 @@ public class GamePlayScene extends Activity implements Scene{
 
 
     public GamePlayScene(Activity activity) {
-        //this.context = context;
-        //this.view = view;
         this.activity = activity;
 
         /* Creating the ground on which the players move */
@@ -66,11 +64,6 @@ public class GamePlayScene extends Activity implements Scene{
         //initialise enemy
         playerPoint2 = new Point(3*Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT - FLOOR_HEIGHT - player2.getRectangle().height()/2);
         player2.update(playerPoint2);
-
-        //Button att_btn = (Button) findViewById(R.id.att_btn);
-        //Button att_btn = (Button)
-        //att_btn.setVisibility(Button.VISIBLE);
-
     }
 
 
@@ -80,6 +73,8 @@ public class GamePlayScene extends Activity implements Scene{
         if (!btn_active) {
             Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
             att_btn.setVisibility(Button.VISIBLE);
+            Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
+            super_btn.setVisibility(Button.VISIBLE);
             btn_active = true;
             att_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,7 +86,7 @@ public class GamePlayScene extends Activity implements Scene{
             });
         }
         if (playerPoint1.x - player1.getRectangle().width()/2 < 0)
-            playerPoint1.x = 0 + player1.getRectangle().width()/2;
+            playerPoint1.x = player1.getRectangle().width()/2;
         else if (playerPoint1.x + player1.getRectangle().width()/2 > Constants.SCREEN_WIDTH)
             playerPoint1.x = Constants.SCREEN_WIDTH - player1.getRectangle().width()/2;
 
@@ -125,6 +120,8 @@ public class GamePlayScene extends Activity implements Scene{
         //TODO: define what to do if this scene gets terminated
         Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
         att_btn.setVisibility(Button.INVISIBLE);
+        Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
+        super_btn.setVisibility(Button.INVISIBLE);
         btn_active = false;
 
     }
