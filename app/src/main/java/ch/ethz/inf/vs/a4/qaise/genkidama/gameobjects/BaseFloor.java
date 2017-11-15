@@ -11,7 +11,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
 public class BaseFloor implements GameObject {
     private int topDistance;         // distance ceiling floor (y Value for floor top)
-    private final int FLOOR_COLOR = Color.rgb(160, 120, 50);
+    private final int FLOOR_COLOR = Color.rgb(94, 50, 37); // Color.rgb(78, 42, 22);
     private Rect floor;
 
     public BaseFloor(int heightPercent){
