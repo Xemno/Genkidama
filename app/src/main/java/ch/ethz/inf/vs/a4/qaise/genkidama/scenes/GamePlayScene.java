@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.BaseFloor;
@@ -148,9 +149,9 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
     public void terminate() {
         //TODO: define what to do if this scene gets terminated
         Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
-        att_btn.setVisibility(Button.INVISIBLE);
+        att_btn.setVisibility(Button.GONE);
         Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
-        super_btn.setVisibility(Button.INVISIBLE);
+        super_btn.setVisibility(Button.GONE);
         btn_active = false;
 
     }
