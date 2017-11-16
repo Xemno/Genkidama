@@ -2,15 +2,24 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Gallery;
 import android.widget.ImageButton;
@@ -18,16 +27,32 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.UUID;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GamePlayScene;
 
 
 public class MainActivity extends AppCompatActivity {
+    private EditText edit_username;
+    private EditText ip_address;
+    private EditText portnumber;
+    Button enterbutton;
+    public static final String PREFERENCES="ch.ethz.inf.vs.a4.qaise.genkidama.main.PREFERENCES_FILE_KEY";
+    public static final String KEY_IP="ch.ethz.inf.vs.a4.qaise.genkidama.main.IP_KEY";
+    public static final String KEY_PORT="ch.ethz.inf.vs.a4.qaise.genkidama.main.PORT_KEY";
+
+    SharedPreferences sharedPreferences;
+    public static final String TAG = "##MainActivity## -> ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        setContentView(R.layout.activity_main);
 
         // Set Fullscreen:
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -44,59 +69,79 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
 
+
+        // metrics = new DisplayMetrics();
+        // DisplayMetrics metrics = new DisplayMetrics();
         Constants.SCREEN_WIDTH = metrics.widthPixels;
         Constants.SCREEN_HEIGHT = metrics.heightPixels;
 
+        //initialize buttons and editexts
+        edit_username=(EditText)findViewById(R.id.et_username);
+        ip_address=(EditText)findViewById(R.id.et_ip);
+        portnumber=(EditText)findViewById(R.id.et_port);
+        enterbutton=(Button)findViewById(R.id.namebutton);
+        sharedPreferences=getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 
-        // Create new GamePanel view
-        //setContentView(new GamePanel(this));
-
-        FrameLayout game = new FrameLayout(this);
-        GamePanel gamePanel = new GamePanel(this, this);
-        LinearLayout gameUI = new LinearLayout(this);
-        Button att_btn = new Button(this);
-        Button super_btn = new Button(this);
-
-        att_btn.setText(R.string.att_string);
-        att_btn.setId(Constants.ATT_BTN);
-        att_btn.setBackgroundResource(R.drawable.roundedbutton);
-        att_btn.setVisibility(Button.INVISIBLE);
-
-        super_btn.setText(R.string.special);
-        super_btn.setId(Constants.SUPER_BTN);
-        super_btn.setBackgroundResource(R.drawable.roundedbutton);
-        super_btn.setVisibility(Button.INVISIBLE);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(175,175);
-        params.setMargins(12,8,12,8);
-
-        super_btn.setLayoutParams(params);
-        att_btn.setLayoutParams(params);
-
-        gameUI.setOrientation(LinearLayout.HORIZONTAL);
-        gameUI.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
-
-        gameUI.addView(super_btn);
-        gameUI.addView(att_btn);
-
-        game.addView(gamePanel);
-        game.addView(gameUI);
-
-        setContentView(game);
-        //new GamePanel(this);
+        enterbutton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Constants.USERNAME= edit_username.getText().toString();
+                Constants.IP_ADDRESS=ip_address.getText().toString();
+                Constants.PORT_NUMBER=portnumber.getText().toString();
+            }
+        });
 
 
 
-        //setContentView(R.layout.activity_gamepanel);
+        //Context context = getApplicationContext();
+        //SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFERENCES, Context.MODE_PRIVATE);
 
 
 
 
-
-
-
-
-//        setContentView(R.layout.activity_main);
+      setContentView(R.layout.activity_main);
     }
 
-}
+
+    public void onClickLogin(View view) {
+        //set port number and ip address --> save them
+        //declare on top
+        //et_name = (EditText) findViewById(R.id.edit_username);
+
+        //String userName = et_name.getText().toString();
+        //same for the IP and Port or how?
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        Log.i(TAG, "Network Info: " + networkInfo.toString());
+
+        if (networkInfo == null || !networkInfo.isConnected()) {
+            Toast.makeText(getApplication(), "No internet connection!", Toast.LENGTH_LONG).show();
+        } else {  // connection to the internet is made
+
+            //String userName = edit_username.getText().toString();
+            String uuid = UUID.randomUUID().toString();
+            //String portNumber=portnumber.getText().toString();
+            //String ipaddress=ip_address.getText().toString();
+            String user= Constants.USERNAME;
+            String portNumber=Constants.PORT_NUMBER;
+            String ipaddress=Constants.IP_ADDRESS;
+
+
+            //safe port and IP
+          //  Context context= getApplicationContext();
+          // SharedPreferences sharedPreferences=context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+            //String SERVER_ADDRESS = sharedPreferences.getInt(SettingsActivity.KEY_IP, Constants.IP_ADDRESS);
+            //int udpPort = sharedPreferences.getInt(SettingsActivity.KEY_PORT, Constants.PORT_NUMBER);
+            // Constants.USERNAME= sharedPreferences.getString();
+            //new Thread(new ClientThread(this, userName, uuid, MessageTypes.REGISTER, serverAddress, udpPort)).start();
+
+
+
+            startActivity(new Intent(this, GameActivity.class));
+        }
+
+        }
+
+
+    }

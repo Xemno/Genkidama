@@ -10,30 +10,29 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 // same as Healthbar with renamed
 
 public class ChargeBar implements GameObject {
-    private Player player;                   // player associated with this healthbar
-    private int currCharge, MaxCharge;       // health data of the player
+    private Player player;                   // player associated with this charge bar
+    private int currCharge, MaxCharge;       // charge data of the player
 
-    private Rect rectCharge;                 // health rectangle r=[0-100%]
-    private Rect rectBorder;                 // missing health rectangle 1-r
+    private Rect rectCharge;                 // charge rectangle r=[0-100%]
+    private Rect rectBorder;                 // missing charge rectangle 1-r
 
     // paint values
-    private int colorCharge;                 // color for health r
-
-    private final int COLOR_BORDER = Color.BLUE;                 // color for missing health 1-r
-    private final int ALPHA_CHARGE = 200;      // [0...255] // actual health
-    private final int ALPHA_BORDER = 100;      // [0...255] // missing health
+    private final int COLOR_CHARGE = Color.WHITE;                // color for charge r
+    private final int COLOR_BORDER = Color.CYAN;                 // color for missing charge 1-r
+    private final int ALPHA_CHARGE = 200;      // [0...255] // actual charge
+    private final int ALPHA_BORDER = 200;      // [0...255] // missing charge
 
     // fixed position values, i.e. percentage of screen something should be
     private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
     private final int GAP_TOP_PART = 4;
     private final int BACKGROUND_WIDTH_PART = 4;
-    private final int BACKGROUND_HEIGHT_PART = 20;
+    private final int BACKGROUND_HEIGHT_PART = 24;
     private final int BORDER_SIZE = 6;
 
     // relative position values:
     private int gapSide, gapTop;                                // parameters for drawing: position and size
     private int backgroundWidth, backgroundHeight, chargeWidth;
-    private int side;                                           // on which side the healthbar should be
+    private int side;                                           // on which side the charge bar should be
 
     public ChargeBar(Player player) {
         // Get player data
@@ -42,10 +41,8 @@ public class ChargeBar implements GameObject {
         MaxCharge = player.getMaxCharge();
         side = player.getSide();
 
-        colorCharge = Color.MAGENTA;
-
         // Scaling size and position of the background part with final parameters above
-        gapSide = Constants.SCREEN_WIDTH/GAP_SIDE_PART;        // where you want the healthbar
+        gapSide = Constants.SCREEN_WIDTH/GAP_SIDE_PART;        // where you want the charge bar
         gapTop = Constants.SCREEN_HEIGHT/GAP_TOP_PART;
         backgroundWidth = Constants.SCREEN_WIDTH/ BACKGROUND_WIDTH_PART;         // how large it should be
         backgroundHeight = Constants.SCREEN_HEIGHT/ BACKGROUND_HEIGHT_PART;
@@ -80,7 +77,7 @@ public class ChargeBar implements GameObject {
         paint.setAlpha(ALPHA_BORDER);
         canvas.drawRect(rectBorder, paint);
 
-        paint.setColor(colorCharge);
+        paint.setColor(COLOR_CHARGE);
         paint.setAlpha(ALPHA_CHARGE);
         canvas.drawRect(rectCharge, paint);
     }

@@ -7,9 +7,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.BaseFloor;
@@ -43,6 +45,7 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
 
     static final int FLOOR_HEIGHT = 20; //TODO: replace it with value from Constants class
     private BaseFloor floor;
+    Drawable d;
 
     private Activity activity;
 
@@ -123,6 +126,10 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
     @Override
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.WHITE); // BACKGROUND color
+        d = activity.getBaseContext().getResources().getDrawable(R.drawable.background_try);
+        d.setBounds(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        d.draw(canvas);
+
         floor.draw(canvas);
         healthbar1.draw(canvas);
         chargebar1.draw(canvas);
@@ -142,9 +149,9 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
     public void terminate() {
         //TODO: define what to do if this scene gets terminated
         Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
-        att_btn.setVisibility(Button.INVISIBLE);
+        att_btn.setVisibility(Button.GONE);
         Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
-        super_btn.setVisibility(Button.INVISIBLE);
+        super_btn.setVisibility(Button.GONE);
         btn_active = false;
 
     }

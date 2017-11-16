@@ -2,4 +2,9 @@
     <string name="app_name">Genkidama</string>
     <string name="att_string">attack</string>
     <string name="special">special</string>
+    <string name="enterbutton">Enter</string>
+    <string name="hinte">Enter username:</string>
+    <string name="hintip">Enter IP address:</string>
+    <string name="hintport">Enter Port number:</string>
+
 </resources>
