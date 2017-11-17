@@ -87,11 +87,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 
 
-
-
-
-
-
         //Context context = getApplicationContext();
         //SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFERENCES, Context.MODE_PRIVATE);
 
@@ -106,10 +101,15 @@ public class MainActivity extends AppCompatActivity {
 
         Constants.USERNAME = edit_username.getText().toString();
         Constants.IP_ADDRESS = ip_address.getText().toString();
-        Constants.PORT_NUMBER = Integer.parseInt(portnumber.getText().toString());
+        try{
+            Constants.PORT_NUMBER = Integer.parseInt(portnumber.getText().toString());
+        } catch (NumberFormatException nfe){
+            System.out.println("You have to enter an integer as port number." + nfe);
+        }
 
         /*
         Doesn't work like I want (Lara).
+        Can someone maybe help?
 
 
         while(Constants.USERNAME == null || Constants.USERNAME.isEmpty() || Constants.IP_ADDRESS == null || Constants.IP_ADDRESS.isEmpty()){
