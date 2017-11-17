@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("You have to enter an integer as port number." + nfe);
                 }
                 //client.isConnected
+                //onClickLogin should depend on client.isConnected and therefore shouldn't be an onClick-method anymore.
             }
         });
 
