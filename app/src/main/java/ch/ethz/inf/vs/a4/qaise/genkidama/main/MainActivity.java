@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String KEY_IP="ch.ethz.inf.vs.a4.qaise.genkidama.main.IP_KEY";
     public static final String KEY_PORT="ch.ethz.inf.vs.a4.qaise.genkidama.main.PORT_KEY";
 
+
+
     SharedPreferences sharedPreferences;
     public static final String TAG = "##MainActivity## -> ";
 
@@ -84,27 +86,9 @@ public class MainActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 
-        enterbutton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Constants.USERNAME = edit_username.getText().toString();
-                if(Constants.USERNAME == null || Constants.USERNAME.isEmpty()){
-                    //Textview as hint in red. ("You have to enter at least one letter as username.");
-                }
-
-                Constants.IP_ADDRESS = ip_address.getText().toString();
 
 
-                //Constants.PORT_NUMBER = 0;
-                try {
-                    Constants.PORT_NUMBER = Integer.parseInt(portnumber.getText().toString());
-                } catch(NumberFormatException nfe) {
-                    System.out.println("You have to enter an integer as port number." + nfe);
-                }
-                //client.isConnected
-                //onClickLogin should depend on client.isConnected and therefore shouldn't be an onClick-method anymore.
-            }
-        });
+
 
 
 
@@ -119,6 +103,45 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickLogin(View view) {
+
+        Constants.USERNAME = edit_username.getText().toString();
+        Constants.IP_ADDRESS = ip_address.getText().toString();
+        Constants.PORT_NUMBER = Integer.parseInt(portnumber.getText().toString());
+
+        /*
+        Doesn't work like I want (Lara).
+
+
+        while(Constants.USERNAME == null || Constants.USERNAME.isEmpty() || Constants.IP_ADDRESS == null || Constants.IP_ADDRESS.isEmpty()){
+            Constants.USERNAME = edit_username.getText().toString();
+            if(Constants.USERNAME == null || Constants.USERNAME.isEmpty()){
+                edit_username.setText("");
+                edit_username.setHint("@string/hintUserNameWrong");
+                edit_username.setHintTextColor(0xffff0000); //Makes the new hint red.
+            }
+
+            Constants.IP_ADDRESS = ip_address.getText().toString();
+            if(Constants.IP_ADDRESS == null || Constants.IP_ADDRESS.isEmpty()){
+                ip_address.setText("");
+                ip_address.setHint("@string/hintIPwrong");
+                ip_address.setHintTextColor(0xffff0000); //Makes the new hint red.
+            }
+
+
+            //Constants.PORT_NUMBER = 0;
+
+            try {
+                Constants.PORT_NUMBER = Integer.parseInt(portnumber.getText().toString());
+            } catch(NumberFormatException nfe) {
+                portnumber.setHint("@string/hintPortWrong");
+                edit_username.setHintTextColor(0xffff0000); //Makes the new hint red.
+            }
+
+
+        }
+
+        */
+
         //set port number and ip address --> save them
         //declare on top
         //et_name = (EditText) findViewById(R.id.edit_username);
@@ -151,12 +174,12 @@ public class MainActivity extends AppCompatActivity {
             // Constants.USERNAME= sharedPreferences.getString();
             //new Thread(new ClientThread(this, userName, uuid, MessageTypes.REGISTER, serverAddress, udpPort)).start();
 
-
-
             startActivity(new Intent(this, GameActivity.class));
         }
 
         }
+
+
 
 
     }
