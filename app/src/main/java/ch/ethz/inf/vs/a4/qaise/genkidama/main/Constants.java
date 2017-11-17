@@ -10,7 +10,7 @@ public class Constants {
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
     public static String IP_ADDRESS;
-    public static String PORT_NUMBER;
+    public static int PORT_NUMBER;
     public static String USERNAME;
 
     public static int ATT_BTN = 1337;

@@ -27,6 +27,8 @@ public class GameActivity extends AppCompatActivity {
         // Create new GamePanel view
         //setContentView(new GamePanel(this));
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
+
         FrameLayout game = new FrameLayout(this);
         GamePanel gamePanel = new GamePanel(this, this);
         LinearLayout gameUI = new LinearLayout(this);

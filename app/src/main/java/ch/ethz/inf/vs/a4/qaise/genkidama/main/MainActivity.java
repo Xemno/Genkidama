@@ -80,14 +80,28 @@ public class MainActivity extends AppCompatActivity {
         ip_address=(EditText)findViewById(R.id.et_ip);
         portnumber=(EditText)findViewById(R.id.et_port);
         enterbutton=(Button)findViewById(R.id.namebutton);
-        sharedPreferences=getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+
+        Context context = getApplicationContext();
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 
         enterbutton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Constants.USERNAME= edit_username.getText().toString();
-                Constants.IP_ADDRESS=ip_address.getText().toString();
-                Constants.PORT_NUMBER=portnumber.getText().toString();
+                Constants.USERNAME = edit_username.getText().toString();
+                if(Constants.USERNAME == null || Constants.USERNAME.isEmpty()){
+                    //Textview as hint in red. ("You have to enter at least one letter as username.");
+                }
+
+                Constants.IP_ADDRESS = ip_address.getText().toString();
+
+
+                //Constants.PORT_NUMBER = 0;
+                try {
+                    Constants.PORT_NUMBER = Integer.parseInt(portnumber.getText().toString());
+                } catch(NumberFormatException nfe) {
+                    System.out.println("You have to enter an integer as port number." + nfe);
+                }
+                //client.isConnected
             }
         });
 
@@ -124,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             //String portNumber=portnumber.getText().toString();
             //String ipaddress=ip_address.getText().toString();
             String user= Constants.USERNAME;
-            String portNumber=Constants.PORT_NUMBER;
+            int portNumber=Constants.PORT_NUMBER;
             String ipaddress=Constants.IP_ADDRESS;
 
 
