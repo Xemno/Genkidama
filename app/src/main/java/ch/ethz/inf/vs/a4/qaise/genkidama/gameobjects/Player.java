@@ -19,6 +19,7 @@ public class Player implements GameObject {
     private int currentHealth, maxHealth;
     private int currentCharge, maxCharge;
     private final int CHARGE_AMOUNT = 5;
+    public boolean isLooser=false;
 
     private int strength, skill, defence, range, movement;
 
@@ -55,6 +56,8 @@ public class Player implements GameObject {
 
     @Override
     public void update() {
+        //TODO: setLoosermethod setzen
+        setLooser();
         // you can leave this empty if you dont need it
     }
 
@@ -64,6 +67,7 @@ public class Player implements GameObject {
          *  for collision detection, i.e., rectangle moves with the player.
           */
         rectangle.set(point.x - rectangle.width()/2, point.y - rectangle.height()/2, point.x + rectangle.width()/2, point.y + rectangle.height()/2);
+
     }
 
     public Rect getRectangle() {
@@ -94,6 +98,11 @@ public class Player implements GameObject {
 
     public void setCurrentHealth(int health){
         currentHealth = health;
+    }
+    public void setLooser(){
+        if(currentHealth==0){
+            isLooser=true;
+        }
     }
 
     public void attack(Player enemy, boolean collision){

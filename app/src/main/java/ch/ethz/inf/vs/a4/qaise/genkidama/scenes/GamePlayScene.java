@@ -1,6 +1,7 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.scenes;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,6 +9,10 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -32,7 +37,9 @@ import static java.security.AccessController.getContext;
 public class GamePlayScene /*extends Activity*/ implements Scene{
 
     //TODO: create the main game here
+    //TODO: how to set SceneManager.ACTIVESCENE=0; here so that it is variable between this and the scene 1 for the gamover
 
+    boolean is_healthbar_zero=false;
     private float x_old, x_new;
     //static final int MIN_DIST = 200;
     static final int MAX_HEALTH = 1000; //maybe put it into player class and don't give it as an argument
@@ -120,8 +127,26 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
             player1.update(playerPoint1);
             collision = true;
         }
+        //if current health is zero change scene
+        if(healthbar1.currHealth==0 || healthbar2.currHealth==0) {
+            //TransitionManager.go("GameOverScene");
+            //set ACTIVE_SCENE=1 --> respectively
+          //  terminate();
+        }
+        //TODO ANJA: this method was tought for transition to gamoverscene
+
 
     }
+    public void doSceneTransition(){
+       // Transition mFadeTransition = new Fade();
+        //mFadeTransition= TransitionInflater.from(this).inflateTransition(R.transition.transition);
+        //TransitionManager.go((Scene)GameOverScene, mFadeTransition);
+
+
+       // fade xmlns:android="http://schemas.android.com/apk/res/android" />
+    }
+
+
 
     @Override
     public void draw(Canvas canvas) {
@@ -153,6 +178,7 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
         Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
         super_btn.setVisibility(Button.GONE);
         btn_active = false;
+        //SceneManager.ACTIVE_SCENE=1;
 
     }
 
@@ -180,6 +206,8 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
                 return;
         }
     }
+
+    //is healthbar1= 0 or healthbasr2=0 --> then switch to gamoverscnene
 
 
 

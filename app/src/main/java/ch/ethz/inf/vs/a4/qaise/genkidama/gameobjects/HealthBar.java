@@ -17,7 +17,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
 public class HealthBar implements GameObject {
     private Player player;                   // player associated with this healthbar
-    private int currHealth, MaxHealth;       // health data of the player
+    public int currHealth, MaxHealth;       // health data of the player
 
     private Rect rectHealth;                 // health rectangle r=[0-100%]
     private Rect rectBorder;                 // missing health rectangle 1-r

@@ -6,5 +6,7 @@
     <string name="hinte">Enter username:</string>
     <string name="hintip">Enter IP address:</string>
     <string name="hintport">Enter Port number:</string>
+    <string name="restartbuttonstring">Restart Game</string>
+    <string name="backtologinbuttonstring">Back to Login</string>
 
 </resources>

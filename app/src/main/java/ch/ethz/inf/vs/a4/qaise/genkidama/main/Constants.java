@@ -15,4 +15,8 @@ public class Constants {
 
     public static int ATT_BTN = 1337;
     public static int SUPER_BTN = 1338;
+    //buttons for the Gameoverscene
+    //TODO number or no number with buttons ? why?
+    public static int RESTARTGAME_BTN=1339;
+    public static int BACK_TO_LOGIN_BTN;
 }

@@ -18,9 +18,11 @@ public class SceneManager {
     public static int ACTIVE_SCENE;
 
     public SceneManager(Activity activity) {
-        ACTIVE_SCENE = 0; // start with scene 0
+       // ACTIVE_SCENE = 0; // start with scene 0
         scenes.add(new GamePlayScene(activity));
+        scenes.add(new GameOverScene(activity));
     }
+
 
     // TODO: you might want to add more  methods for handling scenes
 
