@@ -28,4 +28,8 @@ public class Constants {
     public static int GAMEOVER_UI = 1342;
     public static int LOGIN_UI = 1343;
 
+    public static int LOGIN_SCENE = 0;
+    public static int GAMEPLAY_SCENE = 1;
+    public static int GAMEOVER_SCENE = 2;
+
 }

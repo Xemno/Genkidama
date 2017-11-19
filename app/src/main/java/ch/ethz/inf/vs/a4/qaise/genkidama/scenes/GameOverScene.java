@@ -78,7 +78,7 @@ public class GameOverScene implements Scene {
 
                         @Override
                         public void onClick(View view) {
-                            nextScene = 1;
+                            nextScene = Constants.GAMEPLAY_SCENE;
                             terminate();
                         }
                     });
@@ -88,7 +88,7 @@ public class GameOverScene implements Scene {
                         public void onClick(View view) {
                             //go back to login, startactivity main (there is our login)
                             //startActivity(new Intent(this, MainActivity.class));
-                            nextScene = 0;
+                            nextScene = Constants.LOGIN_SCENE;
                             terminate();
 
                         }

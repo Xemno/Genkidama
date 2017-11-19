@@ -54,8 +54,8 @@ public class LoginScene implements Scene {
 
                         @Override
                         public void onClick(View view) {
-                            testInputs();
-                            terminate();
+                            if(testInputs())
+                                terminate();
                         }
                     });
 
@@ -77,7 +77,7 @@ public class LoginScene implements Scene {
                 RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.LOGIN_UI);
                 loginUI.setVisibility(View.GONE);
                 btn_active = false;
-                SceneManager.ACTIVE_SCENE = 1;
+                SceneManager.ACTIVE_SCENE = Constants.GAMEPLAY_SCENE;
             }
         });
 
@@ -88,13 +88,15 @@ public class LoginScene implements Scene {
         //do nothing
     }
 
-    private void testInputs(){
+    private boolean testInputs(){
         Constants.USERNAME = edit_username.getText().toString();
         Constants.IP_ADDRESS = ip_address.getText().toString();
         try{
             Constants.PORT_NUMBER = Integer.parseInt(portnumber.getText().toString());
         } catch (NumberFormatException nfe){
             System.out.println("You have to enter an integer as port number." + nfe);
+            Toast.makeText(activity.getApplication(), "Please enter a port number!", Toast.LENGTH_LONG).show();
+            return false;
         }
 
         /*
@@ -141,10 +143,11 @@ public class LoginScene implements Scene {
         ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        Log.i(TAG, "Network Info: " + networkInfo.toString());
+        //Log.i(TAG, "Network Info: " + networkInfo.toString());
 
         if (networkInfo == null || !networkInfo.isConnected()) {
             Toast.makeText(activity.getApplication(), "No internet connection!", Toast.LENGTH_LONG).show();
+            return false;
         } else {  // connection to the internet is made
 
             //String userName = edit_username.getText().toString();
@@ -165,5 +168,6 @@ public class LoginScene implements Scene {
             //new Thread(new ClientThread(this, userName, uuid, MessageTypes.REGISTER, serverAddress, udpPort)).start();
 
         }
+        return true;
     }
 }

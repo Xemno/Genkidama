@@ -244,7 +244,7 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
             }
         });
         new_game = true;
-        SceneManager.ACTIVE_SCENE = 2;
+        SceneManager.ACTIVE_SCENE = Constants.GAMEOVER_SCENE;
 
     }
 

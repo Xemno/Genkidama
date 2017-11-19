@@ -33,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
 
+
         // create new layout from scratch
         FrameLayout game = new FrameLayout(this);
         GamePanel gamePanel = new GamePanel(this, this);
@@ -163,5 +164,10 @@ public class GameActivity extends AppCompatActivity {
 
         setContentView(game);
         //new GamePanel(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
