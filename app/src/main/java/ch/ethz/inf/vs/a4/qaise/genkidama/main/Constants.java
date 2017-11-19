@@ -18,5 +18,14 @@ public class Constants {
     //buttons for the Gameoverscene
     //TODO number or no number with buttons ? why?
     public static int RESTARTGAME_BTN=1339;
-    public static int BACK_TO_LOGIN_BTN;
+    public static int BACK_TO_LOGIN_BTN = 1340;
+    public static int USERNAME_ID = 1344;
+    public static int IP_ID = 1345;
+    public static int PORT_ID = 1346;
+    public static int ENTER_BTN = 1347;
+
+    public static int GAME_UI = 1341;
+    public static int GAMEOVER_UI = 1342;
+    public static int LOGIN_UI = 1343;
+
 }

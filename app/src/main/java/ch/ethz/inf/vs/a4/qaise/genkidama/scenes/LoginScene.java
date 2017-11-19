@@ -1,107 +1,94 @@
-package ch.ethz.inf.vs.a4.qaise.genkidama.main;
+package ch.ethz.inf.vs.a4.qaise.genkidama.scenes;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.method.TransformationMethod;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.Gallery;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.UUID;
 
-import ch.ethz.inf.vs.a4.qaise.genkidama.R;
-import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GamePlayScene;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
 
-public class MainActivity extends AppCompatActivity {
+public class LoginScene implements Scene {
+    private Activity activity;
+    private boolean btn_active = false;
+
+    public static final String TAG = "##LoginScene## -> ";
+
     private EditText edit_username;
     private EditText ip_address;
     private EditText portnumber;
-    Button enterbutton;
-    public static final String PREFERENCES="ch.ethz.inf.vs.a4.qaise.genkidama.main.PREFERENCES_FILE_KEY";
-    public static final String KEY_IP="ch.ethz.inf.vs.a4.qaise.genkidama.main.IP_KEY";
-    public static final String KEY_PORT="ch.ethz.inf.vs.a4.qaise.genkidama.main.PORT_KEY";
+    private Button enter_btn;
 
-
-
-    SharedPreferences sharedPreferences;
-    public static final String TAG = "##MainActivity## -> ";
+    public LoginScene(Activity activity){
+        this.activity = activity;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void update() {
+        if (!btn_active){
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.LOGIN_UI);
+                    loginUI.setVisibility(View.VISIBLE);
+                    loginUI.bringToFront();
+                    enter_btn = (Button) activity.findViewById(Constants.ENTER_BTN);
+                    edit_username = (EditText) activity.findViewById(Constants.USERNAME_ID);
+                    ip_address = (EditText) activity.findViewById(Constants.IP_ID);
+                    portnumber = (EditText) activity.findViewById(Constants.PORT_ID);
 
+                    btn_active = true;
+                    enter_btn.setOnClickListener(new View.OnClickListener(){
 
-        //setContentView(R.layout.activity_main);
+                        @Override
+                        public void onClick(View view) {
+                            testInputs();
+                            terminate();
+                        }
+                    });
 
-        // Set Fullscreen:
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                }
+            });
+        }
+    }
 
-        // Get rid of the toolbar
-        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.drawColor(Color.WHITE);
+    }
 
-        // use this to get rid of app title. FEATURE_NO_TITLE didn't work properly somehow.
-        getSupportActionBar().hide();
-
-
-        // Get Screen Dimensions
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
-
-
-        // metrics = new DisplayMetrics();
-        // DisplayMetrics metrics = new DisplayMetrics();
-        Constants.SCREEN_WIDTH = metrics.widthPixels;
-        Constants.SCREEN_HEIGHT = metrics.heightPixels;
-
-        /*
-        //initialize buttons and editexts
-        edit_username=(EditText)findViewById(R.id.et_username);
-        ip_address=(EditText)findViewById(R.id.et_ip);
-        portnumber=(EditText)findViewById(R.id.et_port);
-        enterbutton=(Button)findViewById(R.id.namebutton);
-
-        Context context = getApplicationContext();
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-
-
-        //Context context = getApplicationContext();
-        //SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFERENCES, Context.MODE_PRIVATE);
-
-
-        setContentView(R.layout.activity_main);*/
-        startActivity(new Intent(this, GameActivity.class));
+    @Override
+    public void terminate() {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.LOGIN_UI);
+                loginUI.setVisibility(View.GONE);
+                btn_active = false;
+                SceneManager.ACTIVE_SCENE = 1;
+            }
+        });
 
     }
 
+    @Override
+    public void receiveTouch(MotionEvent event) {
+        //do nothing
+    }
 
-    public void onClickLogin(View view) {
-
+    private void testInputs(){
         Constants.USERNAME = edit_username.getText().toString();
         Constants.IP_ADDRESS = ip_address.getText().toString();
         try{
@@ -151,13 +138,13 @@ public class MainActivity extends AppCompatActivity {
 
         //String userName = et_name.getText().toString();
         //same for the IP and Port or how?
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         Log.i(TAG, "Network Info: " + networkInfo.toString());
 
         if (networkInfo == null || !networkInfo.isConnected()) {
-            Toast.makeText(getApplication(), "No internet connection!", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "No internet connection!", Toast.LENGTH_LONG).show();
         } else {  // connection to the internet is made
 
             //String userName = edit_username.getText().toString();
@@ -170,19 +157,13 @@ public class MainActivity extends AppCompatActivity {
 
 
             //safe port and IP
-          //  Context context= getApplicationContext();
-          // SharedPreferences sharedPreferences=context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+            //  Context context= getApplicationContext();
+            // SharedPreferences sharedPreferences=context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
             //String SERVER_ADDRESS = sharedPreferences.getInt(SettingsActivity.KEY_IP, Constants.IP_ADDRESS);
             //int udpPort = sharedPreferences.getInt(SettingsActivity.KEY_PORT, Constants.PORT_NUMBER);
             // Constants.USERNAME= sharedPreferences.getString();
             //new Thread(new ClientThread(this, userName, uuid, MessageTypes.REGISTER, serverAddress, udpPort)).start();
 
-            startActivity(new Intent(this, GameActivity.class));
         }
-
-        }
-
-
-
-
     }
+}

@@ -19,6 +19,7 @@ public class SceneManager {
 
     public SceneManager(Activity activity) {
        // ACTIVE_SCENE = 0; // start with scene 0
+        scenes.add(new LoginScene(activity));
         scenes.add(new GamePlayScene(activity));
         scenes.add(new GameOverScene(activity));
     }

@@ -20,7 +20,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".main.GameActivity" />
-        <activity android:name=".scenes.SceneTransitionActivity"></activity>
     </application>
 
 </manifest>

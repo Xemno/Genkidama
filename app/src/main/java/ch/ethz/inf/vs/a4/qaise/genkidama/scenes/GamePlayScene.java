@@ -3,6 +3,7 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.scenes;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
+import ch.ethz.inf.vs.a4.qaise.genkidama.engine.GameEngine;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.BaseFloor;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.ChargeBar;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.HealthBar;
@@ -58,20 +60,21 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
 
     private boolean btn_active = false;
     private boolean collision = false;
+    private boolean new_game = false;
 
     //TODO: make movement of player1 and player2 dependant on size of phone. Needs to be communicated with Server Messages
 
     public GamePlayScene(Activity activity) {
         this.activity = activity;
 
-        /* Creating the ground on which the players move */
+        /* Creating the ground on which the players move
         player1 = new Player(new Rect(0,0,200,200), Color.RED, MAX_HEALTH, MAX_HEALTH, MAX_CHARGE, 0);
         player1.setSide(0);
         healthbar1 = new HealthBar(player1);
         chargebar1 = new ChargeBar(player1);
 
         //create testplayer for test
-        player2 = new Player(new Rect(200,200,400,400), Color.BLUE, MAX_HEALTH, MAX_HEALTH, MAX_CHARGE, 0);
+        player2 = new Player(new Rect(200,200,400,400), Color.BLUE, MAX_HEALTH, 100, MAX_CHARGE, 0);
         player2.setSide(1);
         healthbar2 = new HealthBar(player2);
         chargebar2 = new ChargeBar(player2);
@@ -85,35 +88,68 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
 
 
         //initialise basefloor
+        floor = new BaseFloor(FLOOR_HEIGHT);*/
+
+
+       initializeGame();
+
+    }
+
+    private void initializeGame(){
+          /* Creating the ground on which the players move */
+        player1 = new Player(new Rect(0,0,200,200), Color.RED, MAX_HEALTH, MAX_HEALTH, MAX_CHARGE, 0);
+        player1.setSide(0);
+        healthbar1 = new HealthBar(player1);
+        chargebar1 = new ChargeBar(player1);
+
+        //create testplayer for test
+        player2 = new Player(new Rect(200,200,400,400), Color.BLUE, MAX_HEALTH, 100, MAX_CHARGE, 0);
+        player2.setSide(1);
+        healthbar2 = new HealthBar(player2);
+        chargebar2 = new ChargeBar(player2);
+
+        playerPoint1 = new Point(Constants.SCREEN_WIDTH/4,Constants.SCREEN_HEIGHT - FLOOR_HEIGHT*Constants.SCREEN_HEIGHT/100 - player1.getRectangle().height()/2);
+        player1.update(playerPoint1);
+
+        //initialize enemy
+        playerPoint2 = new Point(3*Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT - FLOOR_HEIGHT*Constants.SCREEN_HEIGHT/100 - player2.getRectangle().height()/2);
+        player2.update(playerPoint2);
+
+
+        //initialize basefloor
         floor = new BaseFloor(FLOOR_HEIGHT);
-
-
-        //Button att_btn = (Button) findViewById(R.id.att_btn);
-        //Button att_btn = (Button)
-        //att_btn.setVisibility(Button.VISIBLE);
-
     }
 
 
     @Override
     public void update() {
+        if (new_game) {
+            initializeGame();
+            new_game = false;
+        }
         collision = false;
         if (!btn_active) {
-            Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
-            att_btn.setVisibility(Button.VISIBLE);
-            Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
-            super_btn.setVisibility(Button.VISIBLE);
-            btn_active = true;
-            att_btn.setOnClickListener(new View.OnClickListener() {
+            activity.runOnUiThread(new Runnable() {
                 @Override
-                public void onClick(View view) {
-                    if (collision){
-                        player1.attack(player2, collision);
-                        healthbar2.update();
-                        chargebar1.update();
-                    }
+                public void run() {
+                    LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_UI);
+                    gameUI.setVisibility(View.VISIBLE);
+                    Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
+                    Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
+                    btn_active = true;
+                    att_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (collision){
+                                player1.attack(player2, collision);
+                                healthbar2.update();
+                                chargebar1.update();
+                            }
+                        }
+                    });
                 }
             });
+
         }
         if (playerPoint1.x - player1.getRectangle().width()/2 < 0)
             playerPoint1.x = player1.getRectangle().width()/2;
@@ -127,13 +163,8 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
             player1.update(playerPoint1);
             collision = true;
         }
-        //if current health is zero change scene
-        if(healthbar1.currHealth==0 || healthbar2.currHealth==0) {
-            //TransitionManager.go("GameOverScene");
-            //set ACTIVE_SCENE=1 --> respectively
-          //  terminate();
-        }
-        //TODO ANJA: this method was tought for transition to gamoverscene
+
+        //TODO ANJA: this method was thought for transition to gamoverscene
 
 
     }
@@ -168,17 +199,52 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
         paint.setTextSize(100);
         canvas.drawText(String.valueOf(player2.getCurrentHealth()), Constants.SCREEN_HEIGHT/2, 500, paint);
 
+        //draw the same to temp_canvas
+        GameOverScene.test = Bitmap.createBitmap(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Bitmap.Config.RGB_565);
+        Canvas temp_canvas = new Canvas(GameOverScene.test);
+
+        temp_canvas.drawColor(Color.WHITE); // BACKGROUND color
+        d = activity.getBaseContext().getResources().getDrawable(R.drawable.background_try);
+        d.setBounds(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        d.draw(temp_canvas);
+
+        floor.draw(temp_canvas);
+        healthbar1.draw(temp_canvas);
+        chargebar1.draw(temp_canvas);
+        player1.draw(temp_canvas);
+        healthbar2.draw(temp_canvas);
+        chargebar2.draw(temp_canvas);
+        player2.draw(temp_canvas);
+        temp_canvas.drawText(String.valueOf(player2.getCurrentHealth()), Constants.SCREEN_HEIGHT/2, 500, paint);
+
+        //if current health is zero change scene
+        if(healthbar1.currHealth==0 || healthbar2.currHealth==0) {
+            //TransitionManager.go("GameOverScene");
+            //set ACTIVE_SCENE=1 --> respectively
+            terminate();
+        }
+
+
+
     }
 
     @Override
     public void terminate() {
         //TODO: define what to do if this scene gets terminated
-        Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
+        /*Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
         att_btn.setVisibility(Button.GONE);
         Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
-        super_btn.setVisibility(Button.GONE);
-        btn_active = false;
-        //SceneManager.ACTIVE_SCENE=1;
+        super_btn.setVisibility(Button.GONE);*/
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_UI);
+                gameUI.setVisibility(View.GONE);
+                btn_active = false;
+            }
+        });
+        new_game = true;
+        SceneManager.ACTIVE_SCENE = 2;
 
     }
 

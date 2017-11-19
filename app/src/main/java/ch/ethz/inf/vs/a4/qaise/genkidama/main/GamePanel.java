@@ -2,6 +2,7 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -24,6 +25,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private GameEngine thread;
 
     private SceneManager manager;
+
+
 
 
 
@@ -84,7 +87,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) { // draws everything in our game
         super.draw(canvas);
-
         manager.draw(canvas);
+
+
     }
+
+
+
 }
