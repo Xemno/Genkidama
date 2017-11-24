@@ -95,7 +95,8 @@ public class GameActivity extends AppCompatActivity {
         enter_btn.setId(Constants.ENTER_BTN);
 
         // Layout gameUI
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(175,175);
+        //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(175,175);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Constants.PLAYER_SIZE, Constants.PLAYER_SIZE);
         params.setMargins(12,8,12,8);
 
         super_btn.setLayoutParams(params);

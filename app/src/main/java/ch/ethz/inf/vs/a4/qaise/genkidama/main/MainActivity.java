@@ -1,40 +1,23 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.method.TransformationMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.Gallery;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.UUID;
-
-import ch.ethz.inf.vs.a4.qaise.genkidama.R;
-import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GamePlayScene;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -78,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         // DisplayMetrics metrics = new DisplayMetrics();
         Constants.SCREEN_WIDTH = metrics.widthPixels;
         Constants.SCREEN_HEIGHT = metrics.heightPixels;
+        Constants.PLAYER_SIZE = (int)(Constants.SCREEN_WIDTH*Constants.PLAYER_PERCENTAGE_WIDTH/100);
+        Constants.PLAYER_PERCENTAGE_HEIGHT = 100*Constants.PLAYER_SIZE/Constants.SCREEN_HEIGHT;
 
         /*
         //initialize buttons and editexts

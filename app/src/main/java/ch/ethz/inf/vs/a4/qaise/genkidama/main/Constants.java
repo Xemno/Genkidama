@@ -13,6 +13,11 @@ public class Constants {
     public static int PORT_NUMBER;
     public static String USERNAME;
 
+    public static float PLAYER_PERCENTAGE_WIDTH = 10;
+    public static float PLAYER_PERCENTAGE_HEIGHT; // defined via player_size
+    public static int PLAYER_SIZE;
+    public static int FLOOR_CEILING_DIST_RELATIVE = 56500/700; // measured pixels from picture to get this ratio
+
     public static int ATT_BTN = 1337;
     public static int SUPER_BTN = 1338;
     //buttons for the Gameoverscene
