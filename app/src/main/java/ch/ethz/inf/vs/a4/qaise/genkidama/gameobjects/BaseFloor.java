@@ -5,19 +5,17 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 
 // TODO: Create and draw the ground here, or just draw a picture
 
 public class BaseFloor implements GameObject {
-    private int topDistance;         // distance ceiling floor (y Value for floor top)
-    private final int FLOOR_COLOR = Color.rgb(94, 50, 37); // Color.rgb(78, 42, 22);
+    private final int FLOOR_COLOR = Color.rgb(94, 50, 37); // Color.rgb(78, 42, 22) is the darker shade;
     private Rect floor;
 
-    public BaseFloor(int heightPercent){
-        topDistance = (100 - heightPercent)*Constants.SCREEN_HEIGHT/100;
-
-        floor = new Rect(0, topDistance, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+    public BaseFloor(int fixDist){
+        floor = new Rect(0, fixDist, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
     public Rect getRect() {     // höhö
@@ -35,8 +33,8 @@ public class BaseFloor implements GameObject {
     public void update() {
     }
 
-    public void update(int heightPercent) {
-        topDistance = (100 - heightPercent)*Constants.SCREEN_HEIGHT/100;
-        floor.top = topDistance;
+    // unnecessary? :
+    public void update(int fixDist) {
+        floor.top = fixDist;
     }
 }
