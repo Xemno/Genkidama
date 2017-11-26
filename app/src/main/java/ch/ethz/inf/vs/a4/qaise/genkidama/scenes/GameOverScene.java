@@ -103,16 +103,12 @@ public class GameOverScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-        //canvas.drawColor(Color.WHITE);
-        //canvas.drawColor(Color.WHITE); // BACKGROUND color
-        //d = activity.getBaseContext().getResources().getDrawable(R.drawable.background_try);
-        //d.setBounds(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        //d.draw(canvas);
-        //canvas.drawColor(Color.WHITE);
 
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setAlpha(50);
         Rect screen = new Rect(0,0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        canvas.drawBitmap(test, null, screen, new Paint());
-
+        canvas.drawBitmap(test, null, screen, paint);
 
     }
 

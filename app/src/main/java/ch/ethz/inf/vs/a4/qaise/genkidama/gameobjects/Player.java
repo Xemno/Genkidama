@@ -26,6 +26,9 @@ public class Player implements GameObject {
     private Rect rectangle; // for collision detection
     private int color;
 
+    public HealthBar healthBar;
+    public ChargeBar chargeBar;
+
     private float posRatio; // used to calculate right position on different phones
 
     final static int MIN_DMG = 10;
@@ -40,6 +43,10 @@ public class Player implements GameObject {
        this.currentHealth = currentHealth;
        this.maxCharge = maxCharge;
        this.currentCharge = currentCharge;
+
+
+        healthBar = new HealthBar(this);
+        chargeBar = new ChargeBar(this);
     }
 
     // important to use the static method intersects instead of intersect. Else player rectangle gets smaller.
@@ -52,6 +59,8 @@ public class Player implements GameObject {
         Paint paint = new Paint(); // The Paint class holds the style and color information about how to draw geometries, text and bitmaps
         paint.setColor(color);
         canvas.drawRect(rectangle, paint);
+        healthBar.draw(canvas);
+        chargeBar.draw(canvas);
     }
 
     @Override
@@ -59,6 +68,9 @@ public class Player implements GameObject {
         //TODO: setLoosermethod setzen
         setLooser();
         // you can leave this empty if you dont need it
+
+        healthBar.update();
+        chargeBar.update();
     }
 
     public void update(Point point) {

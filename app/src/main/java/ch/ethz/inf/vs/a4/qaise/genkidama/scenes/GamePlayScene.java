@@ -48,8 +48,8 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
     static final int MAX_CHARGE = 200;
 
     private Player player1, player2; // player2 should be the enemy player
-    private HealthBar healthbar1, healthbar2;
-    private ChargeBar chargebar1, chargebar2;
+//    private HealthBar healthbar1, healthbar2;
+//    private ChargeBar chargebar1, chargebar2;
     private Point playerPoint1, playerPoint2;
 
     static final int FLOOR_HEIGHT = 20; //TODO: replace it with value from Constants class
@@ -99,14 +99,14 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
           /* Creating the ground on which the players move */
         player1 = new Player(new Rect(0,0,200,200), Color.RED, MAX_HEALTH, MAX_HEALTH, MAX_CHARGE, 0);
         player1.setSide(0);
-        healthbar1 = new HealthBar(player1);
-        chargebar1 = new ChargeBar(player1);
+//        healthbar1 = new HealthBar(player1);
+//        chargebar1 = new ChargeBar(player1);
 
         //create testplayer for test
         player2 = new Player(new Rect(200,200,400,400), Color.BLUE, MAX_HEALTH, 100, MAX_CHARGE, 0);
         player2.setSide(1);
-        healthbar2 = new HealthBar(player2);
-        chargebar2 = new ChargeBar(player2);
+//        healthbar2 = new HealthBar(player2);
+//        chargebar2 = new ChargeBar(player2);
 
         playerPoint1 = new Point(Constants.SCREEN_WIDTH/4,Constants.SCREEN_HEIGHT - FLOOR_HEIGHT*Constants.SCREEN_HEIGHT/100 - player1.getRectangle().height()/2);
         player1.update(playerPoint1);
@@ -142,8 +142,8 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
                         public void onClick(View view) {
                             if (collision){
                                 player1.attack(player2, collision);
-                                healthbar2.update();
-                                chargebar1.update();
+//                                healthbar2.update();
+//                                chargebar1.update();
                             }
                         }
                     });
@@ -187,11 +187,11 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
         d.draw(canvas);
 
         floor.draw(canvas);
-        healthbar1.draw(canvas);
-        chargebar1.draw(canvas);
+//        healthbar1.draw(canvas);
+//        chargebar1.draw(canvas);
         player1.draw(canvas);
-        healthbar2.draw(canvas);
-        chargebar2.draw(canvas);
+//        healthbar2.draw(canvas);
+//        chargebar2.draw(canvas);
         player2.draw(canvas);
         //System.out.println(player2.getCurrentHealth());
         Paint paint = new Paint();
@@ -209,16 +209,16 @@ public class GamePlayScene /*extends Activity*/ implements Scene{
         d.draw(temp_canvas);
 
         floor.draw(temp_canvas);
-        healthbar1.draw(temp_canvas);
-        chargebar1.draw(temp_canvas);
+        player1.healthBar.draw(temp_canvas);
+        player1.chargeBar.draw(temp_canvas);
         player1.draw(temp_canvas);
-        healthbar2.draw(temp_canvas);
-        chargebar2.draw(temp_canvas);
+        player2.healthBar.draw(temp_canvas);
+        player2.chargeBar.draw(temp_canvas);
         player2.draw(temp_canvas);
         temp_canvas.drawText(String.valueOf(player2.getCurrentHealth()), Constants.SCREEN_HEIGHT/2, 500, paint);
 
         //if current health is zero change scene
-        if(healthbar1.currHealth==0 || healthbar2.currHealth==0) {
+        if(player1.healthBar.currHealth==0 || player2.healthBar.currHealth==0) {
             //TransitionManager.go("GameOverScene");
             //set ACTIVE_SCENE=1 --> respectively
             terminate();
