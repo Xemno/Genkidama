@@ -8,11 +8,4 @@
     <string name="hintport">Enter Port number:</string>
     <string name="restartbuttonstring">Restart Game</string>
     <string name="backtologinbuttonstring">Back to Login</string>
-
-    <!-- MainActivity Login, but doesn't work like I expected (Lara).
-    <string name="hintUserNameWrong">You have to enter at least one letter or number as username.</string>
-    <string name="hintIPwrong">You have to enter the IP address.</string>
-    <string name="hintPortWrong">You have to enter an integer as port number.</string>
-    -->
-
 </resources>

@@ -2,172 +2,222 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-import java.util.UUID;
+import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
 
 public class MainActivity extends AppCompatActivity {
-    private EditText edit_username;
-    private EditText ip_address;
-    private EditText portnumber;
-    Button enterbutton;
-    public static final String PREFERENCES="ch.ethz.inf.vs.a4.qaise.genkidama.main.PREFERENCES_FILE_KEY";
-    public static final String KEY_IP="ch.ethz.inf.vs.a4.qaise.genkidama.main.IP_KEY";
-    public static final String KEY_PORT="ch.ethz.inf.vs.a4.qaise.genkidama.main.PORT_KEY";
 
-
-
-    SharedPreferences sharedPreferences;
-    public static final String TAG = "##MainActivity## -> ";
+    public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme); // start up theme
         super.onCreate(savedInstanceState);
 
+        context = this.getApplicationContext();
 
-        //setContentView(R.layout.activity_main);
-
-        // Set Fullscreen:
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        // Get rid of the toolbar
-        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        // use this to get rid of app title. FEATURE_NO_TITLE didn't work properly somehow.
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
         getSupportActionBar().hide();
-
 
         // Get Screen Dimensions
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
 
 
-        // metrics = new DisplayMetrics();
-        // DisplayMetrics metrics = new DisplayMetrics();
         Constants.SCREEN_WIDTH = metrics.widthPixels;
         Constants.SCREEN_HEIGHT = metrics.heightPixels;
         Constants.PLAYER_SIZE = (int)(Constants.SCREEN_WIDTH*Constants.PLAYER_PERCENTAGE_WIDTH/100);
         Constants.PLAYER_PERCENTAGE_HEIGHT = 100*Constants.PLAYER_SIZE/Constants.SCREEN_HEIGHT;
 
-        /*
-        //initialize buttons and editexts
-        edit_username=(EditText)findViewById(R.id.et_username);
-        ip_address=(EditText)findViewById(R.id.et_ip);
-        portnumber=(EditText)findViewById(R.id.et_port);
-        enterbutton=(Button)findViewById(R.id.namebutton);
 
-        Context context = getApplicationContext();
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        // create new layout from scratch
+        FrameLayout game = new FrameLayout(this);
+        GamePanel gamePanel = new GamePanel(this, this);
+        LinearLayout gameUI = new LinearLayout(this);
+        RelativeLayout gameOverUI = new RelativeLayout(this);
+        RelativeLayout loginUI = new RelativeLayout(this);
+
+        // gameUI buttons
+        Button att_btn = new Button(this);
+        Button super_btn = new Button(this);
+
+        // gameOverUI buttons
+        Button restart_game_btn = new Button(this);
+        Button login_btn = new Button(this);
+
+        // loginUI textviews and buttons
+        EditText username = new EditText(this);
+        EditText ip = new EditText(this);
+        EditText port = new EditText(this);
+        Button enter_btn = new Button(this);
+
+        // Set the custom font
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/font1980XX.ttf"); // custom font
+        username.setTypeface(typeface);
+        ip.setTypeface(typeface);
+        port.setTypeface(typeface);
+        enter_btn.setTypeface(typeface);
 
 
-        //Context context = getApplicationContext();
-        //SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFERENCES, Context.MODE_PRIVATE);
+        //set IDs for different layouts and make them gone
+        gameUI.setId(Constants.GAME_UI);
+        gameOverUI.setId(Constants.GAMEOVER_UI);
+        loginUI.setId(Constants.LOGIN_UI);
+
+        gameUI.setVisibility(View.GONE);
+        gameOverUI.setVisibility(View.GONE);
+        loginUI.setVisibility(View.GONE);
+
+        // initialize buttons for gameUI
+        att_btn.setText(R.string.att_string);
+        att_btn.setId(Constants.ATT_BTN);
+        att_btn.setBackgroundResource(R.drawable.roundedbutton);
+
+        super_btn.setText(R.string.special);
+        super_btn.setId(Constants.SUPER_BTN);
+        super_btn.setBackgroundResource(R.drawable.roundedbutton);
+
+        // initialize buttons for gameOverUI
+        restart_game_btn.setText(R.string.restartbuttonstring);
+        restart_game_btn.setId(Constants.RESTARTGAME_BTN);
+
+        login_btn.setText(R.string.backtologinbuttonstring);
+        login_btn.setId(Constants.BACK_TO_LOGIN_BTN);
 
 
-        setContentView(R.layout.activity_main);*/
-        startActivity(new Intent(this, GameActivity.class));
+        //initialize loginUI buttons and edittext
+        username.setHint(R.string.hinte);
+        username.setId(Constants.USERNAME_ID);
+
+        port.setHint(R.string.hintport);
+        port.setId(Constants.PORT_ID);
+        port.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        ip.setHint(R.string.hintip);
+        ip.setId(Constants.IP_ID);
+
+        enter_btn.setText(R.string.enterbutton);
+        enter_btn.setId(Constants.ENTER_BTN);
+
+        // Layout gameUI
+        //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(175,175);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Constants.PLAYER_SIZE, Constants.PLAYER_SIZE);
+        params.setMargins(12,8,12,8);
+
+        super_btn.setLayoutParams(params);
+        att_btn.setLayoutParams(params);
+
+        gameUI.setOrientation(LinearLayout.HORIZONTAL);
+        gameUI.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
+
+        // Layout gameOverUI
+        gameOverUI.setGravity(Gravity.CENTER);
+
+        RelativeLayout.LayoutParams restart_params = new RelativeLayout.LayoutParams(400, 200);
+        restart_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        restart_game_btn.setLayoutParams(restart_params);
+
+        RelativeLayout.LayoutParams login_params = new RelativeLayout.LayoutParams(400, 200);
+        login_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        login_params.addRule(RelativeLayout.BELOW, Constants.RESTARTGAME_BTN);
+        login_btn.setLayoutParams(login_params);
+
+        // Layout loginUI
+        loginUI.setGravity(Gravity.CENTER);
+
+        RelativeLayout.LayoutParams user_params = new RelativeLayout.LayoutParams(600, 200);
+        user_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        username.setLayoutParams(user_params);
+
+        RelativeLayout.LayoutParams ip_params = new RelativeLayout.LayoutParams(600, 200);
+        ip_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        ip_params.addRule(RelativeLayout.BELOW, Constants.USERNAME_ID);
+        ip.setLayoutParams(ip_params);
+
+        RelativeLayout.LayoutParams port_params = new RelativeLayout.LayoutParams(600, 200);
+        port_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        port_params.addRule(RelativeLayout.BELOW, Constants.IP_ID);
+        port.setLayoutParams(port_params);
+
+        RelativeLayout.LayoutParams enter_params = new RelativeLayout.LayoutParams(600, 200);
+        enter_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        enter_params.addRule(RelativeLayout.BELOW, Constants.PORT_ID);
+        enter_btn.setLayoutParams(enter_params);
+
+
+
+        //add buttons to gameUI
+        gameUI.addView(super_btn);
+        gameUI.addView(att_btn);
+
+        //add buttons to gameOverUI
+        gameOverUI.addView(restart_game_btn);
+        gameOverUI.addView(login_btn);
+
+        //add button and edittext to loginUI
+        loginUI.addView(username);
+        loginUI.addView(ip);
+        loginUI.addView(port);
+        loginUI.addView(enter_btn);
+
+        //add views to game
+        game.addView(gamePanel);
+        game.addView(loginUI);
+        game.addView(gameOverUI);
+        game.addView(gameUI);
+
+
+
+        setContentView(game);
 
     }
 
-
-    public void onClickLogin(View view) {
-
-        Constants.USERNAME = edit_username.getText().toString();
-        Constants.IP_ADDRESS = ip_address.getText().toString();
-        try{
-            Constants.PORT_NUMBER = Integer.parseInt(portnumber.getText().toString());
-        } catch (NumberFormatException nfe){
-            System.out.println("You have to enter an integer as port number." + nfe);
-        }
-
-        /*
-        Doesn't work like I want (Lara).
-        Can someone maybe help?
-
-
-        while(Constants.USERNAME == null || Constants.USERNAME.isEmpty() || Constants.IP_ADDRESS == null || Constants.IP_ADDRESS.isEmpty()){
-            Constants.USERNAME = edit_username.getText().toString();
-            if(Constants.USERNAME == null || Constants.USERNAME.isEmpty()){
-                edit_username.setText("");
-                edit_username.setHint("@string/hintUserNameWrong");
-                edit_username.setHintTextColor(0xffff0000); //Makes the new hint red.
-            }
-
-            Constants.IP_ADDRESS = ip_address.getText().toString();
-            if(Constants.IP_ADDRESS == null || Constants.IP_ADDRESS.isEmpty()){
-                ip_address.setText("");
-                ip_address.setHint("@string/hintIPwrong");
-                ip_address.setHintTextColor(0xffff0000); //Makes the new hint red.
-            }
-
-
-            //Constants.PORT_NUMBER = 0;
-
-            try {
-                Constants.PORT_NUMBER = Integer.parseInt(portnumber.getText().toString());
-            } catch(NumberFormatException nfe) {
-                portnumber.setHint("@string/hintPortWrong");
-                edit_username.setHintTextColor(0xffff0000); //Makes the new hint red.
-            }
-
-
-        }
-
-        */
-
-        //set port number and ip address --> save them
-        //declare on top
-        //et_name = (EditText) findViewById(R.id.edit_username);
-
-        //String userName = et_name.getText().toString();
-        //same for the IP and Port or how?
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-        Log.i(TAG, "Network Info: " + networkInfo.toString());
-
-        if (networkInfo == null || !networkInfo.isConnected()) {
-            Toast.makeText(getApplication(), "No internet connection!", Toast.LENGTH_LONG).show();
-        } else {  // connection to the internet is made
-
-            //String userName = edit_username.getText().toString();
-            String uuid = UUID.randomUUID().toString();
-            //String portNumber=portnumber.getText().toString();
-            //String ipaddress=ip_address.getText().toString();
-            String user= Constants.USERNAME;
-            int portNumber=Constants.PORT_NUMBER;
-            String ipaddress=Constants.IP_ADDRESS;
-
-
-            //safe port and IP
-          //  Context context= getApplicationContext();
-          // SharedPreferences sharedPreferences=context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-            //String SERVER_ADDRESS = sharedPreferences.getInt(SettingsActivity.KEY_IP, Constants.IP_ADDRESS);
-            //int udpPort = sharedPreferences.getInt(SettingsActivity.KEY_PORT, Constants.PORT_NUMBER);
-            // Constants.USERNAME= sharedPreferences.getString();
-            //new Thread(new ClientThread(this, userName, uuid, MessageTypes.REGISTER, serverAddress, udpPort)).start();
-
-            startActivity(new Intent(this, GameActivity.class));
-        }
-
-        }
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (KryoClient.getClient() != null) KryoClient.getClient().close();
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (KryoClient.getClient() == null) {
+
+        } else if (!KryoClient.getClient().isConnected()) {
+            return;
+        } else { // TODO: handle this
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (KryoClient.getClient() == null) {
+            // TODO: handle
+        } else {
+        }
+
+        // TODO: connection might remain, so maybe we want to notify server for handling this
+    }
+
+}

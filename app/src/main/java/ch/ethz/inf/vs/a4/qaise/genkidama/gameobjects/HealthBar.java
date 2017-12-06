@@ -7,6 +7,8 @@ import android.graphics.Rect;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
+
+
     /*  What we do:
     *   We have two Rects: rectHealth and rectBorder.
     *   rectBorder is the black "background" rectangle, which will also indicate how much health is missing
@@ -32,7 +34,7 @@ public class HealthBar implements GameObject {
     // fixed position values, i.e. percentage of screen something should be
     private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
     private final int GAP_TOP_PART = 8;
-    private final int BACKGROUND_WIDTH_PART = 3;
+    private final int BACKGROUND_WIDTH_PART = 3; //TODO: why 3? 4 wäre vllt besser da kleinere W'keit auf rundungsgehler
     private final int BACKGROUND_HEIGHT_PART = 12;
     private final int BORDER_SIZE = 10;
 
@@ -46,7 +48,7 @@ public class HealthBar implements GameObject {
         this.player = player;
         currHealth = player.getCurrentHealth();
         MaxHealth = player.getMaxHealth();
-        side = player.getSide();
+//        side = player.getSide();
 
         colorHealth = Color.GREEN;
 
@@ -62,6 +64,7 @@ public class HealthBar implements GameObject {
         makeRect();
     }
 
+    //TODO: Change that...work with ID instead of 'side'
     private void makeRect(){
         // Distinguish on which side the player starts and initialize symmetrically
         if(side == 0) {
@@ -101,9 +104,11 @@ public class HealthBar implements GameObject {
         else colorHealth = Color.RED;
 
         healthWidth = currHealth* backgroundWidth /MaxHealth;
+
         if(side == 0)
             rectHealth.right = gapSide + BORDER_SIZE + healthWidth;
         else
             rectHealth.right = Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + healthWidth;
     }
 }
+

@@ -1,7 +1,6 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.scenes;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,42 +10,23 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import ch.ethz.inf.vs.a4.qaise.genkidama.R;
-import ch.ethz.inf.vs.a4.qaise.genkidama.engine.GameEngine;
-import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
-import ch.ethz.inf.vs.a4.qaise.genkidama.main.GameActivity;
-import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
-import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 
 /**
- * Created by anja on 16.11.2017.
+ * Created by Qais on 26-Nov-17.
  */
 
 public class GameOverScene implements Scene {
-
-    //TODO: idee: musik generell und böse musik bei gameover --> möglich?
-    //medaillen für gewinner --> up to 3 rounds
-    //button für restart game --> ACTIVE SCENE=0
-    //oder button zu login page --> startACtivity mainactivity
-    //constructor
-    //TODO: how to set this activescene ?
-
-
-
-
-   // SceneManager.ACTIVE_SCENE=1;
 
     private Activity activity;
     private boolean btn_active=false;
     private int nextScene;
 
-    Drawable d;
-    public boolean isWinner=false;
-    Player player1;
+    public boolean isWinner = false;
 
     public static Canvas temp_canvas;
     public static Bitmap test;
@@ -61,7 +41,7 @@ public class GameOverScene implements Scene {
     }
     @Override
     public void update() {
-       // SceneManager.ACTIVE_SCENE=1;
+        // SceneManager.ACTIVE_SCENE=1;
         //TODO activescene set
         //if on button click then change to other activity
         if(!btn_active){
@@ -123,10 +103,6 @@ public class GameOverScene implements Scene {
                 SceneManager.ACTIVE_SCENE = nextScene;
             }
         });
-
-
-
-
     }
 
     @Override
@@ -141,12 +117,11 @@ public class GameOverScene implements Scene {
         //TODO create a picture which gives the winner a medal
     }
     public void setLooserpage(){
-        if (player1.isLooser) {
-            //if player.isLooser--> then player.setLooserpage();
-            //TODO: create a page where the loser gets displayed something like GAME OVER, want to restart?
-        }
+//        if (player1.isLooser) {
+//            //if player.isLooser--> then player.setLooserpage();
+//            //TODO: create a page where the loser gets displayed something like GAME OVER, want to restart?
+//        }
 
     }
-
 
 }

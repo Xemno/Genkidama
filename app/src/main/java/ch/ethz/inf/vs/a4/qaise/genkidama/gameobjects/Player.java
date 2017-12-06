@@ -1,93 +1,177 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PointF;
+import android.graphics.Point;
 import android.graphics.Rect;
 
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.PLAYER_SIZE;
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
+import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 
 
-//TODO: you might want to modify this class
+/**
+ * Created by Qais on 04-Nov-17.
+ */
+
+//TODO: NOT FINISHED
+
 
 public class Player implements GameObject {
-
-    //    private Rect player;
-    private String name;
-    private int currentHealth, maxHealth;
-    private int currentCharge, maxCharge;
-    private final int CHARGE_AMOUNT = 5;
-    public boolean isCharged = false;
-    public boolean isLooser=false;
-
-    private HealthBar healthbar;
-    private ChargeBar chargebar;
-    private int side;
-
-    private int strength, skill, defence, range, movement;
-
-    private Rect rectangle; // for collision detection
-    private int color;
-
-    private float posRatio; // used to calculate right position on different phones
 
     private final static int MIN_DMG = 10;
     private final static int MAX_DMG = 20;
     private final static int SPECIAL_ATTACK_DMG = 100;
+    static final int MAX_HEALTH = 1000;
+    static final int MAX_CHARGE = 200;
 
 
+    public String name;
+    public int id;
 
-    public Player(Rect rectangle, int color, int maxHealth, int currentHealth, int maxCharge, int currentCharge, int side) {
-        // TODO: create player and set invisible rectangle around for collision detection
+    private int maxHealth, maxCharge;
+    private int currentHealth;
+    private int currentCharge = 0;
+    private final int CHARGE_AMOUNT = 5;
+    public boolean isCharged = false;
+    public boolean isLooser = false;
 
-       this.rectangle = rectangle;
-       this.color = color;
-       this.maxHealth = maxHealth;
-       this.currentHealth = currentHealth;
-       this.maxCharge = maxCharge;
-       this.currentCharge = currentCharge;
-       this.side = side;
-       this.healthbar = new HealthBar(this);
-       this.chargebar = new ChargeBar(this);
+
+    private Rect rectangle; // for collision detection
+    private int rectWidth, rectHight;
+    private int color;
+
+    public Point new_point, old_point;
+
+    private HealthBar healthbar;
+    private ChargeBar chargebar;
+
+    Animation walk_right, walk_left; // TODO: finish these animations, hitbox not yet right position
+    // TODO: add the other animations too
+
+    boolean walkInX = false; // false = -x, true = +x
+
+    public Player(int id, Point point) {
+
+        /* Initialize settings of this player */
+        //|--------------------------------------------|//
+        this.new_point = point;
+        this.old_point = point;
+        this.id = id;
+        this.maxHealth = MAX_HEALTH;
+        this.currentHealth = MAX_HEALTH;
+        this.maxCharge = MAX_CHARGE;
+//        this.healthbar = new HealthBar(this); //TODO: uncomment for use
+//        this.chargebar = new ChargeBar(this); //TODO: uncomment for use
+        //|--------------------------------------------|//
+
+
+        /* Draw Player as a fixed Rectangle with random color */
+        //|--------------------------------------------|//
+        color = Color.rgb(
+                GamePanel.getRandom(30, 255),
+                GamePanel.getRandom(30, 255),
+                GamePanel.getRandom(30, 255)
+        );
+        rectangle = new Rect(point.x, point.y, point.x + 42*8, point.y + 42*8);
+        rectWidth = rectangle.width()/2;
+        rectHight = rectangle.height()/2;
+        rectangle.set(  point.x - rectWidth,  point.y - rectHight,
+                point.x + rectWidth, point.y + rectHight);
+        //|--------------------------------------------|//
+
+
+        walk_right = new Animation(
+                MainActivity.context,
+                R.drawable.knight_walk_right_42x42,
+                42, 42,
+                8,
+                point.x, point.y,
+                true);
+        walk_right.scaleBitmap(8);
+        walk_right.forward = true;
+
+        walk_left = new Animation(
+                MainActivity.context,
+                R.drawable.knight_walk_left_42x42,
+                42, 42,
+                8,
+                point.x, point.y,
+                true);
+        walk_left.scaleBitmap(8);
+        walk_left.forward = false;
+
     }
 
-    // important to use the static method intersects instead of intersect. Else player rectangle gets smaller.
-    public boolean playerCollide(Player enemy){
-        int me_right = rectangle.right;
-        int en_left = enemy.getRectangle().left;
-        return Rect.intersects(rectangle,enemy.getRectangle()) || (rectangle.right >= enemy.getRectangle().left);
+
+    public void attack(Player enemy){
+        if (this.collidesWith(enemy)) { // only attack if collision !!!
+            // TODO
+        }
+    }
+
+    public void specialAttack(Player enemy) {
+        if (this.collidesWith(enemy)) { // only attack if collision !!!
+            // TODO
+        }
     }
 
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint(); // The Paint class holds the style and color information about how to draw geometries, text and bitmaps
         paint.setColor(color);
+        paint.setAlpha(200);
         canvas.drawRect(rectangle, paint);
-        healthbar.draw(canvas);
-        chargebar.draw(canvas);
+//        healthbar.draw(canvas); //TODO: uncomment for use
+//        chargebar.draw(canvas); //TODO: uncomment for use
+
+
+
+        if (walkInX) {
+            walk_right.draw(canvas);
+        } else {
+            walk_left.draw(canvas);
+        }
+//        walk_right.draw(canvas);
+
     }
 
     @Override
     public void update() {
-        //TODO: setLoosermethod setzen
-        setLoser();
-        // you can leave this empty if you dont need it
+        // you can leave this empty if you don't need it
     }
 
-    public void update(PointF point) {  //TODO: change to give the percentage of the screen instead of fixed pos when called
-        /* TODO: Update position
-         *  update the position of the player and surround it with a rectangle
-         *  for collision detection, i.e., rectangle moves with the player.
-          */
-        int halfSize = PLAYER_SIZE/2;
-        // rectangle.set(point.x - halfSize, point.y - halfSize, point.x + halfSize, point.y + halfSize);
+    public void update(Point point) {
+        // (left, top, right, bottom)
+        this.new_point = point;
 
-        // relative version:
-        int fixX = (int) (SCREEN_WIDTH*point.x/100.0f);
-        int fixY = (int) (SCREEN_HEIGHT*point.y/100.0f);
-        rectangle.set(fixX - halfSize, fixY - halfSize, fixX + halfSize, fixY + halfSize);
+        rectangle.set(  point.x - rectWidth,  point.y - rectHight,
+                point.x + rectWidth, point.y + rectHight);
+
+        if (new_point.x < old_point.x) {
+            walkInX = false;
+            walk_left.setWhereToDraw((float)(new_point.x - 42*8) , (float) (new_point.y - 42*8)); // scale und frame dimension abziehen
+        } else {
+            walkInX = true;
+            walk_right.setWhereToDraw((float)(new_point.x - 42*8) , (float) (new_point.y - 42*8)); // scale und frame dimension abziehen
+        }
+
+
+
+        if(currentHealth == 0){
+            isLooser = true;
+        }
+
+        old_point = new_point;
+
+    }
+
+    public void update(int damage) {
+        this.currentHealth = this.currentHealth - damage;
+    }
+
+    public void setColor (int color) {
+        this.color = color;
     }
 
     public Rect getRectangle() {
@@ -110,58 +194,15 @@ public class Player implements GameObject {
         return currentCharge;
     }
 
-
-
-    //public void setSide(int s) {side = s;}
-
-    public int getSide() {return side;}
-
-
     public void setCurrentHealth(int health){
         currentHealth = health;
-    }
-    public void setLoser(){
-        if(currentHealth==0){
-            isLooser=true;
-        }
-    }
-
-    public void attack(Player enemy, boolean collision){
-
-        if (collision) {
-            int att_dmg = (int)(Math.random() * ((MAX_DMG - MIN_DMG) + 1)) + MIN_DMG; //calculates random value between MIN_DMG and MAX_DMG
-            if (currentCharge > maxCharge - CHARGE_AMOUNT) {
-                currentCharge = maxCharge;
-                isCharged = true;
-            }
-            else currentCharge += CHARGE_AMOUNT;
-            int health = enemy.currentHealth - att_dmg;
-            if (health > 0) {
-                enemy.setCurrentHealth(enemy.currentHealth - att_dmg); // TODO: why not just pass health as argument?
-            } else {
-                enemy.setCurrentHealth(0);
-            }
-            enemy.healthbar.update();
-            chargebar.update();
-        }
-        return;
-    }
-
-    public void specialAttack(Player enemy) {
-        //TODO: Make it visible, do we need collision? Maybe make SA stronger when repeated
-        int health = enemy.currentHealth - SPECIAL_ATTACK_DMG;
-        if (health > 0) {
-            enemy.setCurrentHealth(health);
-        } else {
-            enemy.setCurrentHealth(0);
-        }
-        currentCharge = 0;
-        isCharged = false;
-        enemy.healthbar.update();
-        chargebar.update();
     }
 
     public HealthBar getHealthbar(){
         return healthbar;
+    }
+
+    public boolean collidesWith(Player enemy){
+        return Rect.intersects(rectangle, enemy.getRectangle()) || (rectangle.right >= enemy.getRectangle().left);
     }
 }

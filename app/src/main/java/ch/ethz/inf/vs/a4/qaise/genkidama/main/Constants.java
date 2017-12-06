@@ -6,12 +6,14 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 
 public class Constants {
 
-    //SCREEN_WIDTH and SCREEN_HEIGHT are measured
+    public static String NAME = "default"; // TODO: overwrite with input name!
+    public static String USERNAME;
+    public static int PORT_NUMBER = 15325;
+    public static String SERVER_ADDRESS = "192.168.0.103";
+    public static int ID = 999;
+
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
-    public static String IP_ADDRESS;
-    public static int PORT_NUMBER;
-    public static String USERNAME;
 
     public static float PLAYER_PERCENTAGE_WIDTH = 10;
     public static float PLAYER_PERCENTAGE_HEIGHT; // defined via player_size
@@ -20,8 +22,8 @@ public class Constants {
 
     public static int ATT_BTN = 1337;
     public static int SUPER_BTN = 1338;
+
     //buttons for the Gameoverscene
-    //TODO number or no number with buttons ? why?
     public static int RESTARTGAME_BTN=1339;
     public static int BACK_TO_LOGIN_BTN = 1340;
     public static int USERNAME_ID = 1344;
