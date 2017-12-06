@@ -179,6 +179,7 @@ public class Animation {
         this.frameWidth = scale*frameWidth;
         this.frameHeight = scale*frameHeight;
 
+        // use this for hitbox
         frameToDraw = new Rect(0,0, frameWidth, frameHeight);
         whereToDraw = new RectF(x, y, x + frameWidth, y + frameHeight);
 

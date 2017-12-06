@@ -12,13 +12,18 @@ public class Constants {
     public static String SERVER_ADDRESS = "192.168.0.103";
     public static int ID = 999;
 
+//    public static int side = 0;
+
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
+
+//    public static boolean REGISTERED = false;
 
     public static float PLAYER_PERCENTAGE_WIDTH = 10;
     public static float PLAYER_PERCENTAGE_HEIGHT; // defined via player_size
     public static int PLAYER_SIZE;
     public static int FLOOR_CEILING_DIST_RELATIVE = 56500/700; // measured pixels from picture to get this ratio
+    public static int fixDist = FLOOR_CEILING_DIST_RELATIVE*SCREEN_HEIGHT/100;
 
     public static int ATT_BTN = 1337;
     public static int SUPER_BTN = 1338;

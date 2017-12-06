@@ -30,9 +30,13 @@ public class ClientProgram extends Listener {
 
             Network.Register message = new Network.Register();
             int proposedID = ((Network.RegistrationRequired) object).id; // take proposed ID from server
+//            int proposedSide = ((Network.RegistrationRequired) object).side; // take proposed ID from server
+
             message.id =  proposedID;
             Constants.ID = proposedID;
-            Log.i(TAG, "registering ID: " + proposedID );
+//            Constants.side = proposedSide;
+            Log.i(TAG, "PROPOSED ID" + proposedID);
+            Log.i(TAG, "TAKEN ID" + Constants.ID);
 
 //            Point new_point = new Point(Constants.SCREEN_WIDTH/2, 3* Constants.SCREEN_HEIGHT/4); // at which location the player rectangle is
             Point new_point = new Point(25,(int) (FLOOR_CEILING_DIST_RELATIVE - PLAYER_PERCENTAGE_HEIGHT/2)); // TODO: replace to PointF,a lso server-side
@@ -52,7 +56,10 @@ public class ClientProgram extends Listener {
                 return;
             }
 
-            Log.i(TAG, "AddPlayer ID: " + msg.id + "  Player in Map: " + GamePanel.players.values());
+//
+//            if (GamePanel.myPlayer() != null && GamePanel.myPlayer().id == msg.id) {
+//                Constants.REGISTERED = true;
+//            }
 
             GamePanel.addPlayer(new Player(msg.id, new Point(msg.x, msg.y)));
             return;
@@ -63,7 +70,6 @@ public class ClientProgram extends Listener {
             Network.UpdatePlayer msg = (Network.UpdatePlayer) object;
 
             if (!GamePanel.players.containsKey(msg.id)) {
-                Log.i(TAG, "UpdatePlayer: Player with ID: " + msg.id  + " not contained ");
                 GamePanel.addPlayer(new Player(msg.id, new Point(msg.x, msg.y)));
             }
 

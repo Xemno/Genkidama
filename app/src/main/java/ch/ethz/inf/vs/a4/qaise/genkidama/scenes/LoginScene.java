@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
@@ -21,7 +22,6 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 /**
  * Created by Qais on 26-Nov-17.
  */
-
 public class LoginScene implements Scene {
     public static final String TAG = "##LoginScene## -> ";
 
@@ -47,8 +47,8 @@ public class LoginScene implements Scene {
                 activity, R.drawable.genkidama_splash,
                 556, 141,
                 1,
-                SCREEN_WIDTH/2 - 2*278,
-                16  ,
+                Constants.SCREEN_WIDTH/2 - 2*278,
+                Constants.SCREEN_HEIGHT/2 - 2*278, // TODO: somehow this is wrong, doesnt work, check again
                 true);
         genkidamaLogo.scaleBitmap(2);
         genkidamaLogo.isMoving = false;
@@ -57,8 +57,8 @@ public class LoginScene implements Scene {
                 activity, R.drawable.coins,
                 15, 16,
                 8,
-                SCREEN_WIDTH/4,
-                SCREEN_HEIGHT/3 ,
+                Constants.SCREEN_WIDTH/4,
+                Constants.SCREEN_HEIGHT/3 ,
                 true);
         coinAnimation.setFrameDuration(100);
         coinAnimation.scaleBitmap(6);
@@ -124,11 +124,11 @@ public class LoginScene implements Scene {
         background_image.draw(canvas);
 
 
-        coinAnimation.setWhereToDraw(SCREEN_WIDTH/4, SCREEN_HEIGHT/3 );
+        coinAnimation.setWhereToDraw(Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT/3 );
         coinAnimation.draw(canvas);
-        coinAnimation.setWhereToDraw(SCREEN_WIDTH/4, SCREEN_HEIGHT/2 );
+        coinAnimation.setWhereToDraw(Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT/2 );
         coinAnimation.draw(canvas);
-        coinAnimation.setWhereToDraw(SCREEN_WIDTH/4, 2* SCREEN_HEIGHT/3 );
+        coinAnimation.setWhereToDraw(Constants.SCREEN_WIDTH/4, 2*Constants.SCREEN_HEIGHT/3 );
         coinAnimation.draw(canvas);
 //        animation2.draw(canvas);
 //        animation3.draw(canvas);

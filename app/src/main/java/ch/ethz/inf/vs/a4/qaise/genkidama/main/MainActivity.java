@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
 
@@ -101,19 +102,23 @@ public class MainActivity extends AppCompatActivity {
         login_btn.setText(R.string.backtologinbuttonstring);
         login_btn.setId(Constants.BACK_TO_LOGIN_BTN);
 
-
+        float textSize = username.getTextSize() * 0.7f;
         //initialize loginUI buttons and edittext
         username.setHint(R.string.hinte);
+        username.setTextSize(textSize);
         username.setId(Constants.USERNAME_ID);
 
         port.setHint(R.string.hintport);
+        port.setTextSize(textSize);
         port.setId(Constants.PORT_ID);
         port.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         ip.setHint(R.string.hintip);
+        ip.setTextSize(textSize);
         ip.setId(Constants.IP_ID);
 
         enter_btn.setText(R.string.enterbutton);
+        enter_btn.setTextSize(textSize);
         enter_btn.setId(Constants.ENTER_BTN);
 
         // Layout gameUI

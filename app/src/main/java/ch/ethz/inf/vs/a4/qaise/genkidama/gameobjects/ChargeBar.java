@@ -39,7 +39,7 @@ public class ChargeBar implements GameObject {
         this.player = player;
         currCharge = player.getCurrentCharge();
         MaxCharge = player.getMaxCharge();
-        side = player.getSide();
+//        side = player.getSide();
 
         // Scaling size and position of the background part with final parameters above
         gapSide = Constants.SCREEN_WIDTH/GAP_SIDE_PART;        // where you want the charge bar
@@ -53,6 +53,7 @@ public class ChargeBar implements GameObject {
         makeRect();
     }
 
+    //TODO: Change that...
     private void makeRect(){
         // Distinguish on which side the player starts and initialize symmetrically
         if(side == 0) {

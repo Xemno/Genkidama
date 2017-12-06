@@ -6,13 +6,18 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 
+import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 
 
 /**
  * Created by Qais on 04-Nov-17.
  */
+
+//TODO: NOT FINISHED
+
 
 //TODO: NOT FINISHED
 
@@ -34,7 +39,7 @@ public class Player implements GameObject {
     private int currentCharge = 0;
     private final int CHARGE_AMOUNT = 5;
     public boolean isCharged = false;
-    public boolean isLooser = false;
+    public boolean isLoser = false;
 
 
     private Rect rectangle; // for collision detection
@@ -66,6 +71,8 @@ public class Player implements GameObject {
         //|--------------------------------------------|//
 
 
+
+
         /* Draw Player as a fixed Rectangle with random color */
         //|--------------------------------------------|//
         color = Color.rgb(
@@ -73,6 +80,7 @@ public class Player implements GameObject {
                 GamePanel.getRandom(30, 255),
                 GamePanel.getRandom(30, 255)
         );
+
         rectangle = new Rect(point.x, point.y, point.x + 42*8, point.y + 42*8);
         rectWidth = rectangle.width()/2;
         rectHight = rectangle.height()/2;
@@ -159,7 +167,7 @@ public class Player implements GameObject {
 
 
         if(currentHealth == 0){
-            isLooser = true;
+            isLoser = true;
         }
 
         old_point = new_point;
@@ -203,6 +211,14 @@ public class Player implements GameObject {
     }
 
     public boolean collidesWith(Player enemy){
+
+        //TODO:
+        /* Rect.intersects(wheretoDraw, enemy.whereToDraw)
+         * muss whereToDraw von dem momentanen Animationszustand nehmen und intersects machen
+         * mit dem Rect whereToDraw vom enemy der jeweiligen animation des enemys
+         */
+
+
         return Rect.intersects(rectangle, enemy.getRectangle()) || (rectangle.right >= enemy.getRectangle().left);
     }
 }

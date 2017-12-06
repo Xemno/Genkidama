@@ -117,8 +117,8 @@ public class GameOverScene implements Scene {
         //TODO create a picture which gives the winner a medal
     }
     public void setLooserpage(){
-//        if (player1.isLooser) {
-//            //if player.isLooser--> then player.setLooserpage();
+//        if (player1.isLoser) {
+//            //if player.isLoser--> then player.setLooserpage();
 //            //TODO: create a page where the loser gets displayed something like GAME OVER, want to restart?
 //        }
 
