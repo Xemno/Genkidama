@@ -34,7 +34,9 @@ public class Constants {
     public static int USERNAME_ID = 1344;
     public static int IP_ID = 1345;
     public static int PORT_ID = 1346;
-    public static int ENTER_BTN = 1347;
+    public static int LOGIN_BTN = 1347;
+    public static int START_BTN = 1348;
+    public static int TEXT_VIEW = 1349;
 
     public static int GAME_UI = 1341;
     public static int GAMEOVER_UI = 1342;

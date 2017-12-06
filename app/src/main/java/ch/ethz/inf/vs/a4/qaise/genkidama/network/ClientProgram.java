@@ -35,8 +35,7 @@ public class ClientProgram extends Listener {
             message.id =  proposedID;
             Constants.ID = proposedID;
 //            Constants.side = proposedSide;
-            Log.i(TAG, "PROPOSED ID" + proposedID);
-            Log.i(TAG, "TAKEN ID" + Constants.ID);
+
 
 //            Point new_point = new Point(Constants.SCREEN_WIDTH/2, 3* Constants.SCREEN_HEIGHT/4); // at which location the player rectangle is
             Point new_point = new Point(25,(int) (FLOOR_CEILING_DIST_RELATIVE - PLAYER_PERCENTAGE_HEIGHT/2)); // TODO: replace to PointF,a lso server-side

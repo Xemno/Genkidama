@@ -4,60 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
     android:paddingBottom="48dp"
-    android:paddingTop="48dp"
 
     android:paddingLeft="48dp"
     android:paddingRight="48dp"
 
-    android:layout_centerHorizontal="true"
+    android:paddingTop="48dp"
 
     tools:context="ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity">
 
 
-
-    <EditText
-        android:id="@+id/et_username"
+    <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/hinte"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:inputType="textPersonName"
+        android:layout_marginTop="30dp"
+        android:text="TextView" />
 
-        />
-    <EditText
-        android:id="@+id/et_ip"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/et_username"
-        android:hint="@string/hintip"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="17dp"
+        android:text="TextView" />
 
-        />
-    <EditText
-        android:id="@id/et_port"
+    <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/et_ip"
-        android:hint="@string/hintport"
-        android:inputType="number"
-        />
+        android:layout_alignStart="@+id/textView3"
+        android:layout_below="@+id/textView3"
+        android:layout_marginTop="16dp"
+        android:text="TextView" />
 
     <Button
-        android:id="@+id/namebutton"
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/et_port"
-        android:text="@string/enterbutton"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:onClick="onClickLogin"
-
-        />
-
-
+        android:layout_marginBottom="14dp"
+        android:text="Button" />
 </RelativeLayout>

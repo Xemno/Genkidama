@@ -3,6 +3,7 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.network;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
@@ -10,13 +11,14 @@ import com.esotericsoftware.kryonet.Listener;
 import java.io.IOException;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 
 
 /**
  * Created by Qais on 11-Nov-17.
  */
 
-// Class is Singelton pattern
+// Class is Singleton pattern
 
 public class KryoClient {
     // Sends and receives positions of the players
@@ -24,7 +26,8 @@ public class KryoClient {
     private static KryoClient instance = null;
     private static final int timeout = 5000;
 
-    private static Client client; // careful with this... dont access it if not allocated in constructor
+    private static Client client;
+
 
     public static Client getClient() { // only return if instantiated, check it!
         return client;

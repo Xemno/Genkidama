@@ -2,7 +2,6 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.scenes;
 
 import android.app.Activity;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,25 +32,28 @@ public class LoginScene implements Scene {
     private EditText port_number;
     private Button enter_btn;
 
+    private int top, right, left, bottom;
 
     Animation coinAnimation, animation2, animation3;
-    Animation genkidamaLogo;
+//    Animation genkidamaLogo;
 
     Drawable background_image;
+    Drawable genkidamaLogo;
 
     public LoginScene(Activity activity){
         this.activity = activity;
 
+        // Scale top of genkidamaLogo drawable
+        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
+            top = 5;
+        } else {
+            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
+        }
 
-        genkidamaLogo = new Animation(
-                activity, R.drawable.genkidama_splash,
-                556, 141,
-                1,
-                Constants.SCREEN_WIDTH/2 - 2*278,
-                Constants.SCREEN_HEIGHT/2 - 2*278, // TODO: somehow this is wrong, doesnt work, check again
-                true);
-        genkidamaLogo.scaleBitmap(2);
-        genkidamaLogo.isMoving = false;
+        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
+        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
+        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
+
 
         coinAnimation = new Animation(
                 activity, R.drawable.coins,
@@ -61,7 +63,7 @@ public class LoginScene implements Scene {
                 Constants.SCREEN_HEIGHT/3 ,
                 true);
         coinAnimation.setFrameDuration(100);
-        coinAnimation.scaleBitmap(6);
+        coinAnimation.scaleBitmap(4);
 
 //        animation2 = new Animation(
 //                activity, R.drawable.coins,
@@ -93,10 +95,18 @@ public class LoginScene implements Scene {
                     RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.LOGIN_UI);
                     loginUI.setVisibility(View.VISIBLE);
                     loginUI.bringToFront();
-                    enter_btn = (Button) activity.findViewById(Constants.ENTER_BTN);
+/*
+                    textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
+*/
+                    enter_btn = (Button) activity.findViewById(Constants.LOGIN_BTN);
                     edit_username = (EditText) activity.findViewById(Constants.USERNAME_ID);
                     ip_address = (EditText) activity.findViewById(Constants.IP_ID);
                     port_number = (EditText) activity.findViewById(Constants.PORT_ID);
+
+/*
+                    textView.setText("\n" + "Welcome!");
+*/
+
 
                     btn_active = true;
                     enter_btn.setOnClickListener(new View.OnClickListener(){
@@ -118,22 +128,22 @@ public class LoginScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawColor(Color.WHITE);
+
+        // Draw Background Picture
         background_image = activity.getBaseContext().getResources().getDrawable(R.drawable.rock_background);
         background_image.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         background_image.draw(canvas);
 
-
-        coinAnimation.setWhereToDraw(Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT/3 );
-        coinAnimation.draw(canvas);
-        coinAnimation.setWhereToDraw(Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT/2 );
-        coinAnimation.draw(canvas);
-        coinAnimation.setWhereToDraw(Constants.SCREEN_WIDTH/4, 2*Constants.SCREEN_HEIGHT/3 );
-        coinAnimation.draw(canvas);
-//        animation2.draw(canvas);
-//        animation3.draw(canvas);
-
+        // Draw Genkidama Text, centered and scales accordingly to the screen size
+        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
+        genkidamaLogo.setBounds(left, top, right, bottom);
         genkidamaLogo.draw(canvas);
+
+
+        coinAnimation.setWhereToDraw(left - 80, (bottom - top)/2 - 30);
+        coinAnimation.draw(canvas);
+        coinAnimation.setWhereToDraw(right + 20, (bottom - top)/2 - 30);
+        coinAnimation.draw(canvas);
 
 
     }

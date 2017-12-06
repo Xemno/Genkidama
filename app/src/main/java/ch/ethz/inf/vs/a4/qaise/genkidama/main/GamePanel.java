@@ -3,11 +3,13 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -33,6 +35,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private SceneManager manager;
 
+//    private static Activity activity;
+
     /* TODO: instantiate player here, add it to hashmap and access it then from every scene
      *  So we can bind our network in this class and do not have to worry to send packets in
      *  all scenes.
@@ -41,14 +45,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public GamePanel(Context context, Activity activity) {
         super(context);
 
+//        this.activity = activity;
+
         getHolder().addCallback(this);
 
         thread = new GameEngine(getHolder(), this);
 
         manager = new SceneManager(activity);
 
-        // TODO: initialize network
-//        new KryoClient();
+//        textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
 
         setFocusable(true);
     }
@@ -123,7 +128,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public static void addPlayer (Player player) {
         players.put(player.id, player);
-        Log.i(TAG, "Players: EntrySet -> " + players.entrySet());
+
+/*        TextView textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
+        if (player == myPlayer()) {
+            textView.append("\n" + "You, ");
+            textView.setTextColor(Color.rgb(220,20,60));
+            textView.append(player.name);
+            textView.setTextColor(Color.DKGRAY);
+            textView.append(", have been added to the game.");
+        } else {
+            textView.append("\n" + "Player ");
+            textView.setTextColor(Color.rgb(220,20,60));
+            textView.append(player.name);
+            textView.setTextColor(Color.DKGRAY);
+            textView.setText(" with ID ");
+            textView.setTextColor(Color.rgb(219,112,147));
+            textView.append(String.valueOf(player.id));
+            textView.setTextColor(Color.DKGRAY);
+            textView.setText(" has been added to the game.");
+
+        }*/
     }
 
     public static void updatePlayer(Network.UpdatePlayer msg) {
@@ -144,10 +168,28 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public static void removePlayer (int id) {
+ /*       Player player = players.get(id);
+
+        TextView textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
+        if (player == myPlayer()) {
+            textView.append("\n" + "You, ");
+            textView.setTextColor(Color.rgb(220,20,60));
+            textView.append(player.name);
+            textView.setTextColor(Color.DKGRAY);
+            textView.append(", have left the game.");
+        } else {
+            textView.append("\n" + "Player ");
+            textView.setTextColor(Color.rgb(220,20,60));
+            textView.append(player.name);
+            textView.setTextColor(Color.DKGRAY);
+            textView.setText(" with ID ");
+            textView.setTextColor(Color.rgb(219,112,147));
+            textView.append(String.valueOf(player.id));
+            textView.setTextColor(Color.DKGRAY);
+            textView.setText(" has left the game.");
+        }*/
+
         players.remove(id);
-        if (players.containsKey(id)) {
-            Log.i(TAG, "ERROR: failed to remove player");
-        }
     }
     /* ----------------------------------------------------------------------------------------- */
 
