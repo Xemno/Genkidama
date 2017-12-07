@@ -53,6 +53,13 @@ public class Player implements GameObject {
 
     Animation walk_right, walk_left; // TODO: finish these animations, hitbox not yet right position
     // TODO: add the other animations too
+    //declaration of other animations
+
+    Animation attack_left, attack_right;
+    Animation block_left, block_right;
+    Animation idle_left, idle_right;
+    Animation death_left, death_right;
+
 
     boolean walkInX = false; // false = -x, true = +x
 
@@ -109,7 +116,17 @@ public class Player implements GameObject {
         walk_left.scaleBitmap(8);
         walk_left.forward = false;
 
+       // idle_right= new Animation(MainActivity.context, R.drawable.knight_idle_right,42,42,4);
+        //idle_right.scaleBitmap(8);
+        //idle_right.forward=false;
+
     }
+    //Animation idle_right, idle_left;
+
+
+        //idle_right= new Animation(MainActivity.context, R.drawable.knight_idle_right, 42, 42, 4);
+    //4 frames idle right declaration
+
 
 
     public void attack(Player enemy){

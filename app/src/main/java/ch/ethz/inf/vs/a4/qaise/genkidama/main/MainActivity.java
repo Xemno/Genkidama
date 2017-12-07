@@ -30,6 +30,7 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 public class MainActivity extends AppCompatActivity {
 
     public static Context context;
+    //declaration for sound here
     MediaPlayer backgroundsound;
 
     @Override
