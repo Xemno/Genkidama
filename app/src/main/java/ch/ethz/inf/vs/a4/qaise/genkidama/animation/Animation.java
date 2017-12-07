@@ -150,7 +150,7 @@ public class Animation {
 
     public void setWhereToDraw(float x, float y) {
 
-        whereToDraw.set(new RectF(x, y, x + frameWidth, y + frameHeight));
+        whereToDraw.set(new RectF(x - frameWidth/2, y - frameHeight, x + frameWidth/2, y));
     }
 
     public void setFrameCount(int frameCount) {

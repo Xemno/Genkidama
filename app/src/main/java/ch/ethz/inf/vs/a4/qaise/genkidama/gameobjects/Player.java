@@ -42,7 +42,7 @@ public class Player implements GameObject {
     public boolean isLoser = false;
 
 
-    private Rect rectangle; // for collision detection
+//    private Rect rectangle; // for collision detection
     private int rectWidth, rectHight;
     private int color;
 
@@ -81,13 +81,15 @@ public class Player implements GameObject {
                 GamePanel.getRandom(30, 255)
         );
 
-        rectangle = new Rect(point.x, point.y, point.x + 42*8, point.y + 42*8);
-        rectWidth = rectangle.width()/2;
-        rectHight = rectangle.height()/2;
-        rectangle.set(  point.x - rectWidth,  point.y - rectHight,
-                point.x + rectWidth, point.y + rectHight);
-        //|--------------------------------------------|//
+//        rectangle = new Rect(point.x, point.y, point.x + 42*8, point.y + 42*8);
+//        rectWidth = rectangle.width()/2;
+//        rectHight = rectangle.height()/2;
+//        rectangle.set(  point.x - rectWidth,  point.y - rectHight,
+//                point.x + rectWidth, point.y + rectHight);
+//        //|--------------------------------------------|//
 
+
+        // TODO: NOTE - In allen Sprite Sheets vom Knight sind die Füsse um 3 pixel vom Boden entfernt! Lösen....
 
         walk_right = new Animation(
                 MainActivity.context,
@@ -126,10 +128,12 @@ public class Player implements GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        Paint paint = new Paint(); // The Paint class holds the style and color information about how to draw geometries, text and bitmaps
-        paint.setColor(color);
-        paint.setAlpha(200);
-        canvas.drawRect(rectangle, paint);
+//        Paint paint = new Paint(); // The Paint class holds the style and color information about how to draw geometries, text and bitmaps
+//        paint.setColor(color);
+//        paint.setAlpha(200);
+//        canvas.drawRect(rectangle, paint);
+
+
 //        healthbar.draw(canvas); //TODO: uncomment for use
 //        chargebar.draw(canvas); //TODO: uncomment for use
 
@@ -153,15 +157,15 @@ public class Player implements GameObject {
         // (left, top, right, bottom)
         this.new_point = point;
 
-        rectangle.set(  point.x - rectWidth,  point.y - rectHight,
-                point.x + rectWidth, point.y + rectHight);
+//        rectangle.set(point.x - rectWidth, point.y - rectHight*2,
+//                point.x + rectWidth, point.y);
 
         if (new_point.x < old_point.x) {
             walkInX = false;
-            walk_left.setWhereToDraw((float)(new_point.x - 42*8) , (float) (new_point.y - 42*8)); // scale und frame dimension abziehen
+            walk_left.setWhereToDraw((float)(new_point.x) , (float) (new_point.y)); // scale und frame dimension abziehen
         } else {
             walkInX = true;
-            walk_right.setWhereToDraw((float)(new_point.x - 42*8) , (float) (new_point.y - 42*8)); // scale und frame dimension abziehen
+            walk_right.setWhereToDraw((float)(new_point.x) , (float) (new_point.y)); // scale und frame dimension abziehen
         }
 
 
@@ -182,9 +186,9 @@ public class Player implements GameObject {
         this.color = color;
     }
 
-    public Rect getRectangle() {
-        return rectangle; // for collision detection
-    }
+//    public Rect getRectangle() {
+//        return rectangle; // for collision detection
+//    }
 
     public int getMaxHealth(){
         return maxHealth;
@@ -219,6 +223,7 @@ public class Player implements GameObject {
          */
 
 
-        return Rect.intersects(rectangle, enemy.getRectangle()) || (rectangle.right >= enemy.getRectangle().left);
+//        return Rect.intersects(rectangle, enemy.getRectangle()) || (rectangle.right >= enemy.getRectangle().left);
+        return false;
     }
 }

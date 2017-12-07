@@ -140,9 +140,9 @@ public class LoginScene implements Scene {
         genkidamaLogo.draw(canvas);
 
 
-        coinAnimation.setWhereToDraw(left - 80, (bottom - top)/2 - 30);
+        coinAnimation.setWhereToDraw(left - 40, (bottom - top) - 30);
         coinAnimation.draw(canvas);
-        coinAnimation.setWhereToDraw(right + 20, (bottom - top)/2 - 30);
+        coinAnimation.setWhereToDraw(right + 20, (bottom - top) - 30);
         coinAnimation.draw(canvas);
 
 
