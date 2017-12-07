@@ -23,6 +23,8 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
  */
 public class LoginScene implements Scene {
     public static final String TAG = "##LoginScene## -> ";
+    //TODO: Here loginmusic as soon as loginscene starts until we enter gameplayscene
+
 
     private Activity activity;
     private boolean btn_active = false;
