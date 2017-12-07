@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
@@ -190,15 +191,13 @@ public class Player implements GameObject {
     //Animation idle_right, idle_left;
 
 
-        //idle_right= new Animation(MainActivity.context, R.drawable.knight_idle_right, 42, 42, 4);
-    //4 frames idle right declaration
-
 
 
     public void attack(Player enemy){
         if (this.collidesWith(enemy)) { // only attack if collision !!!
             // TODO
-            //TODO: Music of normalattack
+            //TODO: Music of normalattack -> where to declare the media player
+
         }
     }
 
