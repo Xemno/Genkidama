@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -29,11 +30,17 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 public class MainActivity extends AppCompatActivity {
 
     public static Context context;
+    MediaPlayer backgroundsound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme); // start up theme
         super.onCreate(savedInstanceState);
+
+        //sound for background created here, setlooping infinity damit es immer läuft (wieder von vorne beginnt)
+        backgroundsound=MediaPlayer.create(this,R.raw.openingmusic);
+        backgroundsound.setLooping(true);
+        backgroundsound.start();
 
         context = this.getApplicationContext();
 
