@@ -51,10 +51,9 @@ public class Player implements GameObject {
     private HealthBar healthbar;
     private ChargeBar chargebar;
 
-    Animation walk_right, walk_left; // TODO: finish these animations, hitbox not yet right position
-    // TODO: add the other animations too
-    //declaration of other animations
-
+    // TODO: finish these animations, hitbox not yet right position
+    Animation animation;
+    Animation walk_right, walk_left;
     Animation attack_left, attack_right;
     Animation block_left, block_right;
     Animation idle_left, idle_right;
@@ -82,11 +81,11 @@ public class Player implements GameObject {
 
         /* Draw Player as a fixed Rectangle with random color */
         //|--------------------------------------------|//
-        color = Color.rgb(
-                GamePanel.getRandom(30, 255),
-                GamePanel.getRandom(30, 255),
-                GamePanel.getRandom(30, 255)
-        );
+//        color = Color.rgb(
+//                GamePanel.getRandom(30, 255),
+//                GamePanel.getRandom(30, 255),
+//                GamePanel.getRandom(30, 255)
+//        );
 
 //        rectangle = new Rect(point.x, point.y, point.x + 42*8, point.y + 42*8);
 //        rectWidth = rectangle.width()/2;
@@ -97,6 +96,27 @@ public class Player implements GameObject {
 
 
         // TODO: NOTE - In allen Sprite Sheets vom Knight sind die Füsse um 3 pixel vom Boden entfernt! Lösen....
+
+        idle_right = new Animation(
+                MainActivity.context,
+                R.drawable.knight_idle_right,
+                42, 42,
+                4,
+                point.x, point.y,
+                true);
+        idle_right.scaleBitmap(8);
+        idle_right.forward = true;      // always true for right animations
+
+        idle_left = new Animation(
+                MainActivity.context,
+                R.drawable.knight_idle_left,
+                42, 42,
+                4,
+                point.x, point.y,
+                true);
+        idle_left.scaleBitmap(8);
+        idle_left.forward = false;      // always false for right animations
+
 
         walk_right = new Animation(
                 MainActivity.context,
@@ -155,13 +175,7 @@ public class Player implements GameObject {
 //        chargebar.draw(canvas); //TODO: uncomment for use
 
 
-
-        if (walkInX) {
-            walk_right.draw(canvas);
-        } else {
-            walk_left.draw(canvas);
-        }
-//        walk_right.draw(canvas);
+        animation.draw(canvas);
 
     }
 
@@ -180,12 +194,29 @@ public class Player implements GameObject {
         if (new_point.x < old_point.x) {
             walkInX = false;
             walk_left.setWhereToDraw((float)(new_point.x) , (float) (new_point.y)); // scale und frame dimension abziehen
-        } else {
+            animation = walk_left;
+        } else if (new_point.x == old_point.x) {
+            idle_left.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
+            animation = idle_left;
+        }
+
+        if (new_point.x > old_point.x) {
             walkInX = true;
             walk_right.setWhereToDraw((float)(new_point.x) , (float) (new_point.y)); // scale und frame dimension abziehen
+            animation = walk_right;
+        } else if (new_point.x == old_point.x) {
+            idle_right.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
+            animation = idle_right;
         }
 
 
+//        if (walkInX && new_point.x == old_point.x) {
+//            idle_right.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
+//            animation = idle_right;
+//        } else if (!walkInX && new_point.x == old_point.x){
+//            idle_left.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
+//            animation = idle_left;
+//        }
 
         if(currentHealth == 0){
             isLoser = true;

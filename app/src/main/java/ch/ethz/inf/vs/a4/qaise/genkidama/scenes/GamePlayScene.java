@@ -41,6 +41,8 @@ public class GamePlayScene implements Scene {
 
     private boolean doOnce = true;
 
+    private boolean sendOnce = true;
+
     private BaseFloor floor;
 
     Drawable background_image;
@@ -121,6 +123,12 @@ public class GamePlayScene implements Scene {
             KryoClient.send(new_point); // sends the point of this player to server
             old_point.set(new_point.x, new_point.y);
         }
+
+        if (sendOnce) {
+            KryoClient.send(new_point);
+            old_point.set(new_point.x, new_point.y);
+            sendOnce = false;
+        }
     }
 
     @Override
@@ -154,6 +162,7 @@ public class GamePlayScene implements Scene {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 movingPlayer = true;
+                sendOnce = true;
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (movingPlayer) { // only move our player if condition true
@@ -168,6 +177,8 @@ public class GamePlayScene implements Scene {
                 break;
             case MotionEvent.ACTION_UP:
                 movingPlayer = false;
+                sendOnce = true;
+                new_point.x = (int) event.getX(); // TODO: newly added...
                 break;
         }
 
