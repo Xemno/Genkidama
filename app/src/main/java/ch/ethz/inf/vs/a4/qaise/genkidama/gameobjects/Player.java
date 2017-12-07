@@ -138,9 +138,53 @@ public class Player implements GameObject {
         walk_left.scaleBitmap(8);
         walk_left.forward = false;
 
-       // idle_right= new Animation(MainActivity.context, R.drawable.knight_idle_right,42,42,4);
-        //idle_right.scaleBitmap(8);
-        //idle_right.forward=false;
+       //declarations of other animations
+        attack_left=new Animation(MainActivity.context,
+                R.drawable.knight_attack_left,
+                42,42,
+                10,point.x, point.y,
+                true);
+        attack_left.scaleBitmap(8);
+        attack_left.forward=false;
+
+        attack_right=new Animation(MainActivity.context,
+                R.drawable.knight_attack_right,
+                42, 42,
+                10, point.x, point.y,
+                true);
+
+        attack_right.scaleBitmap(8);
+
+        block_left=new Animation(MainActivity.context,
+                R.drawable.knight_block_left,
+                42,42,
+                7,point.x,point.y,
+                true);
+        block_left.scaleBitmap(8);
+        block_left.forward=false;
+
+        block_right=new Animation(MainActivity.context,
+                R.drawable.knight_block_right,
+                42,42,
+                7,point.x,point.y,
+                true);
+        block_right.scaleBitmap(8);
+
+        death_left=new Animation(MainActivity.context,
+                R.drawable.knight_death_left,
+                42,42,
+                9, point.x, point.y,
+                true);
+        death_left.scaleBitmap(8);
+        death_left.forward=false;
+
+        death_right=new Animation(MainActivity.context,
+                R.drawable.knight_death_right,
+                42,42,
+                9, point.x, point.y,
+                true);
+        death_right.scaleBitmap(8);
+
 
     }
     //Animation idle_right, idle_left;
@@ -154,12 +198,14 @@ public class Player implements GameObject {
     public void attack(Player enemy){
         if (this.collidesWith(enemy)) { // only attack if collision !!!
             // TODO
+            //TODO: Music of normalattack
         }
     }
 
     public void specialAttack(Player enemy) {
         if (this.collidesWith(enemy)) { // only attack if collision !!!
             // TODO
+            //TODO: here music of attacksound
         }
     }
 
