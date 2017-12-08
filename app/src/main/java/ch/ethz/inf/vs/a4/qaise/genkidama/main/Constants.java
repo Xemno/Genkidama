@@ -49,4 +49,8 @@ public class Constants {
     public static int GAMEPLAY_SCENE = 1;
     public static int GAMEOVER_SCENE = 2;
 
+    public static int MAX_HEALTH = 1000;
+    public static int MAX_CHARGE = 200;
+    public static int CHARGE_AMOUNT = 5;
+
 }

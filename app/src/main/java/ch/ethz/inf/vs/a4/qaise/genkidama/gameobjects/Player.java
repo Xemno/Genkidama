@@ -8,13 +8,18 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
-import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
+
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_CHARGE;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_HEALTH;
+
 
 /**
  * Created by Qais on 04-Nov-17.
@@ -31,8 +36,7 @@ public class Player implements GameObject {
     private final static int MIN_DMG = 10;
     private final static int MAX_DMG = 20;
     private final static int SPECIAL_ATTACK_DMG = 100;
-    static final int MAX_HEALTH = 1000;
-    static final int MAX_CHARGE = 200;
+
 
 
     public String name;
@@ -43,7 +47,6 @@ public class Player implements GameObject {
     private int maxHealth, maxCharge;
     private int currentHealth;
     private int currentCharge = 0;
-    private final int CHARGE_AMOUNT = 5;
     public boolean isCharged = false;
     public boolean isLoser = false;
 
@@ -84,9 +87,7 @@ public class Player implements GameObject {
         this.side = side;
         //|--------------------------------------------|//
 
-        if (side % 2 != 0) {
-            walkInX = true;  // if on the left side, animate idle_right
-        } // otherwise false anyways and animate idle_left
+
 
 
         /* Draw Player as a fixed Rectangle with random color */
@@ -196,6 +197,11 @@ public class Player implements GameObject {
         death_right.scaleBitmap(8);
 
 
+        if (side % 2 != 0) {
+            walkInX = true;  // if on the left side, animate idle_right
+            animation = idle_right;
+        } // otherwise false anyways and animate idle_left
+
     }
     //Animation idle_right, idle_left;
 
@@ -207,18 +213,13 @@ public class Player implements GameObject {
             // TODO
             //TODO: Music of normalattack -> where to declare the media player
             int damage = GamePanel.getRandom(MIN_DMG, MAX_DMG);
-            if (currentCharge > maxCharge - CHARGE_AMOUNT) {
-                currentCharge = maxCharge;
-                isCharged = true;
-            } else {
-                currentCharge += CHARGE_AMOUNT;
-            }
 
-            int health = enemy.currentHealth - damage;
-            if (health > 0) {
+            Log.d("DEBUG FUN", "attack now");
+            //int health = enemy.currentHealth - damage;
+            //if (health > 0) {
                 KryoClient.attack(enemy, damage);
-            }
-
+            //}
+            Log.d("DEBUG FUN", "attack finished");
         }
     }
 
@@ -310,6 +311,10 @@ public class Player implements GameObject {
 
     public int getCurrentCharge() {
         return currentCharge;
+    }
+
+    public void setCurrentCharge(int charge){
+        currentCharge = charge;
     }
 
     public void setCurrentHealth(int health){

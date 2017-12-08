@@ -18,7 +18,10 @@ public class Network {
         kryo.register(UpdatePlayer.class);
         kryo.register(RemovePlayer.class);
         kryo.register(StateObject.class);
+        kryo.register(Attack.class);
+        kryo.register(AttackPlayer.class);
         kryo.register(MovePlayer.class);
+
     }
 
     public static class Login {
