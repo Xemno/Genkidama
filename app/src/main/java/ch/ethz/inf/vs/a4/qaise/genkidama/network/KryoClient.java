@@ -71,7 +71,7 @@ public class KryoClient {
             Network.AttackPlayer message = new Network.AttackPlayer();
 
             if (Constants.ID == 999) return; // if default ID, that is ID is not yet set by server
-            message.idA = GamePanel.myPlayer().id;  // move our player
+            message.idA = Constants.ID;  // move our player
             message.idE = enemy.id;
             // TODO: if float not necessary for packets, we can leave the rest but change network to int, and cast here from float to int
             message.damage = damage;

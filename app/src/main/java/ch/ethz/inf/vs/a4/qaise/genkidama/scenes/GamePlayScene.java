@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -68,9 +69,10 @@ public class GamePlayScene implements Scene {
         this.activity = activity;
 
         floor = new BaseFloor();
-        Constants.fixDist = floor.getFixHeight();
+        fixDist = floor.getFixHeight();
 
         old_point = new PointF(0,0);
+        new_point = new PointF(0, fixDist); // TODO: added such that new_point is not null, must be changed though
 
         coinAnimation = new Animation(
                 activity, R.drawable.coins,
@@ -78,7 +80,6 @@ public class GamePlayScene implements Scene {
                 8, 300, 300, true);
         coinAnimation.setFrameDuration(100);
         coinAnimation.scaleBitmap(5);
-
 
     }
 
@@ -157,6 +158,10 @@ public class GamePlayScene implements Scene {
 
         for (Player player : players.values()) { // draw all players
             player.draw(canvas);
+
+//            Log.i(TAG, player.name);
+//            Log.i(TAG, "ID:" + String.valueOf(player.id));
+//            Log.i(TAG, "SIDE: " + String.valueOf(player.side));
         }
 
         coinAnimation.draw(canvas);

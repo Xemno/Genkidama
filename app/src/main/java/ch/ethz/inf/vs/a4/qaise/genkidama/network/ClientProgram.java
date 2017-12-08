@@ -82,9 +82,10 @@ public class ClientProgram extends Listener {
             Network.UpdatePlayer msg = (Network.UpdatePlayer) object;
 
 //TODO: removed...maybe handle
-//            if (!GamePanel.players.containsKey(msg.id)) {
+            if (!GamePanel.players.containsKey(msg.id)) {
 //                GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y)));
-//            }
+                return;
+            }
 
             GamePanel.updatePlayer(msg);
             return;
