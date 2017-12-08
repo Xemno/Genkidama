@@ -195,28 +195,20 @@ public class Player implements GameObject {
             walkInX = false;
             walk_left.setWhereToDraw((float)(new_point.x) , (float) (new_point.y)); // scale und frame dimension abziehen
             animation = walk_left;
-        } else if (new_point.x == old_point.x) {
-            idle_left.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
-            animation = idle_left;
-        }
-
-        if (new_point.x > old_point.x) {
+        } else if (new_point.x > old_point.x) {
             walkInX = true;
             walk_right.setWhereToDraw((float)(new_point.x) , (float) (new_point.y)); // scale und frame dimension abziehen
             animation = walk_right;
         } else if (new_point.x == old_point.x) {
-            idle_right.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
-            animation = idle_right;
+            if (walkInX){
+                idle_right.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
+                animation = idle_right;
+            } else {
+                idle_left.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
+                animation = idle_left;
+            }
         }
 
-
-//        if (walkInX && new_point.x == old_point.x) {
-//            idle_right.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
-//            animation = idle_right;
-//        } else if (!walkInX && new_point.x == old_point.x){
-//            idle_left.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
-//            animation = idle_left;
-//        }
 
         if(currentHealth == 0){
             isLoser = true;

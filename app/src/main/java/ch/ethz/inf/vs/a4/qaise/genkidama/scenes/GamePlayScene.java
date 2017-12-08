@@ -144,7 +144,6 @@ public class GamePlayScene implements Scene {
             player.draw(canvas);
         }
 
-
         coinAnimation.draw(canvas);
 
         floor.draw(canvas);
