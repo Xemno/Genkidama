@@ -321,9 +321,8 @@ public class Player implements GameObject {
     }
 
     public boolean collidesWith(Player enemy){
-
+        if (enemy == null) return false;
         return RectF.intersects( animation.getWhereToDraw(), enemy.animation.getWhereToDraw());
-
 //        return Rect.intersects(rectangle, enemy.getRectangle()) || (rectangle.right >= enemy.getRectangle().left);
 
     }
