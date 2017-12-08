@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -154,7 +155,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         /* enemy players will be updated through the network here */
         Player player = players.get(msg.id);
 //        if (player == null) return;
-        player.update(new Point(msg.x, msg.y));
+        player.update(new PointF(msg.x, msg.y));
     }
 
     public static void attackPlayer(Network.Attack msg) {

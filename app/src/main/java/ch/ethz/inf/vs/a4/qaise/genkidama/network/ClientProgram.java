@@ -1,6 +1,7 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.network;
 
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -71,7 +72,7 @@ public class ClientProgram extends Listener {
 //                Constants.REGISTERED = true;
 //            }
 
-            GamePanel.addPlayer(new Player(msg.id, new Point(msg.x, msg.y)));
+            GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y)));
             return;
         }
 
@@ -80,7 +81,7 @@ public class ClientProgram extends Listener {
             Network.UpdatePlayer msg = (Network.UpdatePlayer) object;
 
             if (!GamePanel.players.containsKey(msg.id)) {
-                GamePanel.addPlayer(new Player(msg.id, new Point(msg.x, msg.y)));
+                GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y)));
             }
 
             GamePanel.updatePlayer(msg);

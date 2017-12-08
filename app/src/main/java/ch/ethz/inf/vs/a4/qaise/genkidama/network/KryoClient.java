@@ -1,6 +1,7 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.network;
 
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
@@ -50,12 +51,13 @@ public class KryoClient {
 
     }
 
-    public static void send(Point point) {
+    public static void send(PointF point) {
         if (client != null && client.isConnected()) {
             Network.MovePlayer message = new Network.MovePlayer();
 
             if (Constants.ID == 999) return; // if default ID, that is ID is not yet set by server
             message.id = Constants.ID;  // move our player
+            // TODO: if float not necessary for packets, we can leave the rest but change network to int, and cast here from float to int
             message.x = point.x;
             message.y = point.y;
             client.sendTCP(message);

@@ -33,11 +33,15 @@ public class Network {
 
     public static class Register {
         public String name;
-        public int id, x, y;
+        public int id;
+        public float x, y;
+//        public int id, x, y;
     }
 
     public static class AddPlayer {
-        public int id, x ,y;
+        public int id;
+        public float x,y;
+//        public int id, x ,y;
     }
 
     static public class RemovePlayer {
@@ -46,8 +50,11 @@ public class Network {
 
     public static class MovePlayer {
         // For sending updates of our character
-        public int id, x, y;
+        public int id;
+        public float x,y;
+//        public int id, x, y;
     }
+
 
     public static class Attack {
         // For Server use
@@ -68,6 +75,8 @@ public class Network {
 
     public static class UpdatePlayer {
         // For receiving updates of other characters
-        public int id, x, y;
+        public int id;
+        public float x,y;
+//        public int id, x, y;
     }
 }

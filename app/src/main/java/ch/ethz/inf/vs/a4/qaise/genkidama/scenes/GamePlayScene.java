@@ -39,9 +39,7 @@ public class GamePlayScene implements Scene {
 
     private Activity activity;
 
-    private Point old_point, new_point;
-    private float x_old, x_new;
-    private PointF point; // Point of our player
+    private PointF old_point, new_point;
     private boolean movingPlayer = false;
 
     private boolean doOnce = true;
@@ -66,7 +64,7 @@ public class GamePlayScene implements Scene {
         floor = new BaseFloor();
         Constants.fixDist = floor.getFixHeight();
 
-        old_point = new Point(0,0);
+        old_point = new PointF(0,0);
 
         coinAnimation = new Animation(
                 activity, R.drawable.coins,
@@ -83,7 +81,7 @@ public class GamePlayScene implements Scene {
 
         // initialize players new_point if assigned by server
         if (myPlayer() != null && new_point == null) {
-            new_point = new Point(myPlayer().new_point);
+            new_point = new PointF(myPlayer().new_point.x, myPlayer().new_point.y);
         }
 
         // send updated movement of our player to server

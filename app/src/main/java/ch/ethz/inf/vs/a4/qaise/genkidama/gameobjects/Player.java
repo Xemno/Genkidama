@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 
@@ -51,7 +52,7 @@ public class Player implements GameObject {
     private int rectWidth, rectHight;
     private int color;
 
-    public Point new_point, old_point;
+    public PointF new_point, old_point;  // ###
 
     private HealthBar healthbar;
     private ChargeBar chargebar;
@@ -67,7 +68,7 @@ public class Player implements GameObject {
 
     boolean walkInX = false; // false = -x, true = +x
 
-    public Player(int id, Point point) {
+    public Player(int id, PointF point) {
 
         /* Initialize settings of this player */
         //|--------------------------------------------|//
@@ -235,7 +236,7 @@ public class Player implements GameObject {
         // you can leave this empty if you don't need it
     }
 
-    public void update(Point point) {
+    public void update(PointF point) {
         // (left, top, right, bottom)
         this.new_point = point;
 
@@ -244,18 +245,18 @@ public class Player implements GameObject {
 
         if (new_point.x < old_point.x) {
             walkInX = false;
-            walk_left.setWhereToDraw((float)(new_point.x) , (float) (new_point.y)); // scale und frame dimension abziehen
+            walk_left.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
             animation = walk_left;
         } else if (new_point.x > old_point.x) {
             walkInX = true;
-            walk_right.setWhereToDraw((float)(new_point.x) , (float) (new_point.y)); // scale und frame dimension abziehen
+            walk_right.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
             animation = walk_right;
         } else if (new_point.x == old_point.x) {
             if (walkInX){
-                idle_right.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
+                idle_right.setWhereToDraw((new_point.x) , (new_point.y));
                 animation = idle_right;
             } else {
-                idle_left.setWhereToDraw((float)(new_point.x) , (float) (new_point.y));
+                idle_left.setWhereToDraw((new_point.x) , (new_point.y));
                 animation = idle_left;
             }
         }
