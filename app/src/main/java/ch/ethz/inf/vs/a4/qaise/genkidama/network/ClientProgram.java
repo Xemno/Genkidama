@@ -37,17 +37,18 @@ public class ClientProgram extends Listener {
             int proposedSide = ((Network.RegistrationRequired) object).side; // take proposed ID from server
 
             message.id =  proposedID;
+            message.side = proposedSide;
             ID = proposedID;
             side = proposedSide;
 
-            Point new_point;
+            PointF new_point;
 
             // side was assigned to by server
             int count = 10; // lets say we can have 10 palyers placed on the screen
             if (side % 2 != 0) { // draw on left side
-                new_point = new Point(side * SCREEN_WIDTH/count, Constants.fixDist);
+                new_point = new PointF(side * SCREEN_WIDTH/count, Constants.fixDist);
             } else {  // draw on right side
-                new_point = new Point(SCREEN_WIDTH - ((side) * SCREEN_WIDTH/count) , Constants.fixDist);
+                new_point = new PointF(SCREEN_WIDTH - ((side) * SCREEN_WIDTH/count) , Constants.fixDist);
             }
 
 
@@ -72,7 +73,7 @@ public class ClientProgram extends Listener {
 //                Constants.REGISTERED = true;
 //            }
 
-            GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y)));
+            GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y), msg.side));
             return;
         }
 
@@ -80,9 +81,10 @@ public class ClientProgram extends Listener {
 
             Network.UpdatePlayer msg = (Network.UpdatePlayer) object;
 
-            if (!GamePanel.players.containsKey(msg.id)) {
-                GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y)));
-            }
+//TODO: removed...maybe handle
+//            if (!GamePanel.players.containsKey(msg.id)) {
+//                GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y)));
+//            }
 
             GamePanel.updatePlayer(msg);
             return;

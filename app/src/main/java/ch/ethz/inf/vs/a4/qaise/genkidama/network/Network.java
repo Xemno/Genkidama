@@ -33,13 +33,13 @@ public class Network {
 
     public static class Register {
         public String name;
-        public int id;
+        public int id, side;
         public float x, y;
 //        public int id, x, y;
     }
 
     public static class AddPlayer {
-        public int id;
+        public int id, side;
         public float x,y;
 //        public int id, x ,y;
     }

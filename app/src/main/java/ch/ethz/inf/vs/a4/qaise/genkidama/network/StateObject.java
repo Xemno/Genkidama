@@ -6,6 +6,6 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.network;
 
 public class StateObject {
     public String name;
-    public int id;
+    public int id, side;
     public float x, y;
 }

@@ -16,10 +16,6 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
-
-
 /**
  * Created by Qais on 04-Nov-17.
  */
@@ -41,6 +37,8 @@ public class Player implements GameObject {
 
     public String name;
     public int id;
+    public int side;
+
 
     private int maxHealth, maxCharge;
     private int currentHealth;
@@ -48,6 +46,7 @@ public class Player implements GameObject {
     private final int CHARGE_AMOUNT = 5;
     public boolean isCharged = false;
     public boolean isLoser = false;
+
 
 
 //    private Rect rectangle; // for collision detection
@@ -70,7 +69,7 @@ public class Player implements GameObject {
 
     boolean walkInX = false; // false = -x, true = +x
 
-    public Player(int id, PointF point) {
+    public Player(int id, PointF point, int side) {
 
         /* Initialize settings of this player */
         //|--------------------------------------------|//
@@ -82,6 +81,7 @@ public class Player implements GameObject {
         this.maxCharge = MAX_CHARGE;
         this.healthbar = new HealthBar(this); //TODO: uncomment for use
         this.chargebar = new ChargeBar(this); //TODO: uncomment for use
+        this.side = side;
         //|--------------------------------------------|//
 
         if (side % 2 != 0) {

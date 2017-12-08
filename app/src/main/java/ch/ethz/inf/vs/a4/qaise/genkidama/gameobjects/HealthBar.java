@@ -7,8 +7,6 @@ import android.graphics.Rect;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
-
 
 
     /*  What we do:
@@ -44,10 +42,13 @@ public class HealthBar implements GameObject {
     private int gapSide, gapTop;                                // parameters for drawing: position and size
     private int backgroundWidth, backgroundHeight, healthWidth;
 
+    private int side;
+
 
     public HealthBar(Player player) {
         // Get player data
         this.player = player;
+        this.side = player.side;
         currHealth = player.getCurrentHealth();
         MaxHealth = player.getMaxHealth();
 
@@ -108,7 +109,7 @@ public class HealthBar implements GameObject {
 
         healthWidth = currHealth* backgroundWidth /MaxHealth;
 
-        if(side == 0)
+        if(side == 1)
             rectHealth.right = gapSide + BORDER_SIZE + healthWidth;
         else
             rectHealth.right = Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + healthWidth;

@@ -7,8 +7,6 @@ import android.graphics.Rect;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
-
 // same as Healthbar with renamed
 
 public class ChargeBar implements GameObject {
@@ -35,9 +33,12 @@ public class ChargeBar implements GameObject {
     private int gapSide, gapTop;                                // parameters for drawing: position and size
     private int backgroundWidth, backgroundHeight, chargeWidth;
 
+    private int side;
+
     public ChargeBar(Player player) {
         // Get player data
         this.player = player;
+        this.side = player.side;
         currCharge = player.getCurrentCharge();
         MaxCharge = player.getMaxCharge();
 //        side = player.getSide();
@@ -63,7 +64,7 @@ public class ChargeBar implements GameObject {
                     gapSide + 2*BORDER_SIZE + backgroundWidth, gapTop + backgroundHeight + 2*BORDER_SIZE);
             rectCharge = new Rect(gapSide + BORDER_SIZE, gapTop + BORDER_SIZE,
                     gapSide + BORDER_SIZE + chargeWidth, gapTop + BORDER_SIZE + backgroundHeight);
-        } else if (side == 2){
+        } else {
             // display on right side
             rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2*BORDER_SIZE - backgroundWidth, gapTop,
                     Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2*BORDER_SIZE);
@@ -88,7 +89,7 @@ public class ChargeBar implements GameObject {
     public void update() {
         currCharge = player.getCurrentCharge();
         chargeWidth = currCharge* backgroundWidth / MaxCharge;
-        if (side == 0)
+        if (side == 1)
             rectCharge.right = gapSide + BORDER_SIZE + chargeWidth;
         else
             rectCharge.right = Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + chargeWidth;
