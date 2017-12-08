@@ -7,6 +7,8 @@ import android.graphics.Rect;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
+
 // same as Healthbar with renamed
 
 public class ChargeBar implements GameObject {
@@ -32,7 +34,6 @@ public class ChargeBar implements GameObject {
     // relative position values:
     private int gapSide, gapTop;                                // parameters for drawing: position and size
     private int backgroundWidth, backgroundHeight, chargeWidth;
-    private int side;                                           // on which side the charge bar should be
 
     public ChargeBar(Player player) {
         // Get player data

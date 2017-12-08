@@ -7,6 +7,8 @@ import android.graphics.Rect;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
+
 
 
     /*  What we do:
@@ -41,13 +43,14 @@ public class HealthBar implements GameObject {
     // relative position values:
     private int gapSide, gapTop;                                // parameters for drawing: position and size
     private int backgroundWidth, backgroundHeight, healthWidth;
-    private int side;                                           // on which side the healthbar should be
+
 
     public HealthBar(Player player) {
         // Get player data
         this.player = player;
         currHealth = player.getCurrentHealth();
         MaxHealth = player.getMaxHealth();
+
 //        side = player.getSide();
 
         colorHealth = Color.GREEN;
@@ -73,7 +76,7 @@ public class HealthBar implements GameObject {
                     gapSide + 2*BORDER_SIZE + backgroundWidth, gapTop + backgroundHeight + 2*BORDER_SIZE);
             rectHealth = new Rect(gapSide + BORDER_SIZE, gapTop + BORDER_SIZE,
                     gapSide + BORDER_SIZE + healthWidth, gapTop + BORDER_SIZE + backgroundHeight);
-        } else if(side == 2) {
+        } else /*if(side == 2)*/ {
             // display on right side
             rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2*BORDER_SIZE - backgroundWidth, gapTop,
                     Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2*BORDER_SIZE);
