@@ -8,7 +8,7 @@ import android.app.Activity;
 
 public class Constants {
 
-    public static Activity activity;
+//    public static Activity activity;
     public static String NAME = "default"; // TODO: overwrite with input name!
     public static String USERNAME;
     public static int PORT_NUMBER = 15325;
@@ -20,7 +20,7 @@ public class Constants {
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
 
-//    public static boolean REGISTERED = false;
+    public static boolean CONNECTED = false;
 
     public static float PLAYER_PERCENTAGE_WIDTH = 10;
     public static float PLAYER_PERCENTAGE_HEIGHT; // defined via player_size

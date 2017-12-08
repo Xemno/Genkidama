@@ -13,6 +13,7 @@ import android.widget.Toast;
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
@@ -32,7 +33,9 @@ public class LoginScene implements Scene {
     private EditText edit_username;
     private EditText ip_address;
     private EditText port_number;
-    private Button enter_btn;
+    private Button enter_btn, start_btn;
+
+    public static Thread thread;
 
     private int top, right, left, bottom;
 
@@ -101,6 +104,7 @@ public class LoginScene implements Scene {
                     textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
 */
                     enter_btn = (Button) activity.findViewById(Constants.LOGIN_BTN);
+                    start_btn = (Button) activity.findViewById(Constants.START_BTN);
                     edit_username = (EditText) activity.findViewById(Constants.USERNAME_ID);
                     ip_address = (EditText) activity.findViewById(Constants.IP_ID);
                     port_number = (EditText) activity.findViewById(Constants.PORT_ID);
@@ -110,6 +114,7 @@ public class LoginScene implements Scene {
 */
 
 
+
                     btn_active = true;
                     enter_btn.setOnClickListener(new View.OnClickListener(){
                         @Override
@@ -117,7 +122,17 @@ public class LoginScene implements Scene {
                             //TODO: needs to be changed
                             if(checkInputs()) {
                                 KryoClient.getInstance().connect();
-                                terminate();
+                                start_btn.setEnabled(true);
+//                                terminate();
+                            }
+                        }
+                    });
+
+                    start_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (GamePanel.myPlayer() != null) { // if my player has been added by the server, terminate
+                                terminate();   // TODO: we want to wait for other players too
                             }
                         }
                     });

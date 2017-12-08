@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
@@ -15,6 +16,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.LoginScene;
 
 
 /**
@@ -93,7 +95,7 @@ public class KryoClient {
             try {
                 client.connect(timeout, Constants.SERVER_ADDRESS, Constants.PORT_NUMBER);
                 Log.i(TAG, "Connection to Server: Succeeded");
-
+                Constants.CONNECTED = true;
                 login(); // send login message to server
 
                 return null;

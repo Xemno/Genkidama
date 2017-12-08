@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme); // start up theme
         super.onCreate(savedInstanceState);
-        Constants.activity=this;
+//        Constants.activity=this;
         //we need this for music
         //sound for background created here, setlooping infinity damit es immer läuft (wieder von vorne beginnt)
         backgroundsound=MediaPlayer.create(this,R.raw.loginmusic );
@@ -155,6 +155,10 @@ public class MainActivity extends AppCompatActivity {
         enter_btn.setBackgroundResource(R.drawable.button);
         enter_btn.setTextSize(40);
         enter_btn.setId(Constants.START_BTN);
+        enter_btn.setEnabled(false);
+//        enter_btn.setClickable(false);
+//        enter_btn.setFocusableInTouchMode(false);
+//        enter_btn.setFocusable(false);
 
         // Layout gameUI
         //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(175,175);
