@@ -8,6 +8,9 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
@@ -21,6 +24,7 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIS
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.ID;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.fixDist;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.myPlayer;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
 
@@ -41,6 +45,8 @@ public class GamePlayScene implements Scene {
 
     private PointF old_point, new_point;
     private boolean movingPlayer = false;
+
+    float x_old, x_new;
 
     private boolean doOnce = true;
 
@@ -98,6 +104,42 @@ public class GamePlayScene implements Scene {
             old_point.set(new_point.x, new_point.y);
             sendOnce = false;
         }
+
+
+        if (!btn_active) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_UI);
+                    gameUI.setVisibility(View.VISIBLE);
+                    Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
+                    Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
+                    btn_active = true;
+
+                    att_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            for (Player enemy : players.values()) {
+                                myPlayer().attack(enemy);
+                            }
+                        }
+                    });
+
+
+                    super_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            for (Player enemy : players.values()) {
+                                myPlayer().specialAttack(enemy);
+                            }
+                        }
+                    });
+
+
+                }
+            });
+        }
     }
 
     @Override
@@ -131,16 +173,23 @@ public class GamePlayScene implements Scene {
             case MotionEvent.ACTION_DOWN:
                 movingPlayer = true;
                 sendOnce = true;
+//                x_old = event.getX();
+                old_point.x = event.getX();
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (movingPlayer) { // only move our player if condition true
-                    new_point.x = (int) event.getX(); // only update y direction
+                new_point.x = event.getX();
+                float diff = new_point.x - old_point.x;
+
+                if (movingPlayer && Math.abs(diff) > 5) { // only move our player if condition true
+//                    new_point.x = (int) event.getX(); // only update y direction
+                    new_point.x = old_point.x + (diff * 100/SCREEN_WIDTH);
+//                    x_old = x_new;
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 movingPlayer = false;
                 sendOnce = true;
-                new_point.x = (int) event.getX(); // TODO: newly added...
+//                new_point.x = (int) event.getX(); // TODO: newly added...
                 break;
         }
 

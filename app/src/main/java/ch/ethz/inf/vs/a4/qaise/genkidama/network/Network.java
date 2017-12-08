@@ -69,8 +69,7 @@ public class Network {
         public int idA; // ID of the Attacker
         public int idE; // which player is being attacked
         public int damage;  // the damage caused
-        public int charge;  // charge for idA from this damage
-
+//        public int charge;  // charge for idA from this damage
     }
 
     public static class UpdatePlayer {

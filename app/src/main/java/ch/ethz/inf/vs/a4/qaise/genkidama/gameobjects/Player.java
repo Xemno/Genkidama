@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.MediaPlayer;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
@@ -13,6 +14,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
+import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
@@ -78,8 +80,8 @@ public class Player implements GameObject {
         this.maxHealth = MAX_HEALTH;
         this.currentHealth = MAX_HEALTH;
         this.maxCharge = MAX_CHARGE;
-//        this.healthbar = new HealthBar(this); //TODO: uncomment for use
-//        this.chargebar = new ChargeBar(this); //TODO: uncomment for use
+        this.healthbar = new HealthBar(this); //TODO: uncomment for use
+        this.chargebar = new ChargeBar(this); //TODO: uncomment for use
         //|--------------------------------------------|//
 
         if (side % 2 != 0) {
@@ -204,6 +206,18 @@ public class Player implements GameObject {
         if (this.collidesWith(enemy)) { // only attack if collision !!!
             // TODO
             //TODO: Music of normalattack -> where to declare the media player
+            int damage = (int) GamePanel.getRandom(MIN_DMG, MAX_DMG);
+            if (currentCharge > maxCharge - CHARGE_AMOUNT) {
+                currentCharge = maxCharge;
+                isCharged = true;
+            } else {
+                currentCharge += CHARGE_AMOUNT;
+            }
+
+            int health = enemy.currentHealth - damage;
+            if (health > 0) {
+                KryoClient.attack(enemy, damage);
+            }
 
         }
     }
@@ -223,8 +237,8 @@ public class Player implements GameObject {
 //        canvas.drawRect(rectangle, paint);
 
 
-//        healthbar.draw(canvas); //TODO: uncomment for use
-//        chargebar.draw(canvas); //TODO: uncomment for use
+        healthbar.draw(canvas); //TODO: uncomment for use
+        chargebar.draw(canvas); //TODO: uncomment for use
 
 
         animation.draw(canvas);
@@ -308,14 +322,9 @@ public class Player implements GameObject {
 
     public boolean collidesWith(Player enemy){
 
-        //TODO:
-        /* Rect.intersects(wheretoDraw, enemy.whereToDraw)
-         * muss whereToDraw von dem momentanen Animationszustand nehmen und intersects machen
-         * mit dem Rect whereToDraw vom enemy der jeweiligen animation des enemys
-         */
-
+        return RectF.intersects( animation.getWhereToDraw(), enemy.animation.getWhereToDraw());
 
 //        return Rect.intersects(rectangle, enemy.getRectangle()) || (rectangle.right >= enemy.getRectangle().left);
-        return false;
+
     }
 }
