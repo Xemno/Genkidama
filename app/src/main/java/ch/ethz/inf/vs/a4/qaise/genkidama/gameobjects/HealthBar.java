@@ -67,13 +67,13 @@ public class HealthBar implements GameObject {
     //TODO: Change that...work with ID instead of 'side'
     private void makeRect(){
         // Distinguish on which side the player starts and initialize symmetrically
-        if(side == 0) {
+        if(side == 1) {
             // display on left side
             rectBorder = new Rect(gapSide, gapTop,
                     gapSide + 2*BORDER_SIZE + backgroundWidth, gapTop + backgroundHeight + 2*BORDER_SIZE);
             rectHealth = new Rect(gapSide + BORDER_SIZE, gapTop + BORDER_SIZE,
                     gapSide + BORDER_SIZE + healthWidth, gapTop + BORDER_SIZE + backgroundHeight);
-        } else {
+        } else if(side == 2) {
             // display on right side
             rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2*BORDER_SIZE - backgroundWidth, gapTop,
                     Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2*BORDER_SIZE);

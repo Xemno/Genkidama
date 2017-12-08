@@ -56,13 +56,13 @@ public class ChargeBar implements GameObject {
     //TODO: Change that...
     private void makeRect(){
         // Distinguish on which side the player starts and initialize symmetrically
-        if(side == 0) {
+        if(side == 1) {
             // display on left side
             rectBorder = new Rect(gapSide, gapTop,
                     gapSide + 2*BORDER_SIZE + backgroundWidth, gapTop + backgroundHeight + 2*BORDER_SIZE);
             rectCharge = new Rect(gapSide + BORDER_SIZE, gapTop + BORDER_SIZE,
                     gapSide + BORDER_SIZE + chargeWidth, gapTop + BORDER_SIZE + backgroundHeight);
-        } else {
+        } else if (side == 2){
             // display on right side
             rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2*BORDER_SIZE - backgroundWidth, gapTop,
                     Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2*BORDER_SIZE);
