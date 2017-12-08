@@ -13,6 +13,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.BaseFloor;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
@@ -20,6 +21,7 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIS
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.ID;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.myPlayer;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
 
 
@@ -62,30 +64,9 @@ public class GamePlayScene implements Scene {
         this.activity = activity;
 
         floor = new BaseFloor();
+        Constants.fixDist = floor.getFixHeight();
 
-
-//TODO  new_point = new Point(SCREEN_WIDTH/2, floor.getFixHeight()); // at which location the player rectangle is
-//        new_point = new Point(SCREEN_WIDTH/2, 3* SCREEN_HEIGHT/4); // at which location the player rectangle is
-//        old_point = new Point(0,0);
-
-        /* Set the player on the right side on the screen */
-        //TODO> this is for choosing the side of the player, but doesnt work yet
-        if (ID == 999){ // should actually never happen
-            int var = GamePanel.getRandom(1,9);
-            new_point = new Point(var*SCREEN_WIDTH/10, floor.getFixHeight());
-
-        } else { // side was assigned to by server
-            int count = 10; // lets say we can have 10 palyers placed on the screen
-            if (ID % 2 == 0) { // draw on left side
-                new_point = new Point(ID * SCREEN_WIDTH/count, floor.getFixHeight());
-            } else {  // draw on right side
-                new_point = new Point(SCREEN_WIDTH - ((ID - 1) * SCREEN_WIDTH/count) , floor.getFixHeight());
-            }
-        }
-
-//        new_point = new Point(0,0);
         old_point = new Point(0,0);
-
 
         coinAnimation = new Animation(
                 activity, R.drawable.coins,
@@ -100,33 +81,20 @@ public class GamePlayScene implements Scene {
     @Override
     public void update() {
 
-//        if (doOnce && REGISTERED) {
-//            Log.i(TAG, "------Code done once---------");
-//            Log.i(TAG, "------Code done once : " + ID);
-//
-//            if (ID == 999){ // should actually never happen
-//                int var = GamePanel.getRandom(1,9);
-//                new_point = new Point(var*SCREEN_WIDTH/10, floor.getFixHeight());
-//
-//            } else { // side was assigned to by server
-//                int count = 10; // lets say we can have 10 palyers placed on the screen
-//                if (ID % 2 == 0) { // draw on left side
-//                    new_point = new Point(ID * SCREEN_WIDTH/count, floor.getFixHeight());
-//                } else {  // draw on right side
-//                    new_point = new Point(SCREEN_WIDTH - ((ID - 1) * SCREEN_WIDTH/count) , floor.getFixHeight());
-//                }
-//            }
-//            doOnce = false;
-//        }
+        // initialize players new_point if assigned by server
+        if (myPlayer() != null && new_point == null) {
+            new_point = new Point(myPlayer().new_point);
+        }
 
         // send updated movement of our player to server
-        // do the following only if the player has moved!
-        // TODO: maybe also check for beginning if our player is in HastSet
-        if ((old_point.x != new_point.x || old_point.y != new_point.y) && KryoClient.getClient().isConnected() /* && (myPlayer() != null)*/) {
-            KryoClient.send(new_point); // sends the point of this player to server
+        // do the following only if the player has moved and only if player is initilaized!
+        if ((myPlayer() != null) && (old_point.x != new_point.x || old_point.y != new_point.y) && KryoClient.getClient().isConnected()) {
+            KryoClient.send(new_point); // sends the current point of myPlayer to server
             old_point.set(new_point.x, new_point.y);
         }
 
+        // send the last point twice, such that we can detect that the palyer stays still,
+        // and thus we can animate an idle_animation for our palyer
         if (sendOnce) {
             KryoClient.send(new_point);
             old_point.set(new_point.x, new_point.y);
@@ -168,13 +136,7 @@ public class GamePlayScene implements Scene {
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (movingPlayer) { // only move our player if condition true
-//                    new_point.set((int) event.getX(), (int) event.getY()); // update point on touch
-//                    new_point.set((int) event.getX(), floor.getFixHeight()); // update point on touch
                     new_point.x = (int) event.getX(); // only update y direction
-//                    if (!doOnce && REGISTERED) {
-//                        new_point.x = (int) event.getX(); // only update y direction
-//                    }
-
                 }
                 break;
             case MotionEvent.ACTION_UP:

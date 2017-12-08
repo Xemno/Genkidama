@@ -28,7 +28,7 @@ public class Network {
 
     public static class RegistrationRequired {
         public int id; // propose an id for registration
-//        public int side; // location on the screen
+        public int side; // location on the screen
     }
 
     public static class Register {

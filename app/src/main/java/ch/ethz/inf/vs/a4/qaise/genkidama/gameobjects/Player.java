@@ -9,8 +9,12 @@ import android.media.MediaPlayer;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
+
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
 
 
 /**
@@ -77,7 +81,9 @@ public class Player implements GameObject {
 //        this.chargebar = new ChargeBar(this); //TODO: uncomment for use
         //|--------------------------------------------|//
 
-
+        if (side % 2 != 0) {
+            walkInX = true;  // if on the left side, animate idle_right
+        } // otherwise false anyways and animate idle_left
 
 
         /* Draw Player as a fixed Rectangle with random color */
@@ -116,7 +122,7 @@ public class Player implements GameObject {
                 point.x, point.y,
                 true);
         idle_left.scaleBitmap(8);
-        idle_left.forward = false;      // always false for right animations
+        idle_left.forward = false;      // always false for left animations
 
 
         walk_right = new Animation(

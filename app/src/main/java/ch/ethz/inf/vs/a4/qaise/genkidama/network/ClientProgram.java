@@ -11,7 +11,10 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIST_RELATIVE;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.ID;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.PLAYER_PERCENTAGE_HEIGHT;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 
 /**
  * Created by Qais on 11-Nov-17.
@@ -30,15 +33,23 @@ public class ClientProgram extends Listener {
 
             Network.Register message = new Network.Register();
             int proposedID = ((Network.RegistrationRequired) object).id; // take proposed ID from server
-//            int proposedSide = ((Network.RegistrationRequired) object).side; // take proposed ID from server
+            int proposedSide = ((Network.RegistrationRequired) object).side; // take proposed ID from server
 
             message.id =  proposedID;
-            Constants.ID = proposedID;
-//            Constants.side = proposedSide;
+            ID = proposedID;
+            side = proposedSide;
+
+            Point new_point;
+
+            // side was assigned to by server
+            int count = 10; // lets say we can have 10 palyers placed on the screen
+            if (side % 2 != 0) { // draw on left side
+                new_point = new Point(side * SCREEN_WIDTH/count, Constants.fixDist);
+            } else {  // draw on right side
+                new_point = new Point(SCREEN_WIDTH - ((side) * SCREEN_WIDTH/count) , Constants.fixDist);
+            }
 
 
-//            Point new_point = new Point(Constants.SCREEN_WIDTH/2, 3* Constants.SCREEN_HEIGHT/4); // at which location the player rectangle is
-            Point new_point = new Point(25,(int) (FLOOR_CEILING_DIST_RELATIVE - PLAYER_PERCENTAGE_HEIGHT/2)); // TODO: replace to PointF,a lso server-side
             //TODO: x-direction (side) should be decided by server
             message.x = new_point.x; // initial x pos.
             message.y = new_point.y; // initial y pos.

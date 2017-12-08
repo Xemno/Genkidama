@@ -15,7 +15,7 @@ public class Constants {
     public static String SERVER_ADDRESS = "192.168.0.103";
     public static int ID = 999;
 
-//    public static int side = 0;
+    public static int side = 0;
 
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
