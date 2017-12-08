@@ -154,6 +154,8 @@ public class GamePlayScene implements Scene {
         background_image.draw(canvas);
 
         for (Player player : players.values()) { // draw all players
+            player.healthbar.draw(canvas);
+            player.chargebar.draw(canvas);
             player.draw(canvas);
         }
 

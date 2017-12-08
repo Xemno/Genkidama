@@ -56,8 +56,8 @@ public class Player implements GameObject {
 
     public PointF new_point, old_point;  // ###
 
-    private HealthBar healthbar;
-    private ChargeBar chargebar;
+    public HealthBar healthbar;
+    public ChargeBar chargebar;
 
     // TODO: finish these animations, hitbox not yet right position
     Animation animation;
@@ -237,8 +237,8 @@ public class Player implements GameObject {
 //        canvas.drawRect(rectangle, paint);
 
 
-        healthbar.draw(canvas); //TODO: uncomment for use
-        chargebar.draw(canvas); //TODO: uncomment for use
+//        healthbar.draw(canvas); //TODO: uncomment for use
+//        chargebar.draw(canvas); //TODO: uncomment for use
 
 
         animation.draw(canvas);
