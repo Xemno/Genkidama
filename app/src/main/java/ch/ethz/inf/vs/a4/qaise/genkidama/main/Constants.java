@@ -1,11 +1,14 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 
+import android.app.Activity;
+
 /**
  * Add global Constants here
  */
 
 public class Constants {
 
+    public static Activity activity;
     public static String NAME = "default"; // TODO: overwrite with input name!
     public static String USERNAME;
     public static int PORT_NUMBER = 15325;

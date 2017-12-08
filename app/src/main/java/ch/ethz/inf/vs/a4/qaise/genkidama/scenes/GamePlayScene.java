@@ -29,7 +29,10 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
  */
 
 public class GamePlayScene implements Scene {
-
+//TODO: HERE start openingmusic and when attack happens
+    //TODO: start attacksound for special attack and normalattack for attack
+    //TODO: Start them in the onclickmethods of the buttons
+    //TODO: Add music for onbuttonclick (click) sound --> declare in which class?
     private static final String TAG = "#GamePlayScene#";
 
     private Activity activity;

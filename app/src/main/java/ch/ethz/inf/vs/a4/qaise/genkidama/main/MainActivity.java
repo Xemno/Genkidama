@@ -37,9 +37,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme); // start up theme
         super.onCreate(savedInstanceState);
-
+        Constants.activity=this;
+        //we need this for music
         //sound for background created here, setlooping infinity damit es immer läuft (wieder von vorne beginnt)
-        backgroundsound=MediaPlayer.create(this,R.raw.openingmusic);
+        backgroundsound=MediaPlayer.create(this,R.raw.loginmusic );
+        //TODO: loginmusic sound am anfang, und dann openingmusic in gameplayscene
         backgroundsound.setLooping(true);
         backgroundsound.start();
 
