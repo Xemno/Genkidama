@@ -8,6 +8,7 @@ import com.esotericsoftware.kryonet.EndPoint;
  * Created by Qais on 11-Nov-17.
  */
 
+
 public class Network {
     static public void register (EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
@@ -21,7 +22,6 @@ public class Network {
         kryo.register(Attack.class);
         kryo.register(AttackPlayer.class);
         kryo.register(MovePlayer.class);
-
     }
 
     public static class Login {
@@ -36,7 +36,7 @@ public class Network {
 
     public static class Register {
         public String name;
-        public int id;
+        public int id, side;
         public float x, y;
 //        public int id, x, y;
     }
@@ -73,6 +73,7 @@ public class Network {
         public int idE; // which player is being attacked
         public int damage;  // the damage caused
 //        public int charge;  // charge for idA from this damage
+
     }
 
     public static class UpdatePlayer {

@@ -82,7 +82,7 @@ public class KryoClient {
         }
     }*/
 
-    public void attack(Player enemy, int damage) {
+    public static void attack(Player enemy, int damage) {
         if (client != null && client.isConnected()) {
             new AttackMessage().execute(enemy.id, damage);
         }
