@@ -120,9 +120,10 @@ public class GamePlayScene implements Scene {
                     att_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (players.size() <= 1) return;
-                            for (Player enemy : players.values()) {
-                                if (myPlayer().id != enemy.id) myPlayer().attack(enemy);
+                            if (players.size() > 1) {
+                                for (Player enemy : players.values()) {
+                                    if (myPlayer().id != enemy.id) myPlayer().attack(enemy);
+                                }
                             }
                         }
                     });
@@ -131,9 +132,10 @@ public class GamePlayScene implements Scene {
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (players.size() <= 1) return;
-                            for (Player enemy : players.values()) {
-                                if (myPlayer().id != enemy.id) myPlayer().specialAttack(enemy);
+                            if (players.size() > 1) {
+                                for (Player enemy : players.values()) {
+                                    if (myPlayer().id != enemy.id) myPlayer().specialAttack(enemy);
+                                }
                             }
                         }
                     });
@@ -154,8 +156,6 @@ public class GamePlayScene implements Scene {
         background_image.draw(canvas);
 
         for (Player player : players.values()) { // draw all players
-            player.healthbar.draw(canvas);
-            player.chargebar.draw(canvas);
             player.draw(canvas);
         }
 

@@ -237,8 +237,8 @@ public class Player implements GameObject {
 //        canvas.drawRect(rectangle, paint);
 
 
-//        healthbar.draw(canvas); //TODO: uncomment for use
-//        chargebar.draw(canvas); //TODO: uncomment for use
+        healthbar.draw(canvas); //TODO: uncomment for use
+        chargebar.draw(canvas); //TODO: uncomment for use
 
 
         animation.draw(canvas);
