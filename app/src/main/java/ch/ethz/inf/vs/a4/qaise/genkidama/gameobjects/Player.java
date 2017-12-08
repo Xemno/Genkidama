@@ -206,7 +206,7 @@ public class Player implements GameObject {
         if (this.collidesWith(enemy)) { // only attack if collision !!!
             // TODO
             //TODO: Music of normalattack -> where to declare the media player
-            int damage = (int) GamePanel.getRandom(MIN_DMG, MAX_DMG);
+            int damage = GamePanel.getRandom(MIN_DMG, MAX_DMG);
             if (currentCharge > maxCharge - CHARGE_AMOUNT) {
                 currentCharge = maxCharge;
                 isCharged = true;
