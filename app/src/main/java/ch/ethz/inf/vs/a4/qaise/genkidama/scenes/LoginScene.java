@@ -123,7 +123,6 @@ public class LoginScene implements Scene {
                             if(checkInputs()) {
                                 KryoClient.getInstance().connect();
                                 start_btn.setEnabled(true);
-//                                terminate();
                             }
                         }
                     });

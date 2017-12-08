@@ -151,9 +151,11 @@ public class GamePlayScene implements Scene {
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.WHITE); // BACKGROUND color
 
+
+
         // setting the background, this should actually already scale to any device (whole picture is on it)
         background_image = activity.getBaseContext().getResources().getDrawable(R.drawable.background_image);
-        background_image.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        background_image.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
         background_image.draw(canvas);
 
         for (Player player : players.values()) { // draw all players

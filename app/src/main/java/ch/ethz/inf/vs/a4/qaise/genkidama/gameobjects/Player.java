@@ -8,6 +8,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
@@ -84,9 +85,7 @@ public class Player implements GameObject {
         this.side = side;
         //|--------------------------------------------|//
 
-        if (side % 2 != 0) {
-            walkInX = true;  // if on the left side, animate idle_right
-        } // otherwise false anyways and animate idle_left
+
 
 
         /* Draw Player as a fixed Rectangle with random color */
@@ -194,6 +193,11 @@ public class Player implements GameObject {
                 9, point.x, point.y,
                 true);
         death_right.scaleBitmap(8);
+
+        if (side % 2 != 0) {
+            walkInX = true;  // if on the left side, animate idle_right
+            animation = idle_right;
+        } // otherwise false anyways and animate idle_left
 
 
     }

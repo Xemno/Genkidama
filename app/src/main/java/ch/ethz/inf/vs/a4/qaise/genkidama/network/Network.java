@@ -18,6 +18,8 @@ public class Network {
         kryo.register(UpdatePlayer.class);
         kryo.register(RemovePlayer.class);
         kryo.register(StateObject.class);
+        kryo.register(Attack.class);
+        kryo.register(AttackPlayer.class);
         kryo.register(MovePlayer.class);
     }
 
@@ -33,7 +35,7 @@ public class Network {
 
     public static class Register {
         public String name;
-        public int id, side;
+        public int id;
         public float x, y;
 //        public int id, x, y;
     }
