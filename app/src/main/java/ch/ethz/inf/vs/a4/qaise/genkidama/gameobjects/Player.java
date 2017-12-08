@@ -8,7 +8,6 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.MediaPlayer;
-import android.util.Log;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
@@ -82,9 +81,9 @@ public class Player implements GameObject {
         this.maxHealth = MAX_HEALTH;
         this.currentHealth = MAX_HEALTH;
         this.maxCharge = MAX_CHARGE;
+        this.side = side; // Jela did this
         this.healthbar = new HealthBar(this); //TODO: uncomment for use
         this.chargebar = new ChargeBar(this); //TODO: uncomment for use
-        this.side = side;
         //|--------------------------------------------|//
 
 
@@ -214,12 +213,10 @@ public class Player implements GameObject {
             //TODO: Music of normalattack -> where to declare the media player
             int damage = GamePanel.getRandom(MIN_DMG, MAX_DMG);
 
-            Log.d("DEBUG FUN", "attack now");
             //int health = enemy.currentHealth - damage;
             //if (health > 0) {
                 KryoClient.attack(enemy, damage);
             //}
-            Log.d("DEBUG FUN", "attack finished");
         }
     }
 
