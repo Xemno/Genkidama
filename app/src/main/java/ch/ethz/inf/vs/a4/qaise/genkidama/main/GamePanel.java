@@ -19,6 +19,10 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.engine.GameEngine;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.Network;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.SceneManager;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
+
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.CHARGE_AMOUNT;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_CHARGE;
 
 
 /**
@@ -161,10 +165,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static void attackPlayer(Network.Attack msg) {
         Player attackedPlayer = players.get(msg.idE);    // the attacked player
         Player attackingPlayer = players.get(msg.idA);   // the attacking player
+        int dmg = msg.damage;
 
-        // TODO: what to do when player gets attacked
-        // TODO: update health of attackedPlayer according to damage taken
-        // TODO: update charge of attackingPlayer according to damage dealt
+        if (attackingPlayer.getCurrentCharge() > MAX_CHARGE - CHARGE_AMOUNT) {
+            attackingPlayer.setCurrentCharge(MAX_CHARGE);
+            attackingPlayer.isCharged = true;
+        } else {
+            attackingPlayer.setCurrentCharge(attackingPlayer.getCurrentCharge() + CHARGE_AMOUNT);
+        }
+
+        int health = attackedPlayer.getCurrentHealth() - dmg;
+        if (health > 0)
+            attackedPlayer.setCurrentHealth(health);
+        else
+            attackedPlayer.setCurrentHealth(0);
+
+
 
     }
 

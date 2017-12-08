@@ -21,6 +21,7 @@ public class Network {
         kryo.register(Attack.class);
         kryo.register(AttackPlayer.class);
         kryo.register(MovePlayer.class);
+
     }
 
     public static class Login {

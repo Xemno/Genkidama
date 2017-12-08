@@ -170,6 +170,12 @@ public class GamePlayScene implements Scene {
 
         floor.draw(canvas);
 
+        for (Player player : players.values()) {
+            if (player.getCurrentHealth() == 0){
+                terminate();
+            }
+        }
+
     }
 
     @Override
