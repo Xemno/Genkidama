@@ -65,11 +65,11 @@ public class GamePlayScene implements Scene {
     private boolean new_game = false;
 
     Animation coinAnimation;
-
-    private int frameLengthInMilliseconds = 50;
-    private long lastFrameChangeTime = 0;
-    private int dx = 0;
-    private boolean fromLeftToRight = true;
+//
+//    private int frameLengthInMilliseconds = 50;
+//    private long lastFrameChangeTime = 0;
+//    private int dx = 0;
+//    private boolean fromLeftToRight = true;
 
 
 
@@ -167,22 +167,22 @@ public class GamePlayScene implements Scene {
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.WHITE); // BACKGROUND color
 
-        long time = System.currentTimeMillis();
-
-        if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
-            lastFrameChangeTime = time;
-            if (fromLeftToRight) {
-                dx += 2;
-            } else {
-                dx -= 2;
-            }
-
-            if (SCREEN_WIDTH/5 <= dx) {
-                fromLeftToRight = false;
-            } if (dx <= -SCREEN_WIDTH/5) {
-                fromLeftToRight = true;
-            }
-        }
+//        long time = System.currentTimeMillis();
+//
+//        if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
+//            lastFrameChangeTime = time;
+//            if (fromLeftToRight) {
+//                dx += 2;
+//            } else {
+//                dx -= 2;
+//            }
+//
+//            if (SCREEN_WIDTH/5 <= dx) {
+//                fromLeftToRight = false;
+//            } if (dx <= -SCREEN_WIDTH/5) {
+//                fromLeftToRight = true;
+//            }
+//        }
 
         layer1 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1);
         layer1.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
@@ -203,6 +203,8 @@ public class GamePlayScene implements Scene {
         layer5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer5);
         layer5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
         layer5.draw(canvas);
+
+        // TODO: draw players here
 
         layer6 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer6);
         layer6.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );

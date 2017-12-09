@@ -101,10 +101,10 @@ public class HealthBar implements GameObject {
     @Override
     public void update() {
         currHealth = player.getCurrentHealth();
-        if (currHealth > MaxHealth/2) colorHealth = Color.GREEN;
-        else if (currHealth > 3*MaxHealth/10) colorHealth = Color.YELLOW;
-        else if (currHealth > 15*MaxHealth/100) colorHealth = Color.rgb(255, 165, 0);
-        else if (currHealth > 8*MaxHealth/100) colorHealth = Color.rgb(255, 85, 0);
+        if (currHealth > MaxHealth/2) colorHealth = Color.rgb(51, 204, 51);
+        else if (currHealth > 3*MaxHealth/10) colorHealth = Color.rgb(204, 204, 51);
+        else if (currHealth > 15*MaxHealth/100) colorHealth = Color.rgb(204, 128, 51);
+        else if (currHealth > 8*MaxHealth/100) colorHealth = Color.rgb(204, 51, 51);
         else colorHealth = Color.RED;
 
         healthWidth = currHealth* backgroundWidth /MaxHealth;
