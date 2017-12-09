@@ -4,13 +4,10 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -20,9 +17,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import java.io.IOException;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
@@ -35,16 +29,18 @@ public class MainActivity extends AppCompatActivity {
 
     public static Context context;
     //declaration for sound here
-    private MediaPlayer backgroundsound;
+//    private MediaPlayer backgroundsound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme); // start up theme
         super.onCreate(savedInstanceState);
 
-        backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
-        backgroundsound.setLooping(true);
-        backgroundsound.start();
+        context = this.getApplicationContext();
+
+//        backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
+//        backgroundsound.setLooping(true);
+//        backgroundsound.start();
 
         // TODO: should be done like this i think, just the path [res] in android.resource://[res]/raw/loginmusic is wrong in the URI, couldnt find out how
 //        backgroundsound = new MediaPlayer();
@@ -291,11 +287,11 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if (KryoClient.getClient() != null) KryoClient.getClient().close();
 
-        if (backgroundsound != null) {
-            backgroundsound.reset();
-            backgroundsound.release();
-            backgroundsound = null;
-        }
+//        if (backgroundsound != null) {
+//            backgroundsound.reset();
+//            backgroundsound.release();
+//            backgroundsound = null;
+//        }
 
     }
 
