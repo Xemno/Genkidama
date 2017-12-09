@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -20,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
@@ -31,19 +35,33 @@ public class MainActivity extends AppCompatActivity {
 
     public static Context context;
     //declaration for sound here
-    MediaPlayer backgroundsound;
+    private MediaPlayer backgroundsound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme); // start up theme
         super.onCreate(savedInstanceState);
 
-        // Loginmusic für login scene
-        backgroundsound=MediaPlayer.create(this,R.raw.loginmusic );
+        backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
         backgroundsound.setLooping(true);
         backgroundsound.start();
 
-        context = this.getApplicationContext();
+        // TODO: should be done like this i think, just the path [res] in android.resource://[res]/raw/loginmusic is wrong in the URI, couldnt find out how
+//        backgroundsound = new MediaPlayer();
+//        backgroundsound.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//        try {
+//            backgroundsound.setDataSource(getApplicationContext(), Uri.parse("android.resource://res/raw/loginmusic"));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        backgroundsound.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
+//
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                mp.start();
+//            }
+//        });
+//        backgroundsound.prepareAsync();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
@@ -272,6 +290,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (KryoClient.getClient() != null) KryoClient.getClient().close();
+
+        if (backgroundsound != null) {
+            backgroundsound.reset();
+            backgroundsound.release();
+            backgroundsound = null;
+        }
 
     }
 
