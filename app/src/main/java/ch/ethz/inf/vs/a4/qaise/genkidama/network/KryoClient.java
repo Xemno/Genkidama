@@ -105,7 +105,6 @@ public class KryoClient {
                 if (Constants.ID == 999) return null; // if default ID, that is ID is not yet set by server
                 message.idA = Constants.ID;  // move our player
                 message.idE = arg0[0];
-                // TODO: if float not necessary for packets, we can leave the rest but change network to int, and cast here from float to int
                 message.damage = arg0[1];
                 client.sendTCP(message);
 

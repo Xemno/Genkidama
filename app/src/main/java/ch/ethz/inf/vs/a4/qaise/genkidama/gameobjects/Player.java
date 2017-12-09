@@ -88,26 +88,6 @@ public class Player implements GameObject {
         //|--------------------------------------------|//
 
 
-
-
-        /* Draw Player as a fixed Rectangle with random color */
-        //|--------------------------------------------|//
-//        color = Color.rgb(
-//                GamePanel.getRandom(30, 255),
-//                GamePanel.getRandom(30, 255),
-//                GamePanel.getRandom(30, 255)
-//        );
-
-//        rectangle = new Rect(point.x, point.y, point.x + 42*8, point.y + 42*8);
-//        rectWidth = rectangle.width()/2;
-//        rectHight = rectangle.height()/2;
-//        rectangle.set(  point.x - rectWidth,  point.y - rectHight,
-//                point.x + rectWidth, point.y + rectHight);
-//        //|--------------------------------------------|//
-
-
-        // TODO: NOTE - In allen Sprite Sheets vom Knight sind die Füsse um 3 pixel vom Boden entfernt! Lösen....
-
         idle_right = new Animation(
                 MainActivity.context,
                 R.drawable.knight_idle_right,
@@ -215,14 +195,9 @@ public class Player implements GameObject {
 
     public void attack(Player enemy){
         if (this.collidesWith(enemy)) { // only attack if collision !!!
-            // TODO
             //TODO: Music of normalattack -> where to declare the media player
             int damage = GamePanel.getRandom(MIN_DMG, MAX_DMG);
-
-            //int health = enemy.currentHealth - damage;
-            //if (health > 0) {
-                KryoClient.attack(enemy, damage);
-            //}
+            KryoClient.attack(enemy, damage);
         }
     }
 
@@ -296,10 +271,6 @@ public class Player implements GameObject {
         this.color = color;
     }
 
-//    public Rect getRectangle() {
-//        return rectangle; // for collision detection
-//    }
-
     public int getMaxHealth(){
         return maxHealth;
     }
@@ -330,8 +301,6 @@ public class Player implements GameObject {
 
     public boolean collidesWith(Player enemy){
         if (enemy == null) return false;
-        return RectF.intersects( animation.getWhereToDraw(), enemy.animation.getWhereToDraw());
-//        return Rect.intersects(rectangle, enemy.getRectangle()) || (rectangle.right >= enemy.getRectangle().left);
-
+        return RectF.intersects(animation.getWhereToDraw(), enemy.animation.getWhereToDraw());
     }
 }

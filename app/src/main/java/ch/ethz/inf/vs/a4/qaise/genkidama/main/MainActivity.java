@@ -37,11 +37,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme); // start up theme
         super.onCreate(savedInstanceState);
-//        Constants.activity=this;
-        //we need this for music
-        //sound for background created here, setlooping infinity damit es immer läuft (wieder von vorne beginnt)
+
+        // Loginmusic für login scene
         backgroundsound=MediaPlayer.create(this,R.raw.loginmusic );
-        //TODO: loginmusic sound am anfang, und dann openingmusic in gameplayscene
         backgroundsound.setLooping(true);
         backgroundsound.start();
 
@@ -54,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
         // Get Screen Dimensions
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
-
-
         Constants.SCREEN_WIDTH = metrics.widthPixels;
         Constants.SCREEN_HEIGHT = metrics.heightPixels;
         Constants.PLAYER_SIZE = (int)(Constants.SCREEN_WIDTH*Constants.PLAYER_PERCENTAGE_WIDTH/100);
@@ -108,10 +103,12 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize buttons for gameUI
         att_btn.setText(R.string.att_string);
+        att_btn.setAlpha(0.6f);
         att_btn.setId(Constants.ATT_BTN);
         att_btn.setBackgroundResource(R.drawable.roundedbutton);
 
         super_btn.setText(R.string.special);
+        super_btn.setAlpha(0.6f);
         super_btn.setId(Constants.SUPER_BTN);
         super_btn.setBackgroundResource(R.drawable.roundedbutton);
 

@@ -44,7 +44,8 @@ public class GamePlayScene implements Scene {
 
     private Activity activity;
 
-    private PointF old_point, new_point;
+    private static PointF new_point;
+    private PointF old_point;
     private boolean movingPlayer = false;
 
     float x_old, x_new;
@@ -57,11 +58,20 @@ public class GamePlayScene implements Scene {
 
     Drawable background_image;
 
+    Drawable layer1, layer2, layer3, layer4, layer5, layer6, layer7, layer8, layer9, layer10, layer11;
+
     private boolean btn_active = false;
     private boolean collision = false;  // TODO: not useful here, implement it in the player class
     private boolean new_game = false;
 
     Animation coinAnimation;
+
+    private int frameLengthInMilliseconds = 50;
+    private long lastFrameChangeTime = 0;
+    private int dx = 0;
+    private boolean fromLeftToRight = true;
+
+
 
 
 
@@ -71,8 +81,14 @@ public class GamePlayScene implements Scene {
         floor = new BaseFloor();
         fixDist = floor.getFixHeight();
 
+/*        if (myPlayer() != null) { // can be null at his point
+            new_point = myPlayer().new_point;
+        } else {
+            new_point = new PointF(SCREEN_WIDTH/4, fixDist);
+        }*/
+
         old_point = new PointF(0,0);
-        new_point = new PointF(0, fixDist); // TODO: added such that new_point is not null, must be changed though
+
 
         coinAnimation = new Animation(
                 activity, R.drawable.coins,
@@ -86,9 +102,9 @@ public class GamePlayScene implements Scene {
     @Override
     public void update() {
 
-        // initialize players new_point if assigned by server
+        // In case something goes wrong with the assigning if the new_point
         if (myPlayer() != null && new_point == null) {
-            new_point = new PointF(myPlayer().new_point.x, myPlayer().new_point.y);
+            new_point = new PointF(SCREEN_WIDTH/4, fixDist);
         }
 
         // send updated movement of our player to server
@@ -151,24 +167,63 @@ public class GamePlayScene implements Scene {
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.WHITE); // BACKGROUND color
 
+        long time = System.currentTimeMillis();
+
+        if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
+            lastFrameChangeTime = time;
+            if (fromLeftToRight) {
+                dx += 2;
+            } else {
+                dx -= 2;
+            }
+
+            if (SCREEN_WIDTH/5 <= dx) {
+                fromLeftToRight = false;
+            } if (dx <= -SCREEN_WIDTH/5) {
+                fromLeftToRight = true;
+            }
+        }
+
+        layer1 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1);
+        layer1.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+        layer1.draw(canvas);
+
+        layer2 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer2);
+        layer2.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+        layer2.draw(canvas);
+
+        layer3 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer3);
+        layer3.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+        layer3.draw(canvas);
+
+        layer4 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer4);
+        layer4.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+        layer4.draw(canvas);
+
+        layer5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer5);
+        layer5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+        layer5.draw(canvas);
+
+        layer6 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer6);
+        layer6.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+        layer6.draw(canvas);
+
+
+
 
 
         // setting the background, this should actually already scale to any device (whole picture is on it)
-        background_image = activity.getBaseContext().getResources().getDrawable(R.drawable.background_image);
-        background_image.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        background_image.draw(canvas);
+//        background_image = activity.getBaseContext().getResources().getDrawable(R.drawable.background_image);
+//        background_image.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+//        background_image.draw(canvas);
 
         for (Player player : players.values()) { // draw all players
             player.draw(canvas);
-
-//            Log.i(TAG, player.name);
-//            Log.i(TAG, "ID:" + String.valueOf(player.id));
-//            Log.i(TAG, "SIDE: " + String.valueOf(player.side));
         }
 
         coinAnimation.draw(canvas);
 
-        floor.draw(canvas);
+//        floor.draw(canvas);
 
         for (Player player : players.values()) {
             if (player.getCurrentHealth() == 0){
@@ -185,12 +240,10 @@ public class GamePlayScene implements Scene {
 
     @Override
     public void receiveTouch(MotionEvent event) {
-        //TODO: define what to do if touch event received, i.e., move players etc.
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 movingPlayer = true;
                 sendOnce = true;
-//                x_old = event.getX();
                 old_point.x = event.getX();
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -198,19 +251,19 @@ public class GamePlayScene implements Scene {
                 float diff = new_point.x - old_point.x;
 
                 if (movingPlayer && Math.abs(diff) > 5) { // only move our player if condition true
-//                    new_point.x = (int) event.getX(); // only update y direction
                     new_point.x = old_point.x + (diff * 100/SCREEN_WIDTH);
-//                    x_old = x_new;
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 movingPlayer = false;
                 sendOnce = true;
-//                new_point.x = (int) event.getX(); // TODO: newly added...
                 break;
         }
 
     }
 
+    public static void setNew_point(PointF new_point) {
+        GamePlayScene.new_point = new_point;
+    }
 
 }

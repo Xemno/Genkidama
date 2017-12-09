@@ -18,14 +18,13 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
 
 /**
  * Created by Qais on 26-Nov-17.
  */
 public class LoginScene implements Scene {
     public static final String TAG = "##LoginScene## -> ";
-    //TODO: Here loginmusic as soon as loginscene starts until we enter gameplayscene
-
 
     private Activity activity;
     private boolean btn_active = false;
@@ -40,7 +39,6 @@ public class LoginScene implements Scene {
     private int top, right, left, bottom;
 
     Animation coinAnimation, animation2, animation3;
-//    Animation genkidamaLogo;
 
     Drawable background_image;
     Drawable genkidamaLogo;
@@ -55,6 +53,7 @@ public class LoginScene implements Scene {
             top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
         }
 
+        // Scale rest of genkidamaLogo drawable
         right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
         left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
         bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
@@ -69,26 +68,6 @@ public class LoginScene implements Scene {
                 true);
         coinAnimation.setFrameDuration(100);
         coinAnimation.scaleBitmap(4);
-
-//        animation2 = new Animation(
-//                activity, R.drawable.coins,
-//                15, 16,
-//                8,
-//                Constants.SCREEN_WIDTH/4,
-//                Constants.SCREEN_HEIGHT/2 ,
-//                true);
-//        animation2.setFrameDuration(100);
-//        animation2.scaleBitmap(6);
-//
-//        animation3 = new Animation(
-//                activity, R.drawable.coins,
-//                15, 16,
-//                8,
-//                Constants.SCREEN_WIDTH/4,
-//                2*Constants.SCREEN_HEIGHT/3 ,
-//                true);
-//        animation3.setFrameDuration(110);
-//        animation3.scaleBitmap(6);
     }
 
     @Override
@@ -113,8 +92,6 @@ public class LoginScene implements Scene {
                     textView.setText("\n" + "Welcome!");
 */
 
-
-
                     btn_active = true;
                     enter_btn.setOnClickListener(new View.OnClickListener(){
                         @Override
@@ -122,7 +99,7 @@ public class LoginScene implements Scene {
                             //TODO: needs to be changed
                             if(checkInputs()) {
                                 KryoClient.getInstance().connect();
-                                start_btn.setEnabled(true);
+                                start_btn.setEnabled(true); // TODO: enable when connected to server...
                             }
                         }
                     });
@@ -130,8 +107,10 @@ public class LoginScene implements Scene {
                     start_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (GamePanel.myPlayer() != null) { // if my player has been added by the server, terminate
+                            if (GamePanel.myPlayer() != null /*&& players.size() > 1*/) { // if my player has been added by the server, terminate
                                 terminate();   // TODO: we want to wait for other players too
+                            } else {
+                                Toast.makeText(activity.getApplication(), "myPlayer not added", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -178,29 +157,25 @@ public class LoginScene implements Scene {
     }
 
     @Override
-    public void receiveTouch(MotionEvent event) {
-
-    }
+    public void receiveTouch(MotionEvent event) {}
 
     private boolean checkInputs(){
-        //TODO: Change this...
         String name = edit_username.getText().toString();
         String ip = ip_address.getText().toString();
         String port = port_number.getText().toString();
 
         if (!isValidString(name)){
-            Toast.makeText(activity.getApplication(), "Invalid Name!", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Name! Only Characters allowed", Toast.LENGTH_LONG).show();
             return false;
         }
         if (!isIP(ip)){
-            Toast.makeText(activity.getApplication(), "Invalid IP!", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid IP format!", Toast.LENGTH_LONG).show();
             return false;
         }
         if (!isPort(port)) {
-            Toast.makeText(activity.getApplication(), "Invalid Port!", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Port! Only numbers allowed", Toast.LENGTH_LONG).show();
             return false;
         }
-
 
         try{
             Constants.PORT_NUMBER = Integer.parseInt(port);
@@ -228,8 +203,4 @@ public class LoginScene implements Scene {
         return str.matches("(\\d+\\.\\d+\\.\\d+\\.\\d+){1}");
     }
 
-//    public static boolean isIP(String str)
-//    {
-//        return str.matches("\\d+(\\.\\d+)+");
-//    }
 }

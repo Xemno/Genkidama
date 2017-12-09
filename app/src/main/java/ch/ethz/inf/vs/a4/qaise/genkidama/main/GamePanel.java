@@ -18,6 +18,7 @@ import java.util.Random;
 import ch.ethz.inf.vs.a4.qaise.genkidama.engine.GameEngine;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.Network;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GamePlayScene;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.SceneManager;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
@@ -134,6 +135,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static void addPlayer (Player player) {
         players.put(player.id, player);
 
+        // TODO: test this, should be done always once
+        if (player.id == Constants.ID) {
+            GamePlayScene.setNew_point(player.new_point);
+        }
 /*        TextView textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
         if (player == myPlayer()) {
             textView.append("\n" + "You, ");
@@ -179,9 +184,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             attackedPlayer.setCurrentHealth(health);
         else
             attackedPlayer.setCurrentHealth(0);
-
-
-
     }
 
     public static void removePlayer (int id) {
