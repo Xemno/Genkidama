@@ -83,8 +83,8 @@ public class Player implements GameObject {
         this.currentHealth = MAX_HEALTH;
         this.maxCharge = MAX_CHARGE;
         this.side = side; // Jela did this
-        this.healthbar = new HealthBar(this); //TODO: uncomment for use
-        this.chargebar = new ChargeBar(this); //TODO: uncomment for use
+        this.healthbar = new HealthBar(this);
+        this.chargebar = new ChargeBar(this);
         //|--------------------------------------------|//
 
 
@@ -188,14 +188,9 @@ public class Player implements GameObject {
         } // otherwise false anyways and animate idle_left
 
     }
-    //Animation idle_right, idle_left;
-
-
-
 
     public void attack(Player enemy){
         if (this.collidesWith(enemy)) { // only attack if collision !!!
-            //TODO: Music of normalattack -> where to declare the media player
             int damage = GamePanel.getRandom(MIN_DMG, MAX_DMG);
             KryoClient.attack(enemy, damage);
         }
@@ -204,22 +199,14 @@ public class Player implements GameObject {
     public void specialAttack(Player enemy) {
         if (this.collidesWith(enemy)) { // only attack if collision !!!
             // TODO
-            //TODO: here music of attacksound
         }
     }
 
     @Override
     public void draw(Canvas canvas) {
-//        Paint paint = new Paint(); // The Paint class holds the style and color information about how to draw geometries, text and bitmaps
-//        paint.setColor(color);
-//        paint.setAlpha(200);
-//        canvas.drawRect(rectangle, paint);
 
-
-        healthbar.draw(canvas); //TODO: uncomment for use
-        chargebar.draw(canvas); //TODO: uncomment for use
-
-
+        healthbar.draw(canvas);
+        chargebar.draw(canvas);
         animation.draw(canvas);
 
     }
@@ -232,9 +219,6 @@ public class Player implements GameObject {
     public void update(PointF point) {
         // (left, top, right, bottom)
         this.new_point = point;
-
-//        rectangle.set(point.x - rectWidth, point.y - rectHight*2,
-//                point.x + rectWidth, point.y);
 
         if (new_point.x < old_point.x) {
             walkInX = false;

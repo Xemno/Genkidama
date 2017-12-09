@@ -56,16 +56,12 @@ public class GamePlayScene implements Scene {
 
     private BaseFloor floor;
 
-    Drawable background_image;
-
-    Drawable layer1, layer2, layer3, layer4, layer5, layer6, layer7, layer8, layer9, layer10, layer11;
+    Drawable layer1, layer2, layer3, layer4, layer5, layer6;
 
     private boolean btn_active = false;
-    private boolean collision = false;  // TODO: not useful here, implement it in the player class
     private boolean new_game = false;
 
-    Animation coinAnimation;
-//
+
 //    private int frameLengthInMilliseconds = 50;
 //    private long lastFrameChangeTime = 0;
 //    private int dx = 0;
@@ -89,20 +85,12 @@ public class GamePlayScene implements Scene {
 
         old_point = new PointF(0,0);
 
-
-        coinAnimation = new Animation(
-                activity, R.drawable.coins,
-                15, 16,
-                8, 300, 300, true);
-        coinAnimation.setFrameDuration(100);
-        coinAnimation.scaleBitmap(5);
-
     }
 
     @Override
     public void update() {
 
-        // In case something goes wrong with the assigning if the new_point
+        // In case something goes wrong with the assigning of the new_point
         if (myPlayer() != null && new_point == null) {
             new_point = new PointF(SCREEN_WIDTH/4, fixDist);
         }
@@ -222,8 +210,6 @@ public class GamePlayScene implements Scene {
         for (Player player : players.values()) { // draw all players
             player.draw(canvas);
         }
-
-        coinAnimation.draw(canvas);
 
 //        floor.draw(canvas);
 
