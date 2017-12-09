@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.media.MediaPlayer;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Random;
 
+import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.engine.GameEngine;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.Network;
@@ -40,6 +43,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private GameEngine thread;
 
     private SceneManager manager;
+    Context context;
 
 //    private static Activity activity;
 
@@ -58,8 +62,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         thread = new GameEngine(getHolder(), this);
 
         manager = new SceneManager(activity);
+        //context variable for MUSIC
+        context= this.getContext();
 
 //        textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
+
 
         setFocusable(true);
     }
@@ -171,6 +178,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         Player attackedPlayer = players.get(msg.idE);    // the attacked player
         Player attackingPlayer = players.get(msg.idA);   // the attacking player
         int dmg = msg.damage;
+        //TODO: here music for attack
+        MediaPlayer attacksoundmusic= new MediaPlayer();
+        attacksoundmusic= MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+        attacksoundmusic.start();
 
         if (attackingPlayer.getCurrentCharge() > MAX_CHARGE - CHARGE_AMOUNT) {
             attackingPlayer.setCurrentCharge(MAX_CHARGE);

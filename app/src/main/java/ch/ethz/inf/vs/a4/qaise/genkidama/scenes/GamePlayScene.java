@@ -215,6 +215,7 @@ public class GamePlayScene implements Scene {
 
         for (Player player : players.values()) {
             if (player.getCurrentHealth() == 0){
+                //TODO: set boolean isdead=true;
                 terminate();
             }
         }

@@ -14,6 +14,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
