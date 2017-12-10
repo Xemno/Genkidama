@@ -42,28 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
-       backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
-       backgroundsound.setLooping(true);
-       backgroundsound.start();
-
-
-        // TODO: should be done like this i think, just the path [res] in android.resource://[res]/raw/loginmusic is wrong in the URI, couldnt find out how
-    //    backgroundsound = new MediaPlayer();
-      //  backgroundsound.setAudioStreamType(AudioManager.STREAM_MUSIC);
-       //try {
-
-           //backgroundsound.setDataSource(getApplicationContext(), Uri.parse("android.resource://res/raw/loginmusic"));
-       //} catch (IOException e) {
-         // e.printStackTrace();
-       // }
-        //backgroundsound.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
-
-          //  @Override
-            //public void onPrepared(MediaPlayer mp) {
-              //  mp.start();
-          //  }
-        //});
-        //backgroundsound.prepareAsync();
+//        backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
+//        backgroundsound.setLooping(true);
+//        backgroundsound.start();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
@@ -293,11 +274,11 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if (KryoClient.getClient() != null) KryoClient.getClient().close();
 
-//        if (backgroundsound != null) {
-//            backgroundsound.reset();
-//            backgroundsound.release();
-//            backgroundsound = null;
-//        }
+/*        if (backgroundsound != null) {
+            backgroundsound.reset();
+            backgroundsound.release();
+            backgroundsound = null;
+        }*/
 
     }
 

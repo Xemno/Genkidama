@@ -35,14 +35,12 @@ public class LoginScene implements Scene {
     private EditText port_number;
     private Button enter_btn, start_btn;
 
-    public static Thread thread;
-
     private int top, right, left, bottom;
 
-    Animation coinAnimation, animation2, animation3;
+    private Animation coinAnimation;
 
-    Drawable background_image;
-    Drawable genkidamaLogo;
+    private Drawable background_image, genkidamaLogo;
+
 
     public LoginScene(Activity activity){
         this.activity = activity;
@@ -66,9 +64,9 @@ public class LoginScene implements Scene {
                 8,
                 Constants.SCREEN_WIDTH/4,
                 Constants.SCREEN_HEIGHT/3 ,
-                true);
+                true, 4);
         coinAnimation.setFrameDuration(100);
-        coinAnimation.scaleBitmap(4);
+//        coinAnimation.scaleBitmap(4);
     }
 
     @Override
@@ -112,6 +110,12 @@ public class LoginScene implements Scene {
                                 terminate();   // TODO: we want to wait for other players too
                             } else {
                                 Toast.makeText(activity.getApplication(), "myPlayer not added", Toast.LENGTH_LONG).show();
+                                if (KryoClient.getClient().isConnected()) {
+                                    KryoClient.login();
+                                    Toast.makeText(activity.getApplication(), "login message sent again", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(activity.getApplication(), "no connection", Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
                     });
@@ -140,7 +144,6 @@ public class LoginScene implements Scene {
         coinAnimation.draw(canvas);
         coinAnimation.setWhereToDraw(right + 20, (bottom - top) - 30);
         coinAnimation.draw(canvas);
-
 
     }
 

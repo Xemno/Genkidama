@@ -39,33 +39,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String TAG = "#GamePanel#";
 
-
     private GameEngine thread;
-
     private SceneManager manager;
-    Context context;
 
-//    private static Activity activity;
 
-    /* TODO: instantiate player here, add it to hashmap and access it then from every scene
-     *  So we can bind our network in this class and do not have to worry to send packets in
-     *  all scenes.
+    /*
+     * This class sets up the game and the server updates the Players from this class
      */
 
     public GamePanel(Context context, Activity activity) {
         super(context);
-
-//        this.activity = activity;
 
         getHolder().addCallback(this);
 
         thread = new GameEngine(getHolder(), this);
 
         manager = new SceneManager(activity);
-        //context variable for MUSIC
-        context= this.getContext();
-
-//        textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
 
 
         setFocusable(true);
@@ -113,7 +102,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) { // draws everything in our game
         super.draw(canvas);
-
         manager.draw(canvas);
     }
 
@@ -143,34 +131,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         players.put(player.id, player);
 
         // TODO: test this, should be done always once
-        if (player.id == Constants.ID) {
+        if (player.id == Constants.ID) { // if my palyer is added, initialize the new_point in GamePlayerScene
             GamePlayScene.setNew_point(player.new_point);
+            Log.i(TAG, "MYPLAYER with ID " + player.id + " is added to the game");
         }
-/*        TextView textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
-        if (player == myPlayer()) {
-            textView.append("\n" + "You, ");
-            textView.setTextColor(Color.rgb(220,20,60));
-            textView.append(player.name);
-            textView.setTextColor(Color.DKGRAY);
-            textView.append(", have been added to the game.");
-        } else {
-            textView.append("\n" + "Player ");
-            textView.setTextColor(Color.rgb(220,20,60));
-            textView.append(player.name);
-            textView.setTextColor(Color.DKGRAY);
-            textView.setText(" with ID ");
-            textView.setTextColor(Color.rgb(219,112,147));
-            textView.append(String.valueOf(player.id));
-            textView.setTextColor(Color.DKGRAY);
-            textView.setText(" has been added to the game.");
-
-        }*/
     }
 
     public static void updatePlayer(Network.UpdatePlayer msg) {
         /* enemy players will be updated through the network here */
         Player player = players.get(msg.id);
-//        if (player == null) return;
+        if (player == null) return;
         player.update(new PointF(msg.x, msg.y));
     }
 
@@ -178,10 +148,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         Player attackedPlayer = players.get(msg.idE);    // the attacked player
         Player attackingPlayer = players.get(msg.idA);   // the attacking player
         int dmg = msg.damage;
+
         //TODO: here music for attack
-        MediaPlayer attacksoundmusic= new MediaPlayer();
-        attacksoundmusic= MediaPlayer.create(MainActivity.context, R.raw.attacksound);
-        attacksoundmusic.start();
+//        MediaPlayer attacksoundmusic= MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+//        attacksoundmusic.start();
 
         if (attackingPlayer.getCurrentCharge() > MAX_CHARGE - CHARGE_AMOUNT) {
             attackingPlayer.setCurrentCharge(MAX_CHARGE);
@@ -198,27 +168,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public static void removePlayer (int id) {
- /*       Player player = players.get(id);
-
-        TextView textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
-        if (player == myPlayer()) {
-            textView.append("\n" + "You, ");
-            textView.setTextColor(Color.rgb(220,20,60));
-            textView.append(player.name);
-            textView.setTextColor(Color.DKGRAY);
-            textView.append(", have left the game.");
-        } else {
-            textView.append("\n" + "Player ");
-            textView.setTextColor(Color.rgb(220,20,60));
-            textView.append(player.name);
-            textView.setTextColor(Color.DKGRAY);
-            textView.setText(" with ID ");
-            textView.setTextColor(Color.rgb(219,112,147));
-            textView.append(String.valueOf(player.id));
-            textView.setTextColor(Color.DKGRAY);
-            textView.setText(" has left the game.");
-        }*/
-
         players.remove(id);
     }
     /* ----------------------------------------------------------------------------------------- */

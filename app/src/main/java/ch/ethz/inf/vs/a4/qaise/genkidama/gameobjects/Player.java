@@ -101,8 +101,8 @@ public class Player implements GameObject {
                 42, 42,
                 4,
                 point.x, point.y,
-                true);
-        idle_right.scaleBitmap(8);
+                true, 8);
+//        idle_right.scaleBitmap(8);
         idle_right.forward = true;      // always true for right animations
 
         idle_left = new Animation(
@@ -111,8 +111,8 @@ public class Player implements GameObject {
                 42, 42,
                 4,
                 point.x, point.y,
-                true);
-        idle_left.scaleBitmap(8);
+                true, 8);
+//        idle_left.scaleBitmap(8);
         idle_left.forward = false;      // always false for left animations
 
 
@@ -122,8 +122,8 @@ public class Player implements GameObject {
                 42, 42,
                 8,
                 point.x, point.y,
-                true);
-        walk_right.scaleBitmap(8);
+                true, 8);
+//        walk_right.scaleBitmap(8);
         walk_right.forward = true;
 
         walk_left = new Animation(
@@ -132,10 +132,11 @@ public class Player implements GameObject {
                 42, 42,
                 8,
                 point.x, point.y,
-                true);
-        walk_left.scaleBitmap(8);
+                true, 8);
+//        walk_left.scaleBitmap(8);
         walk_left.forward = false;
 
+/*
         //Done Lara: frameWidth: 80
         attack_left=new Animation(MainActivity.context,
                 R.drawable.knight_attack_left,
@@ -183,20 +184,14 @@ public class Player implements GameObject {
                 9, point.x, point.y,
                 true);
         death_right.scaleBitmap(8);
+*/
+
+
 
         if (side % 2 != 0) {
             walkInX = true;  // if on the left side, animate idle_right
             animation = idle_right;
         } // otherwise false anyways and animate idle_left
-
-
-        //Done LARA This code is here twice.
-        /*if (side % 2 != 0) {
-            walkInX = true;  // if on the left side, animate idle_right
-            animation = idle_right;
-        } // otherwise false anyways and animate idle_left
-        */
-        //Done LARA
 
     }
 
@@ -231,56 +226,74 @@ public class Player implements GameObject {
         // (left, top, right, bottom)
         this.new_point = point;
 
-        //TODO Lara attack, special_attack, block, is_dead put into code and look that only one can be true at each time.
-
-        //TODO LARA: Animation
+        // Qais: added old version again
         if (new_point.x < old_point.x) {
             walkInX = false;
+            walk_left.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
+            animation = walk_left;
         } else if (new_point.x > old_point.x) {
             walkInX = true;
+            walk_right.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
+            animation = walk_right;
+        } else if (new_point.x == old_point.x) {
+            if (walkInX){
+                idle_right.setWhereToDraw((new_point.x) , (new_point.y));
+                animation = idle_right;
+            } else {
+                idle_left.setWhereToDraw((new_point.x) , (new_point.y));
+                animation = idle_left;
+            }
         }
 
-        if (!attack && !special_attack &&!block && !is_dead){
-            if (!walkInX) {
-                walk_left.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
-                animation = walk_left;
-            } else if (walkInX) {
-                walk_right.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
-                animation = walk_right;
-            } else if (new_point.x == old_point.x) {
-                if (walkInX){
-                    idle_right.setWhereToDraw((new_point.x) , (new_point.y));
-                    animation = idle_right;
-                } else {
-                    idle_left.setWhereToDraw((new_point.x) , (new_point.y));
-                    animation = idle_left;
-                }
-            }
-        }else if(attack && !special_attack && !block && !is_dead && walkInX){
-            attack_right.setWhereToDraw((new_point.x),(new_point.y));
-            animation = attack_right;
-        }else if(!attack && special_attack && !block && !is_dead && walkInX){
-            attack_right.setWhereToDraw((new_point.x),(new_point.y));
-            animation = attack_right;
-        }else if(!attack && !special_attack && block && !is_dead && walkInX){
-            block_left.setWhereToDraw((new_point.x),(new_point.y));
-            animation = block_left;
-        }else if(!attack && !special_attack && !block && is_dead && walkInX){
-            death_left.setWhereToDraw((new_point.x),(new_point.y));
-            animation = death_left;
-        }else if(attack && !special_attack && !block && !is_dead && !walkInX){
-            attack_left.setWhereToDraw((new_point.x),(new_point.y));
-            animation = attack_left;
-        }else if(!attack && special_attack && !block && !is_dead && !walkInX){
-            attack_left.setWhereToDraw((new_point.x),(new_point.y));
-            animation = attack_left;
-        }else if(!attack && !special_attack && block && !is_dead && !walkInX){
-            block_right.setWhereToDraw((new_point.x),(new_point.y));
-            animation = block_right;
-        }else if(!attack && !special_attack &&! block && is_dead && !walkInX){
-            death_right.setWhereToDraw((new_point.x),(new_point.y));
-            animation = death_right;
-        }
+        //TODO Lara attack, special_attack, block, is_dead put into code and look that only one can be true at each time.
+        //TODO LARA: Animation ( Qais: please revise, the following does not work..)
+//        if (new_point.x < old_point.x) {
+//            walkInX = false;
+//        } else if (new_point.x > old_point.x) {
+//            walkInX = true;
+//        }
+//
+//        if (!attack && !special_attack &&!block && !is_dead){
+//            if (!walkInX) {
+//                walk_left.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
+//                animation = walk_left;
+//            } else if (walkInX) {
+//                walk_right.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
+//                animation = walk_right;
+//            } else if (new_point.x == old_point.x) {
+//                if (walkInX){
+//                    idle_right.setWhereToDraw((new_point.x) , (new_point.y));
+//                    animation = idle_right;
+//                } else {
+//                    idle_left.setWhereToDraw((new_point.x) , (new_point.y));
+//                    animation = idle_left;
+//                }
+//            }
+//        }else if(attack && !special_attack && !block && !is_dead && walkInX){
+//            attack_right.setWhereToDraw((new_point.x),(new_point.y));
+//            animation = attack_right;
+//        }else if(!attack && special_attack && !block && !is_dead && walkInX){
+//            attack_right.setWhereToDraw((new_point.x),(new_point.y));
+//            animation = attack_right;
+//        }else if(!attack && !special_attack && block && !is_dead && walkInX){
+//            block_left.setWhereToDraw((new_point.x),(new_point.y));
+//            animation = block_left;
+//        }else if(!attack && !special_attack && !block && is_dead && walkInX){
+//            death_left.setWhereToDraw((new_point.x),(new_point.y));
+//            animation = death_left;
+//        }else if(attack && !special_attack && !block && !is_dead && !walkInX){
+//            attack_left.setWhereToDraw((new_point.x),(new_point.y));
+//            animation = attack_left;
+//        }else if(!attack && special_attack && !block && !is_dead && !walkInX){
+//            attack_left.setWhereToDraw((new_point.x),(new_point.y));
+//            animation = attack_left;
+//        }else if(!attack && !special_attack && block && !is_dead && !walkInX){
+//            block_right.setWhereToDraw((new_point.x),(new_point.y));
+//            animation = block_right;
+//        }else if(!attack && !special_attack &&! block && is_dead && !walkInX){
+//            death_right.setWhereToDraw((new_point.x),(new_point.y));
+//            animation = death_right;
+//        }
 
 
 

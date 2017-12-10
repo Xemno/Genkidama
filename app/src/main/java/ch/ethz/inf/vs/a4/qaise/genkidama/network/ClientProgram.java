@@ -74,7 +74,6 @@ public class ClientProgram extends Listener {
 
             Network.UpdatePlayer msg = (Network.UpdatePlayer) object;
 
-//TODO: removed...maybe handle
             if (!GamePanel.players.containsKey(msg.id)) {
 //                GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y)));
                 return;
@@ -99,7 +98,6 @@ public class ClientProgram extends Listener {
     }
 
     public void disconnected (Connection connection) {
-        Constants.CONNECTED = false;
         Log.i(TAG, "Disconnected");
     }
 
