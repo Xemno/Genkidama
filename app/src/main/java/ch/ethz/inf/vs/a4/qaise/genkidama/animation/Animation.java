@@ -54,6 +54,8 @@ public class Animation {
     public Animation(Context context, int drawable, int frameWidth,
                      int frameHeight, int frameCount, float x, float y, boolean scaled, int scaleFactor) {
 
+        if (scaleFactor < 1) scaleFactor = 1;
+
         this.x = x;
         this.y = y;
         // Following variables should never be zero!
@@ -162,7 +164,7 @@ public class Animation {
         this.currentFrame = currentFrame;
     }
 
-    public Bitmap resource() {
+    private Bitmap resource() {
         return bitmap;
     }
 
@@ -170,22 +172,16 @@ public class Animation {
         this.frameLengthInMilliseconds = frameLengthInMilliseconds;
     }
 
-//    public boolean collidesWith(Player player) {
-//        // TODO: use whereToDraw to detect collision
-//        return false;
+//    public void scaleBitmap(int scale){
+//        this.frameWidth = scale*frameWidth;
+//        this.frameHeight = scale*frameHeight;
+//
+//        // use this for hitbox
+//        frameToDraw = new Rect(0,0, frameWidth, frameHeight);
+//        whereToDraw = new RectF(x, y, x + frameWidth, y + frameHeight);
+//
+//        bitmap = Bitmap.createScaledBitmap(bitmap, frameWidth * frameCount, frameHeight,false);
+//
 //    }
-
-
-    public void scaleBitmap(int scale){
-        this.frameWidth = scale*frameWidth;
-        this.frameHeight = scale*frameHeight;
-
-        // use this for hitbox
-        frameToDraw = new Rect(0,0, frameWidth, frameHeight);
-        whereToDraw = new RectF(x, y, x + frameWidth, y + frameHeight);
-
-        bitmap = Bitmap.createScaledBitmap(bitmap, frameWidth * frameCount, frameHeight,false);
-
-    }
 
 }

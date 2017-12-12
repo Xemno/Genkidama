@@ -86,25 +86,6 @@ public class KryoClient {
     }
 
     private static class ConnectToServer extends AsyncTask<String, int[], String> {
-        @Override
-        protected String doInBackground(String... arg0) {
-            try {
-                client.connect(timeout, Constants.SERVER_ADDRESS, Constants.PORT_NUMBER);
-                Log.i(TAG, "Connection to Server: Succeeded");
-                login(); // send login message to server
-
-                return null;
-            } catch (IOException e) {
-                Log.i(TAG, "Error connecting: " + e.getMessage());
-                return null;
-            }
-        }
-    }
-
-
-
-
-    private static class ReconnectToServer extends AsyncTask<String, int[], String> {
 //        AsyncTask<Void, Void, Void>
 
 //        ProgressDialog pdLoading = new ProgressDialog(MainActivity.this);
@@ -120,15 +101,13 @@ public class KryoClient {
         @Override
         protected String doInBackground(String... arg0) {
             try {
-                // if once connected = true, then reconnect, otherwise connect
-                client.reconnect(timeout);
-                Log.i(TAG, "reconnection succeeded");
-
-                login(); // send a login message upon reconnecting
+                client.connect(timeout, Constants.SERVER_ADDRESS, Constants.PORT_NUMBER);
+                Log.i(TAG, "Connection to Server: Succeeded");
+                login(); // send login message to server
 
                 return null;
             } catch (IOException e) {
-                Log.i(TAG, "Error reconnecting: " + e.getMessage());
+                Log.i(TAG, "Error connecting: " + e.getMessage());
                 return null;
             }
         }
@@ -143,11 +122,6 @@ public class KryoClient {
 //        }
     }
 
-    public void reconnect() {
-        if (client == null) return;
-        if (client.isConnected()) return;
-        new ReconnectToServer().execute();
-    }
 
     public void connect() {
         if (client == null) return;
@@ -155,4 +129,8 @@ public class KryoClient {
         new ConnectToServer().execute();
     }
 
+    public static void close(){
+        if (client != null) client.close();
+        if (instance != null) instance = null;
+    }
 }

@@ -19,7 +19,7 @@ public class SceneManager {
 
     public SceneManager(Activity activity) {
         scenes.add(new LoginScene(activity));
-        // TODO: add LobbyScene to choose a character and wait for other player
+//        scenes.add(new LobbyScene(activity)); // TODO:
         scenes.add(new GamePlayScene(activity));
         scenes.add(new GameOverScene(activity));
     }

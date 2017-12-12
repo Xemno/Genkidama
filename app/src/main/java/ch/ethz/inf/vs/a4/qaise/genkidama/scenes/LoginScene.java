@@ -14,12 +14,10 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
-import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
 
 /**
  * Created by Qais on 26-Nov-17.
@@ -33,7 +31,7 @@ public class LoginScene implements Scene {
     private EditText edit_username;
     private EditText ip_address;
     private EditText port_number;
-    private Button enter_btn, start_btn;
+    private Button login_btn, start_btn;
 
     private int top, right, left, bottom;
 
@@ -66,7 +64,6 @@ public class LoginScene implements Scene {
                 Constants.SCREEN_HEIGHT/3 ,
                 true, 4);
         coinAnimation.setFrameDuration(100);
-//        coinAnimation.scaleBitmap(4);
     }
 
     @Override
@@ -78,21 +75,15 @@ public class LoginScene implements Scene {
                     RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.LOGIN_UI);
                     loginUI.setVisibility(View.VISIBLE);
                     loginUI.bringToFront();
-/*
-                    textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
-*/
-                    enter_btn = (Button) activity.findViewById(Constants.LOGIN_BTN);
+
+                    login_btn = (Button) activity.findViewById(Constants.LOGIN_BTN);
                     start_btn = (Button) activity.findViewById(Constants.START_BTN);
                     edit_username = (EditText) activity.findViewById(Constants.USERNAME_ID);
                     ip_address = (EditText) activity.findViewById(Constants.IP_ID);
                     port_number = (EditText) activity.findViewById(Constants.PORT_ID);
 
-/*
-                    textView.setText("\n" + "Welcome!");
-*/
-
                     btn_active = true;
-                    enter_btn.setOnClickListener(new View.OnClickListener(){
+                    login_btn.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View view) {
                             //TODO: needs to be changed
@@ -111,7 +102,8 @@ public class LoginScene implements Scene {
                             } else {
                                 Toast.makeText(activity.getApplication(), "myPlayer not added", Toast.LENGTH_LONG).show();
                                 if (KryoClient.getClient().isConnected()) {
-                                    KryoClient.login();
+//                                    KryoClient.login();
+                                    //TODO: test to termiante() here, since already connected
                                     Toast.makeText(activity.getApplication(), "login message sent again", Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(activity.getApplication(), "no connection", Toast.LENGTH_LONG).show();
@@ -119,6 +111,7 @@ public class LoginScene implements Scene {
                             }
                         }
                     });
+
 
 
                 }
@@ -138,7 +131,6 @@ public class LoginScene implements Scene {
         genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
         genkidamaLogo.setBounds(left, top, right, bottom);
         genkidamaLogo.draw(canvas);
-
 
         coinAnimation.setWhereToDraw(left - 40, (bottom - top) - 30);
         coinAnimation.draw(canvas);
@@ -163,6 +155,7 @@ public class LoginScene implements Scene {
     @Override
     public void receiveTouch(MotionEvent event) {}
 
+
     private boolean checkInputs(){
         String name = edit_username.getText().toString();
         String ip = ip_address.getText().toString();
@@ -181,7 +174,7 @@ public class LoginScene implements Scene {
             return false;
         }
 
-        try{
+        try {
             Constants.PORT_NUMBER = Integer.parseInt(port);
         } catch (NumberFormatException nfe){
             Toast.makeText(activity.getApplication(), "Invalid Port Number!", Toast.LENGTH_LONG).show();
