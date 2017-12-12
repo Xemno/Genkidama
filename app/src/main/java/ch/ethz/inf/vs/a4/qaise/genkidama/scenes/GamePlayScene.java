@@ -86,14 +86,14 @@ public class GamePlayScene implements Scene {
             // send updated movement of our player to server
             // do the following only if the player has moved and only if player is initialized!
             if ((old_point.x != new_point.x || old_point.y != new_point.y)) {
-                KryoClient.send(new_point); // sends the current point of myPlayer to server
+                KryoClient.send(new PointF(new_point.x/SCREEN_WIDTH, new_point.y/SCREEN_HEIGHT)); // sends the current point of myPlayer to server
                 old_point.set(new_point.x, new_point.y);
             }
 
             // send the last point twice, such that we can detect that the palyer stays still,
             // and thus we can animate an idle_animation for our palyer
             if (sendOnce) {
-                KryoClient.send(new_point);
+                KryoClient.send(new PointF(new_point.x/SCREEN_WIDTH, new_point.y/SCREEN_HEIGHT));
                 old_point.set(new_point.x, new_point.y);
                 sendOnce = false;
             }

@@ -33,11 +33,16 @@ public class HealthBar implements GameObject {
     private final int ALPHA_BORDER = 200;      // [0...255] // missing health
 
     // fixed position values, i.e. percentage of screen something should be
-    private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
+    /*private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
     private final int GAP_TOP_PART = 8;
-    private final int BACKGROUND_WIDTH_PART = 3; //TODO: why 3? 4 wäre vllt besser da kleinere W'keit auf rundungsgehler
+    private final int BACKGROUND_WIDTH_PART = 3;
     private final int BACKGROUND_HEIGHT_PART = 12;
-    private final int BORDER_SIZE = 10;
+    private final int BORDER_SIZE = 10;*/
+    private final int GAP_SIDE_PART = 20; // e.g. gap is one 16th of the screen
+    private final int GAP_TOP_PART = 16;
+    private final int BACKGROUND_WIDTH_PART = 3;
+    private final int BACKGROUND_HEIGHT_PART = 14;
+    private final int BORDER_SIZE = 6;
 
     // relative position values:
     private int gapSide, gapTop;                                // parameters for drawing: position and size

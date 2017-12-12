@@ -141,7 +141,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         /* enemy players will be updated through the network here */
         Player player = players.get(msg.id);
         if (player == null) return;
-        player.update(new PointF(msg.x, msg.y));
+        float x = msg.x * Constants.SCREEN_WIDTH;
+        float y = msg.y * Constants.SCREEN_HEIGHT;
+        if (x < 0.f)
+            player.update(new PointF(0.f, y));
+        else if (x > Constants.SCREEN_WIDTH)
+            player.update(new PointF((float) Constants.SCREEN_WIDTH, y));
+        else
+            player.update(new PointF(x, y));
     }
 
     public static void attackPlayer(Network.Attack msg) {
