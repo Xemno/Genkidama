@@ -36,8 +36,8 @@ public class ClientProgram extends Listener {
             int proposedID = ((Network.RegistrationRequired) object).id; // take proposed ID from server
             int proposedSide = ((Network.RegistrationRequired) object).side; // take proposed ID from server
 
-            message.id =  proposedID;
-            message.side = proposedSide;
+            message.id =  proposedID;       // ID of myPlayer
+            message.side = proposedSide;    // Side of myPlayer
             ID = proposedID;
             side = proposedSide;
 
@@ -51,8 +51,6 @@ public class ClientProgram extends Listener {
                 new_point = new PointF(SCREEN_WIDTH - ((side) * SCREEN_WIDTH/count) , Constants.fixDist);
             }
 
-
-            //TODO: x-direction (side) should be decided by server
             message.x = new_point.x; // initial x pos.
             message.y = new_point.y; // initial y pos.
             message.name = Constants.NAME;
@@ -68,11 +66,6 @@ public class ClientProgram extends Listener {
                 return;
             }
 
-//
-//            if (GamePanel.myPlayer() != null && GamePanel.myPlayer().id == msg.id) {
-//                Constants.REGISTERED = true;
-//            }
-
             GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y), msg.side));
             return;
         }
@@ -81,12 +74,10 @@ public class ClientProgram extends Listener {
 
             Network.UpdatePlayer msg = (Network.UpdatePlayer) object;
 
-//TODO: removed...maybe handle
             if (!GamePanel.players.containsKey(msg.id)) {
 //                GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y)));
                 return;
             }
-
             GamePanel.updatePlayer(msg);
             return;
         }
@@ -107,7 +98,6 @@ public class ClientProgram extends Listener {
     }
 
     public void disconnected (Connection connection) {
-        //TODO: remove own player from list or notify
         Log.i(TAG, "Disconnected");
     }
 

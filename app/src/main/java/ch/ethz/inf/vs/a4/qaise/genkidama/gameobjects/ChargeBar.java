@@ -17,8 +17,8 @@ public class ChargeBar implements GameObject {
     private Rect rectBorder;                 // missing charge rectangle 1-r
 
     // paint values
-    private final int COLOR_CHARGE = Color.WHITE;                // color for charge r
-    private final int COLOR_BORDER = Color.CYAN;                 // color for missing charge 1-r
+    private final int COLOR_CHARGE = Color.rgb(218, 165, 32);                // color for charge r
+    private final int COLOR_BORDER = Color.rgb(255, 228, 181);                 // color for missing charge 1-r
     private final int ALPHA_CHARGE = 200;      // [0...255] // actual charge
     private final int ALPHA_BORDER = 200;      // [0...255] // missing charge
 

@@ -52,16 +52,17 @@ public class Animation {
 
     // Animation from a one-dimensional sprite sheet
     public Animation(Context context, int drawable, int frameWidth,
-                     int frameHeight, int frameCount, float x, float y, boolean scaled) {
+                     int frameHeight, int frameCount, float x, float y, boolean scaled, int scaleFactor) {
 
-        frameToDraw = new Rect(0,0, frameWidth, frameHeight);
-        whereToDraw = new RectF(x, y, x + frameWidth, y + frameHeight);
         this.x = x;
         this.y = y;
         // Following variables should never be zero!
         this.frameCount = frameCount;
-        this.frameWidth = frameWidth;
-        this.frameHeight = frameHeight;
+        this.frameWidth = scaleFactor*frameWidth;
+        this.frameHeight = scaleFactor*frameHeight;
+
+        frameToDraw = new Rect(0,0, this.frameWidth, this.frameHeight);
+        whereToDraw = new RectF(x, y, x + this.frameWidth, y + this.frameHeight);
 //        this.framesInX = framesInX;
 //        this.framesInY = framesInY;
         paint = new Paint();
@@ -79,7 +80,7 @@ public class Animation {
 //                false);
 
         if (scaled) {
-            bitmap = Bitmap.createScaledBitmap(bitmap, frameWidth * frameCount, frameHeight,false);
+            bitmap = Bitmap.createScaledBitmap(bitmap, this.frameWidth * frameCount, this.frameHeight,false);
         } else {
             bitmap = Bitmap.createBitmap(bitmap);
             this.frameWidth = bitmap.getWidth()/frameCount;

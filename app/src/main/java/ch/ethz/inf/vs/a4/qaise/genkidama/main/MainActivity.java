@@ -4,11 +4,12 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -18,7 +19,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import java.io.IOException;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
@@ -31,21 +33,18 @@ public class MainActivity extends AppCompatActivity {
 
     public static Context context;
     //declaration for sound here
-    MediaPlayer backgroundsound;
+   private MediaPlayer backgroundsound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme); // start up theme
         super.onCreate(savedInstanceState);
-//        Constants.activity=this;
-        //we need this for music
-        //sound for background created here, setlooping infinity damit es immer läuft (wieder von vorne beginnt)
-        backgroundsound=MediaPlayer.create(this,R.raw.loginmusic );
-        //TODO: loginmusic sound am anfang, und dann openingmusic in gameplayscene
-        backgroundsound.setLooping(true);
-        backgroundsound.start();
 
         context = this.getApplicationContext();
+
+//        backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
+//        backgroundsound.setLooping(true);
+//        backgroundsound.start();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
@@ -54,9 +53,6 @@ public class MainActivity extends AppCompatActivity {
         // Get Screen Dimensions
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
-
-
         Constants.SCREEN_WIDTH = metrics.widthPixels;
         Constants.SCREEN_HEIGHT = metrics.heightPixels;
         Constants.PLAYER_SIZE = (int)(Constants.SCREEN_WIDTH*Constants.PLAYER_PERCENTAGE_WIDTH/100);
@@ -108,10 +104,12 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize buttons for gameUI
         att_btn.setText(R.string.att_string);
+        att_btn.setAlpha(0.6f);
         att_btn.setId(Constants.ATT_BTN);
         att_btn.setBackgroundResource(R.drawable.roundedbutton);
 
         super_btn.setText(R.string.special);
+        super_btn.setAlpha(0.6f);
         super_btn.setId(Constants.SUPER_BTN);
         super_btn.setBackgroundResource(R.drawable.roundedbutton);
 
@@ -275,6 +273,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (KryoClient.getClient() != null) KryoClient.getClient().close();
+
+/*        if (backgroundsound != null) {
+            backgroundsound.reset();
+            backgroundsound.release();
+            backgroundsound = null;
+        }*/
 
     }
 
