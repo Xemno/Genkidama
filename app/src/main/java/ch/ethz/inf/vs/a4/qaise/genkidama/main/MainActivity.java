@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.Equalizer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 
 import java.io.IOException;
 
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     public static Context context;
     //declaration for sound here
    private MediaPlayer backgroundsound;
+   private Equalizer mEqualizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
-//        backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
-//        backgroundsound.setLooping(true);
-//        backgroundsound.start();
+      backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
+       backgroundsound.setLooping(true);
+       backgroundsound.start();
+       setupEqualizerFxAndUI(); //to equalize music that it works correctly
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
@@ -268,6 +272,39 @@ public class MainActivity extends AppCompatActivity {
         setContentView(game);
 
     }
+    //to equalize music
+ private void setupEqualizerFxAndUI() {
+  //create equalizer object and attach it with default priority 0
+  mEqualizer = new Equalizer(0, backgroundsound.getAudioSessionId());
+  mEqualizer.setEnabled(true);
+  short bands = mEqualizer.getNumberOfBands();
+  final short minEQLevel = mEqualizer.getBandLevelRange()[0];
+  final short maxEQLevel = mEqualizer.getBandLevelRange()[1];
+
+  for (short i = 0; i < bands; i++) {
+   final short band = i;
+   SeekBar bar = new SeekBar(this);
+   bar.setMax(maxEQLevel - minEQLevel);
+   bar.setProgress(mEqualizer.getBandLevel(band));
+   bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+     mEqualizer.setBandLevel(band, (short) (progress + minEQLevel));
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+   });
+  }
+ }
 
     @Override
     protected void onDestroy() {
@@ -282,7 +319,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+ @Override
+ protected void onStop() {
+  super.onStop();
+  if (backgroundsound != null) {
+   backgroundsound.reset();
+   backgroundsound.release();
+   backgroundsound = null;
+  }
+
+
+ }
+
+ @Override
     protected void onResume() {
         super.onResume();
 
