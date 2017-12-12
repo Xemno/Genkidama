@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
@@ -32,11 +33,16 @@ public class HealthBar implements GameObject {
     private final int ALPHA_BORDER = 200;      // [0...255] // missing health
 
     // fixed position values, i.e. percentage of screen something should be
-    private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
+    /*private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
     private final int GAP_TOP_PART = 8;
-    private final int BACKGROUND_WIDTH_PART = 3; //TODO: why 3? 4 wäre vllt besser da kleinere W'keit auf rundungsgehler
+    private final int BACKGROUND_WIDTH_PART = 3;
     private final int BACKGROUND_HEIGHT_PART = 12;
-    private final int BORDER_SIZE = 10;
+    private final int BORDER_SIZE = 10;*/
+    private final int GAP_SIDE_PART = 20; // e.g. gap is one 16th of the screen
+    private final int GAP_TOP_PART = 16;
+    private final int BACKGROUND_WIDTH_PART = 3;
+    private final int BACKGROUND_HEIGHT_PART = 14;
+    private final int BORDER_SIZE = 6;
 
     // relative position values:
     private int gapSide, gapTop;                                // parameters for drawing: position and size
@@ -101,11 +107,11 @@ public class HealthBar implements GameObject {
     @Override
     public void update() {
         currHealth = player.getCurrentHealth();
-        if (currHealth > MaxHealth/2) colorHealth = Color.rgb(51, 204, 51);
+       /* if (currHealth > MaxHealth/2) colorHealth = Color.rgb(51, 204, 51);
         else if (currHealth > 3*MaxHealth/10) colorHealth = Color.rgb(204, 204, 51);
         else if (currHealth > 15*MaxHealth/100) colorHealth = Color.rgb(204, 128, 51);
         else if (currHealth > 8*MaxHealth/100) colorHealth = Color.rgb(204, 51, 51);
-        else colorHealth = Color.RED;
+        else colorHealth = Color.RED;*/
 
         healthWidth = currHealth* backgroundWidth /MaxHealth;
 

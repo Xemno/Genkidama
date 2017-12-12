@@ -17,17 +17,25 @@ public class ChargeBar implements GameObject {
     private Rect rectBorder;                 // missing charge rectangle 1-r
 
     // paint values
-    private final int COLOR_CHARGE = Color.rgb(218, 165, 32);                // color for charge r
-    private final int COLOR_BORDER = Color.rgb(255, 228, 181);                 // color for missing charge 1-r
+    // private final int COLOR_CHARGE = Color.rgb(218, 165, 32);                // color for charge r
+    // private final int COLOR_BORDER = Color.rgb(255, 228, 181);                 // color for missing charge 1-r
+    private final int COLOR_CHARGE = Color.WHITE;                // color for charge r
+    private final int COLOR_BORDER = Color.rgb(121, 27, 25);                 // color for missing charge 1-r
     private final int ALPHA_CHARGE = 200;      // [0...255] // actual charge
     private final int ALPHA_BORDER = 200;      // [0...255] // missing charge
 
     // fixed position values, i.e. percentage of screen something should be
-    private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
+    /*private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
     private final int GAP_TOP_PART = 4;
     private final int BACKGROUND_WIDTH_PART = 4;
     private final int BACKGROUND_HEIGHT_PART = 24;
-    private final int BORDER_SIZE = 6;
+    private final int BORDER_SIZE = 6;*/
+    private final int GAP_SIDE_PART = 20; // e.g. gap is one 16th of the screen
+    private final int GAP_TOP_PART = 6;
+    private final int BACKGROUND_WIDTH_PART = 4;
+    private final int BACKGROUND_HEIGHT_PART = 28;
+    private final int BORDER_SIZE = 5;
+
 
     // relative position values:
     private int gapSide, gapTop;                                // parameters for drawing: position and size

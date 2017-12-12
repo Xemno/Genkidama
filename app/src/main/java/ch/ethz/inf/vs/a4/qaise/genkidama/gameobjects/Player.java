@@ -305,6 +305,7 @@ public class Player implements GameObject {
 
     }
 
+    //not needed anywhere and doesn't make sense
     public void update(int damage) {
         this.currentHealth = this.currentHealth - damage;
     }
