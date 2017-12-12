@@ -179,8 +179,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             attackedPlayer.setCurrentHealth(health);
         else
             attackedPlayer.setCurrentHealth(0);
-
-
+        attackingPlayer.chargebar.update();
+        attackedPlayer.healthbar.update();
 
     }
 
