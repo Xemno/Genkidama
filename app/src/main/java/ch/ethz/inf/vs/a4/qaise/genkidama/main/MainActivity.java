@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     public static Context context;
     //declaration for sound here
    private MediaPlayer backgroundsound;
+   //public static MediaPlayer attacksound;
+   //public static MediaPlayer specialattacksound;
+   //initialize mediaplayers here and used in gameplayscene
    private Equalizer mEqualizer;
 
     @Override
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         context = this.getApplicationContext();
+
+       // attacksound=MediaPlayer.create(this,R.raw.attacksound);
+        //specialattacksound=MediaPlayer.create(this,R.raw.specialattacksound);
+
 
       backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
        backgroundsound.setLooping(true);

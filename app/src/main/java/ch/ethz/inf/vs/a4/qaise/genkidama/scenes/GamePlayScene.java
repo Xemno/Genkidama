@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +21,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.BaseFloor;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIST_RELATIVE;
@@ -52,6 +55,8 @@ public class GamePlayScene implements Scene {
 
     private boolean btn_active = false;
     private boolean new_game = false;
+    MediaPlayer attacksound= new MediaPlayer();
+    MediaPlayer specialattacksound= new MediaPlayer();
 
 
 //    private int frameLengthInMilliseconds = 50;
@@ -112,28 +117,47 @@ public class GamePlayScene implements Scene {
                     Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
                     btn_active = true;
 
+
                     att_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            if(attacksound!=null){attacksound.release();}
+
+                            attacksound=MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+                            attacksound.start();
+                            //start sound for attackbutton 
                             if (players.size() > 1) {
                                 for (Player enemy : players.values()) {
                                     if (myPlayer().id != enemy.id) myPlayer().attack(enemy);
                                 }
                             }
+
                         }
-                    });
+
+                    } );
+                    attacksound.release();
+                    attacksound=null;
+
+                    
 
 
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            if(specialattacksound!=null){specialattacksound.release();}
+
+                           specialattacksound=MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
+                            specialattacksound.start();
                             if (players.size() > 1) {
                                 for (Player enemy : players.values()) {
                                     if (myPlayer().id != enemy.id) myPlayer().specialAttack(enemy);
                                 }
                             }
+
                         }
                     });
+                    specialattacksound.release();
+                    specialattacksound=null;
 
 
                 }
