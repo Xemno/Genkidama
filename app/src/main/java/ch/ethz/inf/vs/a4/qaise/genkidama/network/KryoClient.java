@@ -59,7 +59,7 @@ public class KryoClient {
 
     public static void specialAttack(Player enemy, int damage) {
         if (client != null && client.isConnected())
-            new AttackMessage().execute(enemy.id, damage, 1);
+            new AttackMessage().execute(enemy.id, -damage);
     }
 
     public static void login() {
@@ -80,7 +80,6 @@ public class KryoClient {
                 message.idA = Constants.ID;  // move our player
                 message.idE = arg0[0];
                 message.damage = arg0[1];
-                message.special = arg0[2];
                 client.sendTCP(message);
                 return null;
 

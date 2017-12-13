@@ -155,7 +155,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         Player victim = players.get(msg.idE);    // the attacked player
         Player attacker = players.get(msg.idA);   // the attacking player
         int dmg = msg.damage;
-        int special = msg.special;
         int health;
 
         //TODO: here music for attack
@@ -163,34 +162,34 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 //        attacksoundmusic.start();
 
 
-        switch (special) {
-            case 0: // normal attack
-                if (attacker.getCurrentCharge() >= MAX_CHARGE - CHARGE_AMOUNT) {
-                    attacker.setCurrentCharge(MAX_CHARGE);
-                    attacker.isCharged = true;
-                } else {
-                    attacker.setCurrentCharge(attacker.getCurrentCharge() + CHARGE_AMOUNT);
-                }
+        if (dmg >= 0) {
+            // normal attack
+            if (attacker.getCurrentCharge() >= MAX_CHARGE - CHARGE_AMOUNT) {
+                attacker.setCurrentCharge(MAX_CHARGE);
+                attacker.isCharged = true;
+            } else {
+                attacker.setCurrentCharge(attacker.getCurrentCharge() + CHARGE_AMOUNT);
+            }
 
-                health = victim.getCurrentHealth() - dmg;
-                if (health > 0)
-                    victim.setCurrentHealth(health);
-                else
-                    victim.setCurrentHealth(0);
+            health = victim.getCurrentHealth() - dmg;
+            if (health > 0)
+                victim.setCurrentHealth(health);
+            else
+                victim.setCurrentHealth(0);
 
-                attacker.chargebar.update();
-                victim.healthbar.update();
-                break;
-            case 1: // special attack
-                attacker.setCurrentCharge(0);
-                attacker.isCharged = false;
-                health = victim.getCurrentHealth() - dmg;
-                if (health > 0)
-                    victim.setCurrentHealth(health);
-                else
-                    victim.setCurrentHealth(0);
-                attacker.chargebar.update();
-                victim.healthbar.update();
+            attacker.chargebar.update();
+            victim.healthbar.update();}
+        else { // special attack
+            attacker.setCurrentCharge(0);
+            attacker.isCharged = false;
+            dmg = -dmg;
+            health = victim.getCurrentHealth() - dmg;
+            if (health > 0)
+                victim.setCurrentHealth(health);
+            else
+                victim.setCurrentHealth(0);
+            attacker.chargebar.update();
+            victim.healthbar.update();
         }
     }
 

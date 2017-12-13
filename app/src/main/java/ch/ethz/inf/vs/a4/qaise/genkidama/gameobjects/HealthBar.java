@@ -60,7 +60,7 @@ public class HealthBar implements GameObject {
 
 //        side = player.getSide();
 
-        colorHealth = Color.GREEN;
+        colorHealth = Color.rgb(51, 204, 51);
 
         // Scaling size and position of the background part with final parameters above
         gapSide = Constants.SCREEN_WIDTH/GAP_SIDE_PART;        // where you want the healthbar

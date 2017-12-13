@@ -64,7 +64,6 @@ public class Network {
         public int idA; // ID of the Attacker
         public int idE; // which player is being attacked
         public int damage;  // the damage caused
-        public int special; // 0 for normal attack, 1 for special
     }
 
     public static class AttackPlayer {
@@ -72,7 +71,6 @@ public class Network {
         public int idA; // ID of the Attacker
         public int idE; // which player is being attacked
         public int damage;  // the damage caused
-        public int special; //0 for normal attack, 1 for special
 //        public int charge;  // charge for idA from this damage
 
     }
