@@ -76,8 +76,10 @@ public class ChargeBar implements GameObject {
             // display on right side
             rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2*BORDER_SIZE - backgroundWidth, gapTop,
                     Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2*BORDER_SIZE);
-            rectCharge = new Rect(Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth, gapTop + BORDER_SIZE,
-                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + chargeWidth, gapTop + BORDER_SIZE + backgroundHeight);
+            /*rectCharge = new Rect(Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth, gapTop + BORDER_SIZE,
+                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + chargeWidth, gapTop + BORDER_SIZE + backgroundHeight);*/
+            rectCharge = new Rect (Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - chargeWidth, gapTop + BORDER_SIZE,
+                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE, gapTop + BORDER_SIZE + backgroundHeight);
         }
     }
 
@@ -100,6 +102,6 @@ public class ChargeBar implements GameObject {
         if (side == 1)
             rectCharge.right = gapSide + BORDER_SIZE + chargeWidth;
         else
-            rectCharge.right = Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + chargeWidth;
+            rectCharge.left = Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - chargeWidth;
     }
 }

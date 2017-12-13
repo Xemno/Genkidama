@@ -87,8 +87,10 @@ public class HealthBar implements GameObject {
             // display on right side
             rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2*BORDER_SIZE - backgroundWidth, gapTop,
                     Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2*BORDER_SIZE);
-            rectHealth = new Rect(Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth, gapTop + BORDER_SIZE,
-                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + healthWidth, gapTop + BORDER_SIZE + backgroundHeight);
+            /*rectHealth = new Rect(Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth, gapTop + BORDER_SIZE,
+                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + healthWidth, gapTop + BORDER_SIZE + backgroundHeight);*/
+            rectHealth = new Rect (Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - healthWidth, gapTop + BORDER_SIZE,
+                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE, gapTop + BORDER_SIZE + backgroundHeight);
         }
     }
 
@@ -107,18 +109,18 @@ public class HealthBar implements GameObject {
     @Override
     public void update() {
         currHealth = player.getCurrentHealth();
-       /* if (currHealth > MaxHealth/2) colorHealth = Color.rgb(51, 204, 51);
+        if (currHealth > MaxHealth/2) colorHealth = Color.rgb(51, 204, 51);
         else if (currHealth > 3*MaxHealth/10) colorHealth = Color.rgb(204, 204, 51);
         else if (currHealth > 15*MaxHealth/100) colorHealth = Color.rgb(204, 128, 51);
         else if (currHealth > 8*MaxHealth/100) colorHealth = Color.rgb(204, 51, 51);
-        else colorHealth = Color.RED;*/
+        else colorHealth = Color.RED;
 
         healthWidth = currHealth* backgroundWidth /MaxHealth;
 
         if(side == 1)
             rectHealth.right = gapSide + BORDER_SIZE + healthWidth;
         else
-            rectHealth.right = Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + healthWidth;
+            rectHealth.left = Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - healthWidth;
     }
 }
 
