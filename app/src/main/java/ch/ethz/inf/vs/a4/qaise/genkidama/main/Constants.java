@@ -67,6 +67,6 @@ public class Constants {
 
     public static int MAX_HEALTH = 1000;
     public static int MAX_CHARGE = 200;
-    public static int CHARGE_AMOUNT = 5;
+    public static int CHARGE_AMOUNT = 10;
 
 }

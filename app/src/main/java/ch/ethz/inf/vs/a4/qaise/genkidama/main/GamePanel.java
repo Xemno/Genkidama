@@ -152,29 +152,45 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public static void attackPlayer(Network.Attack msg) {
-        Player attackedPlayer = players.get(msg.idE);    // the attacked player
-        Player attackingPlayer = players.get(msg.idA);   // the attacking player
+        Player victim = players.get(msg.idE);    // the attacked player
+        Player attacker = players.get(msg.idA);   // the attacking player
         int dmg = msg.damage;
+        int health;
 
         //TODO: here music for attack
 //        MediaPlayer attacksoundmusic= MediaPlayer.create(MainActivity.context, R.raw.attacksound);
 //        attacksoundmusic.start();
 
-        if (attackingPlayer.getCurrentCharge() > MAX_CHARGE - CHARGE_AMOUNT) {
-            attackingPlayer.setCurrentCharge(MAX_CHARGE);
-            attackingPlayer.isCharged = true;
-        } else {
-            attackingPlayer.setCurrentCharge(attackingPlayer.getCurrentCharge() + CHARGE_AMOUNT);
+
+        if (dmg >= 0) {
+            // normal attack
+            if (attacker.getCurrentCharge() >= MAX_CHARGE - CHARGE_AMOUNT) {
+                attacker.setCurrentCharge(MAX_CHARGE);
+                attacker.isCharged = true;
+            } else {
+                attacker.setCurrentCharge(attacker.getCurrentCharge() + CHARGE_AMOUNT);
+            }
+
+            health = victim.getCurrentHealth() - dmg;
+            if (health > 0)
+                victim.setCurrentHealth(health);
+            else
+                victim.setCurrentHealth(0);
+
+            attacker.chargebar.update();
+            victim.healthbar.update();}
+        else { // special attack
+            attacker.setCurrentCharge(0);
+            attacker.isCharged = false;
+            dmg = -dmg;
+            health = victim.getCurrentHealth() - dmg;
+            if (health > 0)
+                victim.setCurrentHealth(health);
+            else
+                victim.setCurrentHealth(0);
+            attacker.chargebar.update();
+            victim.healthbar.update();
         }
-
-        int health = attackedPlayer.getCurrentHealth() - dmg;
-        if (health > 0)
-            attackedPlayer.setCurrentHealth(health);
-        else
-            attackedPlayer.setCurrentHealth(0);
-
-        attackingPlayer.chargebar.update();
-        attackedPlayer.healthbar.update();
     }
 
     public static void removePlayer (int id) {

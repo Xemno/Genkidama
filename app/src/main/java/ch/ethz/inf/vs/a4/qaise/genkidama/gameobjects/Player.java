@@ -21,10 +21,6 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_CHARGE;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_HEALTH;
 
 
-/**
- * Created by Qais on 04-Nov-17.
- */
-
 //TODO: NOT FINISHED
 
 
@@ -203,8 +199,8 @@ public class Player implements GameObject {
     }
 
     public void specialAttack(Player enemy) {
-        if (this.collidesWith(enemy)) { // only attack if collision !!!
-            // TODO
+        if (this.collidesWith(enemy) && this.isCharged) { // TODO: really only attack if collision?
+            KryoClient.specialAttack(enemy, SPECIAL_ATTACK_DMG);
         }
     }
 
@@ -322,6 +318,10 @@ public class Player implements GameObject {
         return currentHealth;
     }
 
+    public void setCurrentHealth(int health){
+        currentHealth = health;
+    }
+
     public int getMaxCharge() {
         return maxCharge;
     }
@@ -332,10 +332,6 @@ public class Player implements GameObject {
 
     public void setCurrentCharge(int charge){
         currentCharge = charge;
-    }
-
-    public void setCurrentHealth(int health){
-        currentHealth = health;
     }
 
     public HealthBar getHealthbar(){

@@ -64,7 +64,6 @@ public class Network {
         public int idA; // ID of the Attacker
         public int idE; // which player is being attacked
         public int damage;  // the damage caused
-
     }
 
     public static class AttackPlayer {

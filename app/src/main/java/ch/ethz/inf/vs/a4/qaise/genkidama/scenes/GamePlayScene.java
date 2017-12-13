@@ -1,12 +1,15 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.scenes;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +22,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.BaseFloor;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIST_RELATIVE;
@@ -52,6 +56,10 @@ public class GamePlayScene implements Scene {
 
     private boolean btn_active = false;
     private boolean new_game = false;
+    MediaPlayer attacksound= new MediaPlayer();
+    MediaPlayer specialattacksound= new MediaPlayer();
+
+    private float touch_old, touch_new; // used for movement detection. DO NOT confuse with old_point and new_point
 
 
 //    private int frameLengthInMilliseconds = 50;
@@ -112,28 +120,47 @@ public class GamePlayScene implements Scene {
                     Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
                     btn_active = true;
 
+
                     att_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            if(attacksound!=null){attacksound.release();}
+
+                            attacksound=MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+                            attacksound.start();
+                            //start sound for attackbutton 
                             if (players.size() > 1) {
                                 for (Player enemy : players.values()) {
                                     if (myPlayer().id != enemy.id) myPlayer().attack(enemy);
                                 }
                             }
+
                         }
-                    });
+
+                    } );
+                    attacksound.release();
+                    attacksound=null;
+
+                    
 
 
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            if(specialattacksound!=null){specialattacksound.release();}
+
+                           specialattacksound=MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
+                            specialattacksound.start();
                             if (players.size() > 1) {
                                 for (Player enemy : players.values()) {
                                     if (myPlayer().id != enemy.id) myPlayer().specialAttack(enemy);
                                 }
                             }
+
                         }
                     });
+                    specialattacksound.release();
+                    specialattacksound=null;
 
 
                 }
@@ -190,7 +217,40 @@ public class GamePlayScene implements Scene {
 
             for (Player player : players.values()) {
                 if (player.isLoser){
-//                    terminate(); // TODO: switch to gameoverscene
+                    GameOverScene.test = Bitmap.createBitmap(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Bitmap.Config.RGB_565);
+                    Canvas temp_canvas = new Canvas(GameOverScene.test);
+
+                    canvas.drawColor(Color.WHITE); // BACKGROUND color
+
+                    layer1 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1);
+                    layer1.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+                    layer1.draw(temp_canvas);
+
+                    layer2 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer2);
+                    layer2.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+                    layer2.draw(temp_canvas);
+
+                    layer3 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer3);
+                    layer3.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+                    layer3.draw(temp_canvas);
+
+                    layer4 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer4);
+                    layer4.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+                    layer4.draw(temp_canvas);
+
+                    layer5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer5);
+                    layer5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+                    layer5.draw(temp_canvas);
+
+                    for (Player pl : players.values()) { // draw all players. Cannot use players from above, because the loop stops when loser is found
+                        if (pl != null) pl.draw(temp_canvas); // changed this to check for null object
+                    }
+
+                    layer6 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer6);
+                    layer6.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+                    layer6.draw(canvas);
+
+                    terminate(); // TODO: switch to gameoverscene
                 }
             }
 
@@ -211,7 +271,16 @@ public class GamePlayScene implements Scene {
 
     @Override
     public void terminate() {
-        // TODO:
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_UI);
+                gameUI.setVisibility(View.GONE);
+                btn_active = false;
+            }
+        });
+        new_game = true;
+        SceneManager.ACTIVE_SCENE = Constants.GAMEOVER_SCENE;
     }
 
     @Override
@@ -220,13 +289,14 @@ public class GamePlayScene implements Scene {
             case MotionEvent.ACTION_DOWN:
                 movingPlayer = true;
                 sendOnce = true;
-                old_point.x = event.getX(); // not sure if right
+                touch_old = event.getX();
                 break;
             case MotionEvent.ACTION_MOVE:
-                new_point.x = event.getX();
-                float diff = new_point.x - old_point.x;
+                touch_new = event.getX();
+                float diff = touch_new - touch_old;
                 if (movingPlayer && Math.abs(diff) > 5) { // only move our player if condition true
-                    new_point.x = old_point.x + (diff * 100/SCREEN_WIDTH);
+                    new_point.x = old_point.x + (diff * (SCREEN_WIDTH/500.f)); //TODO adjust 500.f so the player movement is better
+                    touch_old = touch_new;
                 }
                 break;
             case MotionEvent.ACTION_UP:
