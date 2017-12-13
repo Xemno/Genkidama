@@ -71,10 +71,10 @@ public class Animation {
         paint = new Paint();
 
         //bitmap downsampled version
-        bitmap=decodeSampledBitmapFromResource(context.getResources(),drawable, frameWidth*frameCount, frameHeight);
+//        bitmap=decodeSampledBitmapFromResource(context.getResources(),drawable, frameWidth*frameCount, frameHeight);
 
         //old version without bitmap
-        //bitmap = BitmapFactory.decodeResource(context.getResources(), drawable);
+        bitmap = BitmapFactory.decodeResource(context.getResources(), drawable);
 
         // Scale the bitmap to the correct size. We need to do this because Android automatically
         // scales bitmaps based on screen density

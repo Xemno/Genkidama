@@ -53,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
        // attacksound=MediaPlayer.create(this,R.raw.attacksound);
         //specialattacksound=MediaPlayer.create(this,R.raw.specialattacksound);
 
-
-      backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
-       backgroundsound.setLooping(true);
-       backgroundsound.start();
-       setupEqualizerFxAndUI(); //to equalize music that it works correctly
+// TODO: uncomment for use
+//       backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
+//       backgroundsound.setLooping(true);
+//       backgroundsound.start();
+//       setupEqualizerFxAndUI(); //to equalize music that it works correctly
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
@@ -477,17 +477,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
- @Override
- protected void onStop() {
-  super.onStop();
-  if (backgroundsound != null) {
-   backgroundsound.reset();
-   backgroundsound.release();
-   backgroundsound = null;
-  }
-
-
- }
 
  @Override
     protected void onResume() {

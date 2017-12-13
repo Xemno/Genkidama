@@ -43,7 +43,7 @@ public class Network {
 
     public static class AddPlayer {
         public int id, side;
-        public float x,y;
+        public float x, y;
 //        public int id, x ,y;
     }
 

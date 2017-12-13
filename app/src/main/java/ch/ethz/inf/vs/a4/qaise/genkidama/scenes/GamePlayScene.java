@@ -274,7 +274,7 @@ public class GamePlayScene implements Scene {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_UI);
+                LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                 gameUI.setVisibility(View.GONE);
                 btn_active = false;
             }
