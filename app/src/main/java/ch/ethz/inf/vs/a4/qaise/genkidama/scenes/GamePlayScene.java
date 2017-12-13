@@ -106,7 +106,7 @@ public class GamePlayScene implements Scene {
                 @Override
                 public void run() {
 
-                    LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_UI);
+                    LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                     gameUI.setVisibility(View.VISIBLE);
                     Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
                     Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
@@ -201,7 +201,6 @@ public class GamePlayScene implements Scene {
         layer6 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer6);
         layer6.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
         layer6.draw(canvas);
-
 
 
 

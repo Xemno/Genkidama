@@ -2,7 +2,7 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.scenes;
 
 import android.app.Activity;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -10,97 +10,72 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import ch.ethz.inf.vs.a4.qaise.genkidama.R;
-import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isIP;
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isPort;
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isValidString;
-
 /**
- * Created by Qais on 26-Nov-17.
+ * Created by Qais on 13-Dec-17.
  */
-public class LoginScene implements Scene {
-    public static final String TAG = "##LoginScene## -> ";
+
+public class JoinGameScene implements Scene {
 
     private Activity activity;
-    private boolean btn_active = false;
 
     private EditText edit_username;
     private EditText ip_address;
     private EditText port_number;
-    private Button login_btn, start_btn;
+    private Button join_btn, start_btn;
 
-    private int top, right, left, bottom;
+    private int nextScene;
 
-    private Animation coinAnimation;
-
-    private Drawable background_image, genkidamaLogo;
+    private boolean btn_active = false;
 
 
-    public LoginScene(Activity activity){
+
+    public JoinGameScene(Activity activity) {
         this.activity = activity;
-
-        // Scale top of genkidamaLogo drawable
-        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
-            top = 5;
-        } else {
-            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
-        }
-
-        // Scale rest of genkidamaLogo drawable
-        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
-        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
-        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
-
-
-        coinAnimation = new Animation(
-                activity, R.drawable.coins,
-                15, 16,
-                8,
-                Constants.SCREEN_WIDTH/4,
-                Constants.SCREEN_HEIGHT/3 ,
-                true, 4);
-        coinAnimation.setFrameDuration(100);
     }
+
 
     @Override
     public void update() {
+
         if (!btn_active){
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-//                    RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.LOGIN_UI);
-//                    loginUI.setVisibility(View.VISIBLE);
-//                    loginUI.bringToFront();
+                    RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
+                    loginUI.setVisibility(View.VISIBLE);
+                    loginUI.bringToFront();
 
-                    login_btn = (Button) activity.findViewById(Constants.LOGIN_BTN);
+                    join_btn = (Button) activity.findViewById(Constants.LOGIN_BTN);
                     start_btn = (Button) activity.findViewById(Constants.START_BTN);
                     edit_username = (EditText) activity.findViewById(Constants.USERNAME_ID);
                     ip_address = (EditText) activity.findViewById(Constants.IP_ID);
                     port_number = (EditText) activity.findViewById(Constants.PORT_ID);
 
                     btn_active = true;
-                    login_btn.setOnClickListener(new View.OnClickListener(){
+                    join_btn.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View view) {
-                            //TODO: needs to be changed
+
                             if(checkInputs()) {
                                 KryoClient.getInstance().connect();
-                                start_btn.setEnabled(true); // TODO: enable when connected to server...
+                                start_btn.setEnabled(true); // TODO: set enable when connected to server...
                             }
+
                         }
                     });
 
                     start_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+
                             if (GamePanel.myPlayer() != null /*&& players.size() > 1*/) { // if my player has been added by the server, terminate
+                                nextScene = Constants.GAMEPLAY_SCENE;
                                 terminate();   // TODO: we want to wait for other players too
                             } else {
                                 Toast.makeText(activity.getApplication(), "myPlayer not added", Toast.LENGTH_LONG).show();
@@ -120,25 +95,13 @@ public class LoginScene implements Scene {
                 }
             });
         }
+
     }
 
     @Override
     public void draw(Canvas canvas) {
+        canvas.drawColor(Color.rgb(240,230,140)); // BACKGROUND color
 
-        // Draw Background Picture
-        background_image = activity.getBaseContext().getResources().getDrawable(R.drawable.rock_background);
-        background_image.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        background_image.draw(canvas);
-
-        // Draw Genkidama Text, centered and scales accordingly to the screen size
-        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
-        genkidamaLogo.setBounds(left, top, right, bottom);
-        genkidamaLogo.draw(canvas);
-
-        coinAnimation.setWhereToDraw(left - 40, (bottom - top) - 30);
-        coinAnimation.draw(canvas);
-        coinAnimation.setWhereToDraw(right + 20, (bottom - top) - 30);
-        coinAnimation.draw(canvas);
 
     }
 
@@ -147,17 +110,18 @@ public class LoginScene implements Scene {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.LOGIN_UI);
-//                loginUI.setVisibility(View.GONE);
+                RelativeLayout startUI = (RelativeLayout) activity.findViewById(Constants.START_UI);
+                startUI.setVisibility(View.GONE);
                 btn_active = false;
-                SceneManager.ACTIVE_SCENE = Constants.GAMEPLAY_SCENE;
+                SceneManager.ACTIVE_SCENE = nextScene;
             }
         });
     }
 
     @Override
-    public void receiveTouch(MotionEvent event) {}
+    public void receiveTouch(MotionEvent event) {
 
+    }
 
     private boolean checkInputs(){
         String name = edit_username.getText().toString();
@@ -188,6 +152,19 @@ public class LoginScene implements Scene {
 
         return true;
     }
+    public static boolean isValidString(String str)
+    {
+        return str.matches("\\w+");
+    }
 
+    public static boolean isPort(String str)
+    {
+        return str.matches("\\d+");
+    }
+
+    public static boolean isIP(String str)
+    {
+        return str.matches("(\\d+\\.\\d+\\.\\d+\\.\\d+){1}");
+    }
 
 }

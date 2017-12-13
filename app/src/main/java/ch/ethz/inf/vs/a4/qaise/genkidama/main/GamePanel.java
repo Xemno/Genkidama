@@ -196,6 +196,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         return r.nextInt(high - low) + low;
     }
 
+    public static boolean isValidString(String str)
+    {
+        return str.matches("\\w+");
+    }
+
+    public static boolean isPort(String str)
+    {
+        return str.matches("\\d+");
+    }
+
+    public static boolean isIP(String str)
+    {
+        return str.matches("(\\d+\\.\\d+\\.\\d+\\.\\d+){1}");
+    }
+
     /* ----------------------------------------------------------------------------------------- */
 
 }

@@ -17,6 +17,8 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
+
 
 /**
  * Created by Qais on 10-Dec-17.
@@ -25,8 +27,6 @@ import java.util.HashSet;
 public class KryoServer extends Service {
 
     public static final int port = 15555;
-    private static int counter = 0; // ID counter for clients
-
     public static Server server;
 
     @Override
@@ -46,18 +46,19 @@ public class KryoServer extends Service {
         server.start();
         try {
             server.bind(port);
+            Constants.PORT_NUMBER = port;
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO: maybe we can retry with another port nr.
         }
         server.addListener(new Listener.ThreadedListener(new ServerProgramm()));
 
-        Toast.makeText(getApplication(), getIP(), Toast.LENGTH_LONG).show();
+        Constants.SERVER_ADDRESS = getIP();
+        Constants.serverStarted = true;
+
+        Toast.makeText(getApplication(), Constants.SERVER_ADDRESS, Toast.LENGTH_LONG).show();
 
     }
-/*
-    public KryoServer() throws IOException {
-
-    }*/
 
     public Server getServer()
     {

@@ -18,8 +18,9 @@ public class SceneManager {
     public static int ACTIVE_SCENE;
 
     public SceneManager(Activity activity) {
-        scenes.add(new LoginScene(activity));
-//        scenes.add(new LobbyScene(activity)); // TODO:
+        scenes.add(new StartScene(activity));
+        scenes.add(new JoinGameScene(activity));
+        scenes.add(new CreateGameScene(activity));
         scenes.add(new GamePlayScene(activity));
         scenes.add(new GameOverScene(activity));
     }

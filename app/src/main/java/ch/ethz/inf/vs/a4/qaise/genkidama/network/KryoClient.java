@@ -102,6 +102,7 @@ public class KryoClient {
         protected String doInBackground(String... arg0) {
             try {
                 client.connect(timeout, Constants.SERVER_ADDRESS, Constants.PORT_NUMBER);
+                Constants.clientConnected = true;
                 Log.i(TAG, "Connection to Server: Succeeded");
                 login(); // send login message to server
 

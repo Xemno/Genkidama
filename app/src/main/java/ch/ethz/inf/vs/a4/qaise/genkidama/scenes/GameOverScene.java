@@ -48,7 +48,7 @@ public class GameOverScene implements Scene {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    RelativeLayout gameOverUI = (RelativeLayout) activity.findViewById(Constants.GAMEOVER_UI);
+                    RelativeLayout gameOverUI = (RelativeLayout) activity.findViewById(Constants.GAME_OVER_UI);
                     gameOverUI.setVisibility(View.VISIBLE);
                     gameOverUI.bringToFront();
                     Button restartgame_btn = (Button) activity.findViewById(Constants.RESTARTGAME_BTN);
@@ -68,7 +68,7 @@ public class GameOverScene implements Scene {
                         public void onClick(View view) {
                             //go back to login, startactivity main (there is our login)
                             //startActivity(new Intent(this, MainActivity.class));
-                            nextScene = Constants.LOGIN_SCENE;
+                            nextScene = Constants.Join_GAME_SCENE;
                             terminate();
 
                         }
@@ -97,7 +97,7 @@ public class GameOverScene implements Scene {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                RelativeLayout gameOverUI = (RelativeLayout) activity.findViewById(Constants.GAMEOVER_UI);
+                RelativeLayout gameOverUI = (RelativeLayout) activity.findViewById(Constants.GAME_OVER_UI);
                 gameOverUI.setVisibility(View.GONE);
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;

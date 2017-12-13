@@ -69,15 +69,202 @@ public class MainActivity extends AppCompatActivity {
 
         FrameLayout game = new FrameLayout(this);
         GamePanel gamePanel = new GamePanel(this, this);
-        LinearLayout gameUI = new LinearLayout(this);
-        RelativeLayout gameOverUI = new RelativeLayout(this);
-        RelativeLayout loginUI = new RelativeLayout(this);
+        RelativeLayout startSceneUI = new RelativeLayout(this);
+        RelativeLayout gameOverSceneUI = new RelativeLayout(this);
+        RelativeLayout joinGameUI = new RelativeLayout(this);
+        RelativeLayout createGameUI = new RelativeLayout(this);
+        LinearLayout gamePlayeSceneUI = new LinearLayout(this);
 
 
         // Set the custom font
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/font1980XX.ttf"); // custom font
 //        textView.setTypeface(typeface);
         float textSize = 20;
+        float btnTextSize = 40;
+
+
+        /* **********************************
+         *      Start SCENE SCENE UI        *
+         ********************************** */
+        Button join_btn = new Button(this);
+        Button create_btn = new Button(this);
+
+        join_btn.setText(R.string.join);
+        join_btn.setId(Constants.JOIN_BUTTON);
+        join_btn.setTextSize(30);
+        join_btn.setTextColor(Color.rgb(250,250,250));
+        join_btn.setBackgroundResource(R.drawable.button);
+        join_btn.setTypeface(typeface);
+
+        create_btn.setText(R.string.create);
+        create_btn.setId(Constants.CREATE_BUTTON);
+        create_btn.setTextSize(30);
+        create_btn.setTextColor(Color.rgb(250,250,250));
+        create_btn.setBackgroundResource(R.drawable.button);
+        create_btn.setTypeface(typeface);
+
+        startSceneUI.setId(Constants.START_UI);
+        startSceneUI.setVisibility(View.GONE);
+
+        // Layout gameUI
+        RelativeLayout.LayoutParams joinParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+//        joinParams.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
+        joinParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        joinParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        join_btn.setLayoutParams(joinParams);
+
+        RelativeLayout.LayoutParams createParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        createParams.addRule(RelativeLayout.BELOW, Constants.JOIN_BUTTON);
+        createParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        createParams.topMargin = 10;
+        create_btn.setLayoutParams(createParams);
+
+        //add buttons to gameUI
+        startSceneUI.addView(join_btn);
+        startSceneUI.addView(create_btn);
+
+
+        /* **********************************
+         *       Join Game SCENE UI         *
+         ********************************** */
+        // loginUI textviews and buttons
+//        TextView textView = new TextView(this); // TODO: added this
+        EditText username = new EditText(this);
+        EditText ip = new EditText(this);
+        EditText port = new EditText(this);
+        Button join_game_btn = new Button(this);    // Button for logging in to the server
+        Button start_game_btn = new Button(this);    // Button for entering a game if logged in with server
+
+        username.setTypeface(typeface);
+        ip.setTypeface(typeface);
+        port.setTypeface(typeface);
+        join_game_btn.setTypeface(typeface);
+        start_game_btn.setTypeface(typeface);
+
+        joinGameUI.setId(Constants.JOIN_GAME_UI);
+        joinGameUI.setVisibility(View.GONE);
+
+
+        username.setHint(R.string.hinte);
+        username.setTextSize(textSize);
+        username.setId(Constants.USERNAME_ID);
+
+        port.setHint(R.string.hintport);
+        port.setTextSize(textSize);
+        port.setId(Constants.PORT_ID);
+        port.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        ip.setHint(R.string.hintip);
+        ip.setTextSize(textSize);
+        ip.setId(Constants.IP_ID);
+
+        join_game_btn.setText(R.string.join);
+        join_game_btn.setTextColor(Color.rgb(250,250,250));
+        join_game_btn.setBackgroundResource(R.drawable.button);
+        join_game_btn.setTextSize(btnTextSize);
+        join_game_btn.setId(Constants.LOGIN_BTN);
+
+        start_game_btn.setText(R.string.start);
+        start_game_btn.setTextColor(Color.rgb(250,250,250));
+        start_game_btn.setBackgroundResource(R.drawable.button);
+        start_game_btn.setTextSize(btnTextSize);
+        start_game_btn.setId(Constants.START_BTN);
+        start_game_btn.setEnabled(false);
+
+        joinGameUI.setGravity(Gravity.CENTER);
+
+        RelativeLayout.LayoutParams user_params = new RelativeLayout.LayoutParams(600, 200);
+//        user_params.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
+        user_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        username.setLayoutParams(user_params);
+
+        RelativeLayout.LayoutParams ip_params = new RelativeLayout.LayoutParams(600, 200);
+        ip_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        ip_params.addRule(RelativeLayout.BELOW, Constants.USERNAME_ID);
+        ip.setLayoutParams(ip_params);
+
+        RelativeLayout.LayoutParams port_params = new RelativeLayout.LayoutParams(600, 200);
+        port_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        port_params.addRule(RelativeLayout.BELOW, Constants.IP_ID);
+        port.setLayoutParams(port_params);
+
+        RelativeLayout.LayoutParams enter_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        enter_params.leftMargin = 10;
+        enter_params.bottomMargin = 10;
+        enter_params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        enter_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        join_game_btn.setLayoutParams(enter_params);
+
+        RelativeLayout.LayoutParams start_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        start_params.rightMargin = 10;
+        start_params.bottomMargin = 10;
+        start_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        start_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        start_game_btn.setLayoutParams(start_params);
+
+        //add button and edittext to loginUI
+        joinGameUI.addView(username);
+        joinGameUI.addView(ip);
+        joinGameUI.addView(port);
+        joinGameUI.addView(join_game_btn);
+        joinGameUI.addView(start_game_btn);
+
+
+        /* **********************************
+         *       CREATE GAME SCENE UI       *
+         ********************************** */
+        createGameUI.setId(Constants.CREATE_GAME_UI);
+        createGameUI.setVisibility(View.GONE);
+
+        EditText usrname = new EditText(this);
+        Button create_game_btn = new Button(this);    // Button for logging in to the server
+        Button start_game_btn2 = new Button(this);    // Button for entering a game if logged in with server
+
+        usrname.setTypeface(typeface);
+        start_game_btn2.setTypeface(typeface);
+        create_game_btn.setTypeface(typeface);
+
+        usrname.setHint(R.string.hinte);
+        usrname.setTextSize(textSize);
+        usrname.setId(Constants.USERNAME2_ID);
+
+        create_game_btn.setText(R.string.create);
+        create_game_btn.setTextColor(Color.rgb(250,250,250));
+        create_game_btn.setBackgroundResource(R.drawable.button);
+        create_game_btn.setTextSize(btnTextSize);
+        create_game_btn.setId(Constants.CREATE2_BUTTON);
+
+        start_game_btn2.setText(R.string.start);
+        start_game_btn2.setTextColor(Color.rgb(250,250,250));
+        start_game_btn2.setBackgroundResource(R.drawable.button);
+        start_game_btn2.setTextSize(btnTextSize);
+        start_game_btn2.setId(Constants.START2_BTN);
+        start_game_btn2.setEnabled(false);
+
+        RelativeLayout.LayoutParams usr_params = new RelativeLayout.LayoutParams(600, 200);
+//        user_params.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
+        usr_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        usr_params.addRule(RelativeLayout.CENTER_VERTICAL);
+        usrname.setLayoutParams(usr_params);
+
+        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        params1.leftMargin = 10;
+        params1.bottomMargin = 10;
+        params1.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        params1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        create_game_btn.setLayoutParams(params1);
+
+        RelativeLayout.LayoutParams start2_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        start2_params.rightMargin = 10;
+        start2_params.bottomMargin = 10;
+        start2_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        start2_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        start_game_btn2.setLayoutParams(start2_params);
+
+
+        createGameUI.addView(usrname);
+        createGameUI.addView(create_game_btn);
+        createGameUI.addView(start_game_btn2);
 
 
         /* **********************************
@@ -99,23 +286,23 @@ public class MainActivity extends AppCompatActivity {
         super_btn.setBackgroundResource(R.drawable.roundedbutton);
         super_btn.setTypeface(typeface);
 
-        gameUI.setId(Constants.GAME_UI);
-        gameUI.setVisibility(View.GONE);
+        gamePlayeSceneUI.setId(Constants.GAME_PLAY_UI);
+        gamePlayeSceneUI.setVisibility(View.GONE);
 
         // Layout gameUI
         //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(175,175);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Constants.PLAYER_SIZE, Constants.PLAYER_SIZE);
-        params.setMargins(12,8,12,8);
+        params.setMargins(12,8,12,8); // TODO: what does this do??
 
         super_btn.setLayoutParams(params);
         att_btn.setLayoutParams(params);
 
-        gameUI.setOrientation(LinearLayout.HORIZONTAL);
-        gameUI.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
+        gamePlayeSceneUI.setOrientation(LinearLayout.HORIZONTAL);
+        gamePlayeSceneUI.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
 
         //add buttons to gameUI
-        gameUI.addView(super_btn);
-        gameUI.addView(att_btn);
+        gamePlayeSceneUI.addView(super_btn);
+        gamePlayeSceneUI.addView(att_btn);
 
 
         /* **********************************
@@ -142,102 +329,16 @@ public class MainActivity extends AppCompatActivity {
         backToLogin_btn.setLayoutParams(login_params);
 
         //add buttons to gameOverUI
-        gameOverUI.addView(restartGame_btn);
-        gameOverUI.addView(backToLogin_btn);
-        gameOverUI.setId(Constants.GAMEOVER_UI);
-        gameOverUI.setVisibility(View.GONE);
-        gameOverUI.setGravity(Gravity.CENTER);
-
-        /* **********************************
-         *          LOGIN SCENE UI          *
-         ********************************** */
-        // loginUI textviews and buttons
-//        TextView textView = new TextView(this); // TODO: added this
-        EditText username = new EditText(this);
-        EditText ip = new EditText(this);
-        EditText port = new EditText(this);
-        Button login_btn = new Button(this);    // Button for logging in to the server
-        Button enter_btn = new Button(this);    // Button for entering a game if logged in with server
-
-        username.setTypeface(typeface);
-        ip.setTypeface(typeface);
-        port.setTypeface(typeface);
-        login_btn.setTypeface(typeface);
-        enter_btn.setTypeface(typeface);
-
-        loginUI.setId(Constants.LOGIN_UI);
-        loginUI.setVisibility(View.GONE);
+        gameOverSceneUI.addView(restartGame_btn);
+        gameOverSceneUI.addView(backToLogin_btn);
+        gameOverSceneUI.setId(Constants.GAME_OVER_UI);
+        gameOverSceneUI.setVisibility(View.GONE);
+        gameOverSceneUI.setGravity(Gravity.CENTER);
 
 
-        username.setHint(R.string.hinte);
-        username.setTextSize(textSize);
-        username.setId(Constants.USERNAME_ID);
-
-        port.setHint(R.string.hintport);
-        port.setTextSize(textSize);
-        port.setId(Constants.PORT_ID);
-        port.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        ip.setHint(R.string.hintip);
-        ip.setTextSize(textSize);
-        ip.setId(Constants.IP_ID);
-
-        login_btn.setText(R.string.login_button);
-        login_btn.setTextColor(Color.rgb(250,250,250));
-        login_btn.setBackgroundResource(R.drawable.button);
-        login_btn.setTextSize(40);
-        login_btn.setId(Constants.LOGIN_BTN);
-
-        enter_btn.setText(R.string.enter_button);
-        enter_btn.setTextColor(Color.rgb(250,250,250));
-        enter_btn.setBackgroundResource(R.drawable.button);
-        enter_btn.setTextSize(40);
-        enter_btn.setId(Constants.START_BTN);
-        enter_btn.setEnabled(false);
-
-        loginUI.setGravity(Gravity.CENTER);
-
-        RelativeLayout.LayoutParams user_params = new RelativeLayout.LayoutParams(600, 200);
-        user_params.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
-        user_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        username.setLayoutParams(user_params);
-
-        RelativeLayout.LayoutParams ip_params = new RelativeLayout.LayoutParams(600, 200);
-        ip_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        ip_params.addRule(RelativeLayout.BELOW, Constants.USERNAME_ID);
-        ip.setLayoutParams(ip_params);
-
-        RelativeLayout.LayoutParams port_params = new RelativeLayout.LayoutParams(600, 200);
-        port_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        port_params.addRule(RelativeLayout.BELOW, Constants.IP_ID);
-        port.setLayoutParams(port_params);
-
-        RelativeLayout.LayoutParams enter_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
-        enter_params.leftMargin = 10;
-        enter_params.bottomMargin = 10;
-        enter_params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        enter_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        login_btn.setLayoutParams(enter_params);
-
-        RelativeLayout.LayoutParams start_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
-        start_params.rightMargin = 10;
-        start_params.bottomMargin = 10;
-        start_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        start_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        enter_btn.setLayoutParams(start_params);
-
-        //add button and edittext to loginUI
-        loginUI.addView(username);
-        loginUI.addView(ip);
-        loginUI.addView(port);
-        loginUI.addView(login_btn);
-        loginUI.addView(enter_btn);
 
 
-        /* **********************************
-         *      LOBBY SCENE SCENE UI        *
-         ********************************** */
-        //TODO:
+
 
 
 
@@ -301,15 +402,17 @@ public class MainActivity extends AppCompatActivity {
 
         //add views to game
         game.addView(gamePanel);
-        game.addView(loginUI);
-        game.addView(gameOverUI);
-        game.addView(gameUI);
+        game.addView(createGameUI);
+        game.addView(startSceneUI);
+        game.addView(joinGameUI);
+        game.addView(gameOverSceneUI);
+        game.addView(gamePlayeSceneUI);
 
         setContentView(game);
 
 
         // TODO: for test only
-        startService(new Intent(this, KryoServer.class));
+//        startService(new Intent(this, KryoServer.class));
 
 
     }
