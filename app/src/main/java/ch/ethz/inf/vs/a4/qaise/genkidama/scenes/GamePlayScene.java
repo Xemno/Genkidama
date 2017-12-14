@@ -269,10 +269,6 @@ public class GamePlayScene implements Scene {
         layer6.draw(canvas);
 
 
-
-//        floor.draw(canvas);
-
-
     }
 
     @Override

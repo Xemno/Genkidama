@@ -36,6 +36,11 @@ public class JoinGameScene implements Scene {
     private boolean btn_active = false;
     private boolean setEnabled = false;
     private boolean connect = false;
+    private boolean checkConnection = false;
+    private boolean isConnected = false;
+
+    private long lastTime = 0;
+    private long timeout = 5000; // 5s timeout like in KryoClient
 
 
 
@@ -67,16 +72,35 @@ public class JoinGameScene implements Scene {
                         @Override
                         public void onClick(View view) {
 
+
                             if(checkInputs()) {
+                                if (!checkConnection) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            textView.append("Trying to connect to the server..\n");
+                                            lastTime = System.currentTimeMillis();
+                                        }
+                                    });
+                                } else {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            textView.append("...trying to find a connection...\n");
+                                        }
+                                    });
+                                }
+
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        textView.append("Trying to connect to the server...");
                                         KryoClient.getInstance().connect();
                                         connect = true;
                                     }
                                 }).start();
+
                                 setEnabled = true;
+                                checkConnection = true;
                             } else {
 
                             }
@@ -103,41 +127,74 @@ public class JoinGameScene implements Scene {
                             }
                         }
                     });
-
                 }
             });
+        }
 
 
-            if (connect && KryoClient.connectInfo == 1) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.append("You are connected. You can join the game.");
+
+
+        if (KryoClient.getClient() != null) {
+            if (KryoClient.getClient().isConnected()) {
+                isConnected = true;
+                if (setEnabled) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            start_btn.setEnabled(true);
+                        }
+                    });
+                    checkConnection = false;
+                    setEnabled = false;
+                    lastTime = 0;
+                }
+
+                if (connect) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            textView.append("You are connected. You can join the game.\n"); // TODO: wait for atleast 2 players
+                        }
+                    });
+                    connect = false;
+
+                }
+
+            } else {
+
+                if (checkConnection) {
+                    long time = System.currentTimeMillis();
+                    if (time > lastTime + timeout ) {
+                        lastTime = time;
+                        checkConnection = false;
+                        lastTime = 0;
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                textView.append("Failed to find a server...\n");
+                            }
+                        });
                     }
-                });
-                connect = false;
+                }
 
-            } else if (connect && KryoClient.connectInfo == 2) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.append("Failed to find a server...");
-                    }
-                });
-                connect = false;
+                if (isConnected){ // if we are connected but server crashed or closed, then we dont want to join!
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            start_btn.setEnabled(false);
+                            textView.append("Connection to server closed...\n");
+                        }
+                    });
+                    checkConnection = false;
+                    lastTime = 0;
+                    isConnected = false;
+                }
+
             }
 
+
         }
 
-        if (setEnabled && KryoClient.getClient() != null && KryoClient.getClient().isConnected()) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    start_btn.setEnabled(true);
-                }
-            });
-            setEnabled = false;
-        }
 
     }
 
