@@ -9,6 +9,7 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIS
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 
+// TODO: remove this class, we only need the fixDist variable
 public class BaseFloor implements GameObject {
     private final int FLOOR_COLOR = Color.rgb(94, 50, 37); // Color.rgb(78, 42, 22) is the darker shade;
     private Rect floor;

@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -89,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the custom font
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/font1980XX.ttf"); // custom font
-//        textView.setTypeface(typeface);
+        Typeface typefaceCDEF = Typeface.createFromAsset(getAssets(), "fonts/CDEF.ttf"); // custom font
+        Typeface typefaceBandit = Typeface.createFromAsset(getAssets(), "fonts/Bandit.ttf"); // custom font
+
         float textSize = 20;
         float btnTextSize = 40;
 
@@ -138,8 +142,7 @@ public class MainActivity extends AppCompatActivity {
         /* **********************************
          *       Join Game SCENE UI         *
          ********************************** */
-        // loginUI textviews and buttons
-//        TextView textView = new TextView(this); // TODO: added this
+
         EditText username = new EditText(this);
         EditText ip = new EditText(this);
         EditText port = new EditText(this);
@@ -227,17 +230,42 @@ public class MainActivity extends AppCompatActivity {
         createGameUI.setId(Constants.CREATE_GAME_UI);
         createGameUI.setVisibility(View.GONE);
 
+        TextView textView = new TextView(this);
         EditText usrname = new EditText(this);
         Button create_game_btn = new Button(this);    // Button for logging in to the server
         Button start_game_btn2 = new Button(this);    // Button for entering a game if logged in with server
 
+
         usrname.setTypeface(typeface);
+        textView.setTypeface(typefaceBandit);
         start_game_btn2.setTypeface(typeface);
         create_game_btn.setTypeface(typeface);
+
+
+        textView.setHint("Waiting for some action...");
+//        textView.setBackgroundResource(R.drawable.);
+        textView.setTextSize(20);
+        textView.setTextColor(Color.DKGRAY);
+        textView.setMovementMethod(ScrollingMovementMethod.getInstance());
+        textView.setId(Constants.TEXT_VIEW);
+
+        RelativeLayout.LayoutParams textV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/2, 3*Constants.SCREEN_HEIGHT/5); // TODO added
+        textV_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        textV_params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        textV_params.rightMargin = 10;
+        textView.setLayoutParams(textV_params);
+
 
         usrname.setHint(R.string.hinte);
         usrname.setTextSize(textSize);
         usrname.setId(Constants.USERNAME2_ID);
+
+        RelativeLayout.LayoutParams usr_params = new RelativeLayout.LayoutParams(600, 200);
+//        user_params.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
+//        usr_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        usr_params.addRule(RelativeLayout.CENTER_VERTICAL);
+        user_params.leftMargin = 10;
+        usrname.setLayoutParams(usr_params);
 
         create_game_btn.setText(R.string.create);
         create_game_btn.setTextColor(Color.rgb(250,250,250));
@@ -245,25 +273,19 @@ public class MainActivity extends AppCompatActivity {
         create_game_btn.setTextSize(btnTextSize);
         create_game_btn.setId(Constants.CREATE2_BUTTON);
 
-        start_game_btn2.setText(R.string.start);
-        start_game_btn2.setTextColor(Color.rgb(250,250,250));
-        start_game_btn2.setBackgroundResource(R.drawable.button);
-        start_game_btn2.setTextSize(btnTextSize);
-        start_game_btn2.setId(Constants.START2_BTN);
-        start_game_btn2.setEnabled(false);
-
-        RelativeLayout.LayoutParams usr_params = new RelativeLayout.LayoutParams(600, 200);
-//        user_params.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
-        usr_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        usr_params.addRule(RelativeLayout.CENTER_VERTICAL);
-        usrname.setLayoutParams(usr_params);
-
         RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
         params1.leftMargin = 10;
         params1.bottomMargin = 10;
         params1.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         params1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         create_game_btn.setLayoutParams(params1);
+
+        start_game_btn2.setText(R.string.start);
+        start_game_btn2.setTextColor(Color.rgb(250,250,250));
+        start_game_btn2.setBackgroundResource(R.drawable.button);
+        start_game_btn2.setTextSize(btnTextSize);
+        start_game_btn2.setId(Constants.START2_BTN);
+        start_game_btn2.setEnabled(false);
 
         RelativeLayout.LayoutParams start2_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
         start2_params.rightMargin = 10;
@@ -273,6 +295,10 @@ public class MainActivity extends AppCompatActivity {
         start_game_btn2.setLayoutParams(start2_params);
 
 
+
+
+
+        createGameUI.addView(textView);
         createGameUI.addView(usrname);
         createGameUI.addView(create_game_btn);
         createGameUI.addView(start_game_btn2);
@@ -287,12 +313,14 @@ public class MainActivity extends AppCompatActivity {
 
         att_btn.setText(R.string.att_string);
         att_btn.setAlpha(0.6f);
+        att_btn.setTextSize(textSize);
         att_btn.setId(Constants.ATT_BTN);
         att_btn.setBackgroundResource(R.drawable.roundedbutton);
         att_btn.setTypeface(typeface);
 
         super_btn.setText(R.string.special);
         super_btn.setAlpha(0.6f);
+        super_btn.setTextSize(textSize);
         super_btn.setId(Constants.SUPER_BTN);
         super_btn.setBackgroundResource(R.drawable.roundedbutton);
         super_btn.setTypeface(typeface);
@@ -348,69 +376,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-        //initialize loginUI buttons, edittext and textview
-//        textView.setHint("");
-//        textView.setBackgroundResource(R.drawable.);
-//        textView.setTextSize(15);
-//        textView.setTextColor(Color.DKGRAY);
-//        textView.setMovementMethod(ScrollingMovementMethod.getInstance());
-//        textView.setId(Constants.TEXT_VIEW);
-
-//        enter_btn.setClickable(false);
-//        enter_btn.setFocusableInTouchMode(false);
-//        enter_btn.setFocusable(false);
-
-
-
-
-
-        // Layout loginUI
-
-
-/*        //TODO: username, ip and port EditTexts are not yet aligned rightfully, have no idea why not...
-        RelativeLayout.LayoutParams user_params = new RelativeLayout.LayoutParams(600, 200);
-        user_params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-//        user_params.addRule(RelativeLayout.ALI);
-//        user_params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        username.setLayoutParams(user_params);
-
-        RelativeLayout.LayoutParams ip_params = new RelativeLayout.LayoutParams(600, 200);
-        ip_params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-//        ip_params.addRule(RelativeLayout.CENTER_VERTICAL);
-        ip_params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        ip_params.addRule(RelativeLayout.BELOW, Constants.USERNAME_ID);
-        ip.setLayoutParams(ip_params);
-
-        RelativeLayout.LayoutParams port_params = new RelativeLayout.LayoutParams(600, 200);
-        port_params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-//        port_params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        port_params.addRule(RelativeLayout.BELOW, Constants.IP_ID);
-        port.setLayoutParams(port_params);*/
-
-        // TODO: works so far
-
-
-
-
-//        RelativeLayout.LayoutParams textV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/3, 3*Constants.SCREEN_HEIGHT/4); // TODO added
-//        textV_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//        textV_params.addRule(RelativeLayout.CENTER_IN_PARENT);
-//        textView.setLayoutParams(textV_params);
-
-
-
-
-
-
-
-//        loginUI.addView(textView);
-
         //add views to game
         game.addView(gamePanel);
         game.addView(createGameUI);
@@ -421,30 +386,27 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(game);
 
-
-        // TODO: for test only
-//        startService(new Intent(this, KryoServer.class));
-
-
     }
-    //to equalize music
- private void setupEqualizerFxAndUI() {
-  //create equalizer object and attach it with default priority 0
-  mEqualizer = new Equalizer(0, backgroundsound.getAudioSessionId());
-  mEqualizer.setEnabled(true);
-  short bands = mEqualizer.getNumberOfBands();
-  final short minEQLevel = mEqualizer.getBandLevelRange()[0];
-  final short maxEQLevel = mEqualizer.getBandLevelRange()[1];
 
-  for (short i = 0; i < bands; i++) {
-   final short band = i;
-   SeekBar bar = new SeekBar(this);
-   bar.setMax(maxEQLevel - minEQLevel);
-   bar.setProgress(mEqualizer.getBandLevel(band));
-   bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-     mEqualizer.setBandLevel(band, (short) (progress + minEQLevel));
+    //to equalize music
+
+    private void setupEqualizerFxAndUI() {
+      //create equalizer object and attach it with default priority 0
+      mEqualizer = new Equalizer(0, backgroundsound.getAudioSessionId());
+      mEqualizer.setEnabled(true);
+      short bands = mEqualizer.getNumberOfBands();
+      final short minEQLevel = mEqualizer.getBandLevelRange()[0];
+      final short maxEQLevel = mEqualizer.getBandLevelRange()[1];
+
+      for (short i = 0; i < bands; i++) {
+       final short band = i;
+       SeekBar bar = new SeekBar(this);
+       bar.setMax(maxEQLevel - minEQLevel);
+       bar.setProgress(mEqualizer.getBandLevel(band));
+       bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+         mEqualizer.setBandLevel(band, (short) (progress + minEQLevel));
     }
 
     @Override

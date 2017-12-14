@@ -32,6 +32,7 @@ public class JoinGameScene implements Scene {
     private int nextScene;
 
     private boolean btn_active = false;
+    private boolean setEnabled = false;
 
 
 
@@ -63,8 +64,15 @@ public class JoinGameScene implements Scene {
                         public void onClick(View view) {
 
                             if(checkInputs()) {
-                                KryoClient.getInstance().connect();
-                                start_btn.setEnabled(true); // TODO: set enable when connected to server...
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        KryoClient.getInstance().connect();
+                                    }
+                                }).start();
+                                setEnabled = true;
+                            } else {
+
                             }
 
                         }
@@ -92,6 +100,17 @@ public class JoinGameScene implements Scene {
 
                 }
             });
+        }
+
+        // TODO: test this
+        if (setEnabled && KryoClient.getClient() != null && KryoClient.getClient().isConnected()) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    start_btn.setEnabled(true);
+                }
+            });
+            setEnabled = false;
         }
 
     }

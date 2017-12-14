@@ -36,6 +36,10 @@ public class StartScene implements Scene {
 
     private Drawable genkidamaLogo;
 
+    int r = 240, g = 230, b = 140;
+    int FPStime = 0;
+    private boolean redBound = false;
+
 
     public StartScene(Activity activity) {
         this.activity = activity;
@@ -120,7 +124,8 @@ public class StartScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawColor(Color.rgb(240,230,140)); // BACKGROUND color
+        canvas.drawColor(Color.rgb(r,g,b)); // BACKGROUND color
+
 
         // Draw Genkidama Text, centered and scales accordingly to the screen size
         genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);

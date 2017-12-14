@@ -56,6 +56,7 @@ public class GamePlayScene implements Scene {
 
     private boolean btn_active = false;
     private boolean new_game = false;
+
     MediaPlayer attacksound= new MediaPlayer();
     MediaPlayer specialattacksound= new MediaPlayer();
 
@@ -124,10 +125,13 @@ public class GamePlayScene implements Scene {
                     att_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(attacksound!=null){attacksound.release();}
+                            // TODO: we always destroy and create the same resoruce for the sound...!!
+                            if(attacksound != null){attacksound.release();}
 
-                            attacksound=MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+                            // TODO: why not moving this to constructor
+                            attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
                             attacksound.start();
+
                             //start sound for attackbutton 
                             if (players.size() > 1) {
                                 for (Player enemy : players.values()) {
@@ -138,8 +142,9 @@ public class GamePlayScene implements Scene {
                         }
 
                     } );
+                    // TODO: why not moving this to terminate() ? this is released often times..
                     attacksound.release();
-                    attacksound=null;
+                    attacksound = null;
 
                     
 
@@ -147,10 +152,11 @@ public class GamePlayScene implements Scene {
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(specialattacksound!=null){specialattacksound.release();}
+                            if(specialattacksound != null){specialattacksound.release();}
 
-                           specialattacksound=MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
+                            specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
                             specialattacksound.start();
+
                             if (players.size() > 1) {
                                 for (Player enemy : players.values()) {
                                     if (myPlayer().id != enemy.id) myPlayer().specialAttack(enemy);
@@ -160,7 +166,7 @@ public class GamePlayScene implements Scene {
                         }
                     });
                     specialattacksound.release();
-                    specialattacksound=null;
+                    specialattacksound = null;
 
 
                 }
@@ -170,7 +176,7 @@ public class GamePlayScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawColor(Color.WHITE); // BACKGROUND color
+//        canvas.drawColor(Color.WHITE); // BACKGROUND color
 
 //        long time = System.currentTimeMillis();
 //

@@ -113,11 +113,11 @@ public class GameOverScene implements Scene {
 
     }
     public void setWinnerMedals(){
-        //if player.isWinner --> then player.setWinnerMedals();
+        //if myPlayer().isWinner --> then player.setWinnerMedals();
         //TODO create a picture which gives the winner a medal
     }
     public void setLooserpage(){
-//        if (player1.isLoser) {
+//        if (myPlayer.isLoser) {
 //            //if player.isLoser--> then player.setLooserpage();
 //            //TODO: create a page where the loser gets displayed something like GAME OVER, want to restart?
 //        }

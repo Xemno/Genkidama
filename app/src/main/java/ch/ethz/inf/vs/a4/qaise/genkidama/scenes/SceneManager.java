@@ -40,4 +40,8 @@ public class SceneManager {
     public void terminate(){
         scenes.get(ACTIVE_SCENE).terminate();
     }
+
+//    public void getCurrentScene() {
+//        scenes.get(ACTIVE_SCENE);
+//    }
 }

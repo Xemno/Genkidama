@@ -21,6 +21,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.engine.GameEngine;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.Network;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.CreateGameScene;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GamePlayScene;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.SceneManager;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
@@ -40,7 +41,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "#GamePanel#";
 
     private GameEngine thread;
-    private SceneManager manager;
+    private static SceneManager manager;
 
 
     /*
@@ -135,6 +136,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             GamePlayScene.setNew_point(player.new_point);
             Log.i(TAG, "MYPLAYER with ID " + player.id + " is added to the game");
         }
+
+//        if (GamePanel.manager.ACTIVE_SCENE == Constants.CREATE_GAME_SCENE) {
+//            CreateGameScene.updateTextView(player.id, player.name);
+//            try {
+//                manager.getCurrentScene().upda
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     public static void updatePlayer(Network.UpdatePlayer msg) {

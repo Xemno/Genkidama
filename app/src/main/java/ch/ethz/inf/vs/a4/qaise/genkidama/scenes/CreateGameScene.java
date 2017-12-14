@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
@@ -37,6 +38,7 @@ public class CreateGameScene implements Scene{
 
     private EditText edit_username;
     private Button create_btn, start_btn;
+    private TextView textView;
 
     private int nextScene;
     private int top, right, left, bottom;
@@ -89,6 +91,7 @@ public class CreateGameScene implements Scene{
                     create_btn = (Button) activity.findViewById(Constants.CREATE2_BUTTON);
                     start_btn = (Button) activity.findViewById(Constants.START2_BTN);
                     edit_username = (EditText) activity.findViewById(Constants.USERNAME2_ID);
+                    textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
 
                     btn_active = true;
                     create_btn.setOnClickListener(new View.OnClickListener(){
@@ -98,7 +101,7 @@ public class CreateGameScene implements Scene{
                             if (checkInputs() && !serviceStarted) {
                                 activity.startService(new Intent(activity, KryoServer.class));
                                 serviceStarted = true;
-                                // TODO: show IP, PORT, etc. on textview
+
                             } else if(serviceStarted) {
                                 Toast.makeText(activity.getApplication(), "Service already started!", Toast.LENGTH_LONG).show();
                             }
@@ -131,6 +134,7 @@ public class CreateGameScene implements Scene{
         }
 
         if (Constants.serverStarted && !clientConnect) {
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -144,6 +148,14 @@ public class CreateGameScene implements Scene{
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    textView.append("Server Address: ");
+                    textView.setTextColor(Color.rgb(32,178,170));
+                    textView.append("" + Constants.SERVER_ADDRESS + "\n");
+//                    textView.setTextColor(Color.DKGRAY);
+                    textView.append("Port Number: ");
+//                    textView.setTextColor(Color.rgb(32,178,170));
+                    textView.append("" + Constants.PORT_NUMBER + "\n");
+//                    textView.setTextColor(Color.DKGRAY);
                     start_btn.setEnabled(true);
                 }
             });
@@ -196,4 +208,5 @@ public class CreateGameScene implements Scene{
         Constants.NAME = name;
         return true;
     }
+
 }
