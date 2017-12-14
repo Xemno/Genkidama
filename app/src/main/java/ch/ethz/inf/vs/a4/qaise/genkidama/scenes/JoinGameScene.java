@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import ch.ethz.inf.vs.a4.qaise.genkidama.R;
+import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
@@ -42,10 +44,20 @@ public class JoinGameScene implements Scene {
     private long lastTime = 0;
     private long timeout = 5000; // 5s timeout like in KryoClient
 
+    Animation loadAnimation;
+
 
 
     public JoinGameScene(Activity activity) {
         this.activity = activity;
+
+        loadAnimation = new Animation(
+                activity, R.drawable.color_pattern_clone_32,
+                32, 32,
+                23,
+                Constants.SCREEN_WIDTH/2,
+                Constants.SCREEN_HEIGHT/2,4);
+        loadAnimation.setFrameDuration(50);
     }
 
 
@@ -202,6 +214,7 @@ public class JoinGameScene implements Scene {
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.rgb(240,230,140)); // BACKGROUND color
 
+        if (checkConnection) loadAnimation.draw(canvas);
 
     }
 

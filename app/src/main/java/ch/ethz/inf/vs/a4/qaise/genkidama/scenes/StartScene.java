@@ -36,10 +36,6 @@ public class StartScene implements Scene {
 
     private Drawable genkidamaLogo;
 
-    int r = 240, g = 230, b = 140;
-    int FPStime = 0;
-    private boolean redBound = false;
-
 
     public StartScene(Activity activity) {
         this.activity = activity;
@@ -64,6 +60,8 @@ public class StartScene implements Scene {
                 Constants.SCREEN_WIDTH/4,
                 Constants.SCREEN_HEIGHT/3,5);
         coinAnimation.setFrameDuration(65);
+
+
     }
 
 
@@ -123,7 +121,7 @@ public class StartScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawColor(Color.rgb(r,g,b)); // BACKGROUND color
+        canvas.drawColor(Color.rgb(240, 230, 140)); // BACKGROUND color
 
 
         // Draw Genkidama Text, centered and scales accordingly to the screen size
@@ -136,6 +134,8 @@ public class StartScene implements Scene {
         coinAnimation.setWhereToDraw(right + 20, (bottom - top) - 30);
         coinAnimation.draw(canvas);
 
+        anim1.draw(canvas);
+
     }
 
     @Override
@@ -147,6 +147,8 @@ public class StartScene implements Scene {
                 startUI.setVisibility(View.GONE);
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;
+//                coinAnimation.recycle(); // TODO: TEST
+
             }
         });
     }

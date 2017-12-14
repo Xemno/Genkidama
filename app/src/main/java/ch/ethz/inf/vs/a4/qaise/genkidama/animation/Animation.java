@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 /**
  * Created by Qais on 04-Dec-17.
@@ -75,21 +76,20 @@ public class Animation {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true; // avoids memory allocation
         BitmapFactory.decodeResource(context.getResources(), drawable, options); // returns null for the bitmap since inJustDecodeBounds = true
-        int imageHeight = options.outHeight;  // but options height etc. are set!
-        int imageWidth = options.outWidth;
+        int imageHeight = options.outHeight; // should be same as frameHeight, so we don't use it
+        int imageWidth = options.outWidth;  // should be same as frameWidth, so we don't use it
         String imageType = options.outMimeType;
 
 
         /*---- 2. Load a Scaled Down Version into Memory ----*/
         bitmap = decodeSampledBitmapFromResource(context.getResources(), drawable, frameWidth, frameHeight);
-        bitmap = Bitmap.createScaledBitmap(bitmap, this.frameWidth * frameCount, this.frameHeight,false);
+        bitmap = Bitmap.createScaledBitmap(bitmap, this.frameWidth*frameCount, this.frameHeight,false);
 
-
-/*
+        /*
         // old version, works but OutOfMemory Exception if too many loaded
         bitmap = BitmapFactory.decodeResource(context.getResources(), drawable);
         bitmap = Bitmap.createScaledBitmap(bitmap, this.frameWidth * frameCount, this.frameHeight,false);
-*/
+        */
 
 
     }
@@ -105,7 +105,7 @@ public class Animation {
             final int halfWidth=width/2;
             //calculate largest inSmapleSize value that is a power of 2 and keeps height
             //and width larger than the requested height and width
-            while((halfHeight/ inSampleSize)>reqHeight && (halfWidth/inSampleSize) > reqWidth){
+            while((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth){
                 inSampleSize *= 2;
             }
         }
@@ -173,6 +173,10 @@ public class Animation {
     public void setFrameDuration(int frameLengthInMilliseconds) {
         this.frameLengthInMilliseconds = frameLengthInMilliseconds;
     }
+
+//    public void recycle(){ // TODO: TEST THIS
+//        bitmap.recycle();
+//    }
 
 
 }

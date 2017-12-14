@@ -76,7 +76,7 @@ public class CreateGameScene implements Scene{
                 15, 16,
                 8,
                 Constants.SCREEN_WIDTH/4,
-                Constants.SCREEN_HEIGHT/3, 4);
+                9*Constants.SCREEN_HEIGHT/20, 4);
         coinAnimation.setFrameDuration(100);
     }
 
@@ -208,6 +208,7 @@ public class CreateGameScene implements Scene{
                 startUI.setVisibility(View.GONE);
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;
+//                coinAnimation.recycle(); // TODO: TEST THIS
             }
         });
     }
