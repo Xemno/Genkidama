@@ -19,6 +19,8 @@ public class KryoClient {
 
     private static Client client;
 
+    public static int connectInfo = 0; // 0 = uninitialized, 1 = connected, 2 = connecting failed
+
 
     public static Client getClient() { // only return if instantiated, check it!
         return client;
@@ -110,10 +112,11 @@ public class KryoClient {
                 Constants.clientConnected = true;
                 Log.i(TAG, "Connection to Server: Succeeded");
                 login(); // send login message to server
-
+                connectInfo = 1;
                 return null;
             } catch (IOException e) {
                 Log.i(TAG, "Error connecting: " + e.getMessage());
+                connectInfo = 2;
                 return null;
             }
         }

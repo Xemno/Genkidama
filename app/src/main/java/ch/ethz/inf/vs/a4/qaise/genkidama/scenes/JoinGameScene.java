@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -24,6 +25,7 @@ public class JoinGameScene implements Scene {
 
     private Activity activity;
 
+    private TextView textView;
     private EditText edit_username;
     private EditText ip_address;
     private EditText port_number;
@@ -33,6 +35,7 @@ public class JoinGameScene implements Scene {
 
     private boolean btn_active = false;
     private boolean setEnabled = false;
+    private boolean connect = false;
 
 
 
@@ -57,6 +60,7 @@ public class JoinGameScene implements Scene {
                     edit_username = (EditText) activity.findViewById(Constants.USERNAME_ID);
                     ip_address = (EditText) activity.findViewById(Constants.IP_ID);
                     port_number = (EditText) activity.findViewById(Constants.PORT_ID);
+                    textView = (TextView) activity.findViewById(Constants.TEXT_V);
 
                     btn_active = true;
                     join_btn.setOnClickListener(new View.OnClickListener(){
@@ -67,7 +71,9 @@ public class JoinGameScene implements Scene {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        textView.append("Trying to connect to the server...");
                                         KryoClient.getInstance().connect();
+                                        connect = true;
                                     }
                                 }).start();
                                 setEnabled = true;
@@ -100,9 +106,29 @@ public class JoinGameScene implements Scene {
 
                 }
             });
+
+
+            if (connect && KryoClient.connectInfo == 1) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.append("You are connected. You can join the game.");
+                    }
+                });
+                connect = false;
+
+            } else if (connect && KryoClient.connectInfo == 2) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.append("Failed to find a server...");
+                    }
+                });
+                connect = false;
+            }
+
         }
 
-        // TODO: test this
         if (setEnabled && KryoClient.getClient() != null && KryoClient.getClient().isConnected()) {
             activity.runOnUiThread(new Runnable() {
                 @Override
@@ -127,11 +153,8 @@ public class JoinGameScene implements Scene {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                RelativeLayout startUI = (RelativeLayout) activity.findViewById(Constants.START_UI);
-                RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
-                startUI.setVisibility(View.GONE);
-                //TODO: anja question:  so that login also invisible after this scene , kennt loginUI hier nicht
-                loginUI.setVisibility(View.GONE);
+                RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
+                joinGameUI.setVisibility(View.GONE);
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;
             }

@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Genkidama.iml" filepath="$PROJECT_DIR$/Genkidama.iml" />
-      <module fileurl="file://C:\Users\anja\Documents\HS17\Distributed_systems\project_final\Genkidama\Genkidama.iml" filepath="C:\Users\anja\Documents\HS17\Distributed_systems\project_final\Genkidama\Genkidama.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\anja\Documents\HS17\Distributed_systems\project_final\Genkidama\app\app.iml" filepath="C:\Users\anja\Documents\HS17\Distributed_systems\project_final\Genkidama\app\app.iml" />
     </modules>
   </component>
 </project>

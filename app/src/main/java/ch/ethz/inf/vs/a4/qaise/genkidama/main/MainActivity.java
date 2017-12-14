@@ -143,17 +143,32 @@ public class MainActivity extends AppCompatActivity {
          *       Join Game SCENE UI         *
          ********************************** */
 
+        TextView textV = new TextView(this);
         EditText username = new EditText(this);
         EditText ip = new EditText(this);
         EditText port = new EditText(this);
         Button join_game_btn = new Button(this);    // Button for logging in to the server
         Button start_game_btn = new Button(this);    // Button for entering a game if logged in with server
 
+        textV.setTypeface(typefaceBandit);
         username.setTypeface(typeface);
         ip.setTypeface(typeface);
         port.setTypeface(typeface);
         join_game_btn.setTypeface(typeface);
         start_game_btn.setTypeface(typeface);
+
+        textV.setHint("Here you can join a created game...");
+//        textView.setBackgroundResource(R.drawable.);
+        textV.setTextSize(20);
+        textV.setTextColor(Color.DKGRAY);
+        textV.setMovementMethod(ScrollingMovementMethod.getInstance());
+        textV.setId(Constants.TEXT_V);
+
+        RelativeLayout.LayoutParams tV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/2, 3*Constants.SCREEN_HEIGHT/5); // TODO added
+        tV_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        tV_params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        tV_params.rightMargin = 10;
+        textV.setLayoutParams(tV_params);
 
         joinGameUI.setId(Constants.JOIN_GAME_UI);
         joinGameUI.setVisibility(View.GONE);
@@ -189,17 +204,21 @@ public class MainActivity extends AppCompatActivity {
 
         RelativeLayout.LayoutParams user_params = new RelativeLayout.LayoutParams(600, 200);
 //        user_params.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
-        user_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//        user_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        user_params.topMargin = Constants.SCREEN_HEIGHT/20;
+        user_params.leftMargin = 20;
         username.setLayoutParams(user_params);
 
         RelativeLayout.LayoutParams ip_params = new RelativeLayout.LayoutParams(600, 200);
-        ip_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//        ip_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         ip_params.addRule(RelativeLayout.BELOW, Constants.USERNAME_ID);
+        ip_params.leftMargin = 20;
         ip.setLayoutParams(ip_params);
 
         RelativeLayout.LayoutParams port_params = new RelativeLayout.LayoutParams(600, 200);
-        port_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//        port_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         port_params.addRule(RelativeLayout.BELOW, Constants.IP_ID);
+        port_params.leftMargin = 20;
         port.setLayoutParams(port_params);
 
         RelativeLayout.LayoutParams enter_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
@@ -217,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
         start_game_btn.setLayoutParams(start_params);
 
         //add button and edittext to loginUI
+        joinGameUI.addView(textV);
         joinGameUI.addView(username);
         joinGameUI.addView(ip);
         joinGameUI.addView(port);

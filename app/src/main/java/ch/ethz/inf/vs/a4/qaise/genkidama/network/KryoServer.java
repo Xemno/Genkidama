@@ -57,7 +57,7 @@ public class KryoServer extends Service {
         Constants.SERVER_ADDRESS = getIP();
         Constants.serverStarted = true;
 
-        Toast.makeText(getApplication(), Constants.SERVER_ADDRESS, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplication(), "Server started", Toast.LENGTH_LONG).show();
 
     }
 

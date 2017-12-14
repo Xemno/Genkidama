@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
+import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
@@ -25,6 +26,8 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoServer;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isValidString;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.myPlayer;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
 
 /**
  * Created by Qais on 10-Dec-17.
@@ -42,6 +45,7 @@ public class CreateGameScene implements Scene{
 
     private int nextScene;
     private int top, right, left, bottom;
+    private int playersSize = 0;
 
     private boolean btn_active = false;
     private boolean serviceStarted = false;
@@ -148,21 +152,37 @@ public class CreateGameScene implements Scene{
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    textView.append("Server Address: ");
-                    textView.setTextColor(Color.rgb(32,178,170));
-                    textView.append("" + Constants.SERVER_ADDRESS + "\n");
-//                    textView.setTextColor(Color.DKGRAY);
-                    textView.append("Port Number: ");
-//                    textView.setTextColor(Color.rgb(32,178,170));
-                    textView.append("" + Constants.PORT_NUMBER + "\n");
-//                    textView.setTextColor(Color.DKGRAY);
+                    textView.append("Server Address: "
+                            + Constants.SERVER_ADDRESS + "\n"
+                            + "Port Number: "
+                            + Constants.PORT_NUMBER + "\n"
+                    );
+//                    textView.append("" + Constants.SERVER_ADDRESS + "\n");
+//                    textView.append("Port Number: ");
+//                    textView.append("" + Constants.PORT_NUMBER + "\n");
                     start_btn.setEnabled(true);
                 }
             });
             setEnabled = true;
         }
 
+        if (players.size() != playersSize) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
 
+                    if (players.size() < playersSize) {
+                        playersSize--;
+                        textView.append("Player left the game. \nPlayers = " + playersSize + "\n");
+                    } else if (players.size() > playersSize) {
+                        playersSize++;
+                        textView.append("Player joined the game. \nPlayers = " + playersSize + "\n");
+                    }
+
+
+                }
+            });
+        }
     }
 
     @Override
