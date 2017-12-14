@@ -26,6 +26,10 @@ public class Animation {
     private int frameWidth;
     private int frameHeight;
 
+    boolean activate = false;
+
+    boolean isLastFrame = false;
+
     // How many frames are there on the sprite sheet?
     private int frameCount;     // total frame count
 //    private int framesInX, framesInY; // count of frame in x and y direction
@@ -131,11 +135,17 @@ public class Animation {
                 if (forward) { // if forward, then we start with frame 0 and animate up to frameCount
                     currentFrame ++;
                     if (currentFrame >= frameCount) {
+                        if (activate){
+                            isLastFrame = true;
+                        }
                         currentFrame = 0;
                     }
                 } else {    // if forward=false, then we animate backward, that is, beginning from frameCount
                     currentFrame --;
                     if (currentFrame <= -1) {
+                        if (activate){
+                            isLastFrame = true;
+                        }
                         currentFrame = frameCount - 1;
                     }
                 }
@@ -172,6 +182,17 @@ public class Animation {
 
     public void setFrameDuration(int frameLengthInMilliseconds) {
         this.frameLengthInMilliseconds = frameLengthInMilliseconds;
+    }
+    public boolean isLastFrame() {
+        return isLastFrame;
+    }
+
+    public void setLastFrame(boolean lastFrame) {
+        isLastFrame = lastFrame;
+    }
+
+    public void setActivate(boolean activate) {
+        this.activate = activate;
     }
 
 //    public void recycle(){ // TODO: TEST THIS
