@@ -109,7 +109,10 @@ public class JoinGameScene implements Scene {
             @Override
             public void run() {
                 RelativeLayout startUI = (RelativeLayout) activity.findViewById(Constants.START_UI);
+                RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
                 startUI.setVisibility(View.GONE);
+                //TODO: anja question:  so that login also invisible after this scene , kennt loginUI hier nicht
+                loginUI.setVisibility(View.GONE);
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;
             }
