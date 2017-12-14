@@ -76,8 +76,7 @@ public class CreateGameScene implements Scene{
                 15, 16,
                 8,
                 Constants.SCREEN_WIDTH/4,
-                Constants.SCREEN_HEIGHT/3 ,
-                true, 4);
+                Constants.SCREEN_HEIGHT/3, 4);
         coinAnimation.setFrameDuration(100);
     }
 

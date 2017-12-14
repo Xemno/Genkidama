@@ -96,8 +96,7 @@ public class Player implements GameObject {
                 R.drawable.knight_idle_right,
                 42, 42,
                 4,
-                point.x, point.y,
-                true, 8);
+                point.x, point.y, 8);
 //        idle_right.scaleBitmap(8);
         idle_right.forward = true;      // always true for right animations
 
@@ -106,8 +105,7 @@ public class Player implements GameObject {
                 R.drawable.knight_idle_left,
                 42, 42,
                 4,
-                point.x, point.y,
-                true, 8);
+                point.x, point.y, 8);
 //        idle_left.scaleBitmap(8);
         idle_left.forward = false;      // always false for left animations
 
@@ -117,8 +115,7 @@ public class Player implements GameObject {
                 R.drawable.knight_walk_right_42x42,
                 42, 42,
                 8,
-                point.x, point.y,
-                true, 8);
+                point.x, point.y, 8);
 //        walk_right.scaleBitmap(8);
         walk_right.forward = true;
 
@@ -127,8 +124,7 @@ public class Player implements GameObject {
                 R.drawable.knight_walk_left_42x42,
                 42, 42,
                 8,
-                point.x, point.y,
-                true, 8);
+                point.x, point.y, 8);
 //        walk_left.scaleBitmap(8);
         walk_left.forward = false;
 
@@ -146,7 +142,7 @@ public class Player implements GameObject {
                 R.drawable.knight_attack_right,
                 80, 42,
                 10, point.x, point.y,
-                true);
+                8);
 
         attack_right.scaleBitmap(8);
         //Done Lara: frameWidth: 80
@@ -155,7 +151,7 @@ public class Player implements GameObject {
                 R.drawable.knight_block_left,
                 42,42,
                 7,point.x,point.y,
-                true);
+                8);
         block_left.scaleBitmap(8);
         block_left.forward=false;
 
@@ -163,14 +159,14 @@ public class Player implements GameObject {
                 R.drawable.knight_block_right,
                 42,42,
                 7,point.x,point.y,
-                true);
+                8);
         block_right.scaleBitmap(8);
 
         death_left=new Animation(MainActivity.context,
                 R.drawable.knight_death_left,
                 42,42,
                 9, point.x, point.y,
-                true);
+                8);
         death_left.scaleBitmap(8);
         death_left.forward=false;
 
@@ -178,7 +174,7 @@ public class Player implements GameObject {
                 R.drawable.knight_death_right,
                 42,42,
                 9, point.x, point.y,
-                true);
+                8);
         death_right.scaleBitmap(8);
 */
 

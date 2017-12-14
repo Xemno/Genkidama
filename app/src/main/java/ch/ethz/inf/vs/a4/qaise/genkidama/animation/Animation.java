@@ -53,7 +53,7 @@ public class Animation {
 
     // Animation from a one-dimensional sprite sheet
     public Animation(Context context, int drawable, int frameWidth,
-                     int frameHeight, int frameCount, float x, float y, boolean scaled, int scaleFactor) {
+                     int frameHeight, int frameCount, float x, float y, int scaleFactor) {
 
         if (scaleFactor < 1) scaleFactor = 1;
 
@@ -66,68 +66,63 @@ public class Animation {
 
         frameToDraw = new Rect(0,0, this.frameWidth, this.frameHeight);
         whereToDraw = new RectF(x, y, x + this.frameWidth, y + this.frameHeight);
-//        this.framesInX = framesInX;
-//        this.framesInY = framesInY;
+
         paint = new Paint();
 
-        //bitmap downsampled version
-//        bitmap=decodeSampledBitmapFromResource(context.getResources(),drawable, frameWidth*frameCount, frameHeight);
 
-        //old version without bitmap
+        /*---- 1. Read Bitmap Dimensions and Type ----*/
+        // we read the dimensions without loading the image to memory
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true; // avoids memory allocation
+        BitmapFactory.decodeResource(context.getResources(), drawable, options); // returns null for the bitmap since inJustDecodeBounds = true
+        int imageHeight = options.outHeight;  // but options height etc. are set!
+        int imageWidth = options.outWidth;
+        String imageType = options.outMimeType;
+
+
+        /*---- 2. Load a Scaled Down Version into Memory ----*/
+        bitmap = decodeSampledBitmapFromResource(context.getResources(), drawable, frameWidth, frameHeight);
+        bitmap = Bitmap.createScaledBitmap(bitmap, this.frameWidth * frameCount, this.frameHeight,false);
+
+
+/*
+        // old version, works but OutOfMemory Exception if too many loaded
         bitmap = BitmapFactory.decodeResource(context.getResources(), drawable);
+        bitmap = Bitmap.createScaledBitmap(bitmap, this.frameWidth * frameCount, this.frameHeight,false);
+*/
 
-        // Scale the bitmap to the correct size. We need to do this because Android automatically
-        // scales bitmaps based on screen density
-//        bitmap = Bitmap.createScaledBitmap(bitmap, frameWidth * frameCount, frameHeight,false);
-
-//        bitmap = Bitmap.createScaledBitmap(
-//                bitmap,
-//                frameWidth * framesInX,
-//                frameHeight * framesInY,
-//                false);
-
-        if (scaled) {
-            bitmap = Bitmap.createScaledBitmap(bitmap, this.frameWidth * frameCount, this.frameHeight,false);
-        } else {
-            bitmap = Bitmap.createBitmap(bitmap);
-            this.frameWidth = bitmap.getWidth()/frameCount;
-            this.frameHeight = bitmap.getHeight();
-        }
 
     }
+
     //method to scale down image only to size we need
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight){
+    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight){
         //raw height and width of image
         final int height=options.outHeight;
         final int width= options.outWidth;
-        int inSampleSize=1;
-        if (height >reqHeight || width > reqWidth){
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth){
             final int halfHeight=height/2;
             final int halfWidth=width/2;
             //calculate largest inSmapleSize value that is a power of 2 and keeps height
             //and width larger than the requested height and width
-            while((halfHeight/ inSampleSize)>reqHeight && (halfWidth/inSampleSize)>reqWidth){
-                inSampleSize*=2;
+            while((halfHeight/ inSampleSize)>reqHeight && (halfWidth/inSampleSize) > reqWidth){
+                inSampleSize *= 2;
             }
         }
-
-
         return inSampleSize;
     }
 
-    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight){
+    private Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight){
         //first decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options= new BitmapFactory.Options();
-        options.inJustDecodeBounds=true;
-        BitmapFactory.decodeResource(res,resId, options);
-        //calculate inSmaplesize
-        options.inSampleSize= calculateInSampleSize(options, reqWidth,reqHeight);
-        //decode bitmap with inSampleSize set
-        options.inJustDecodeBounds=false;
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    public Rect getCurrentFrame(){
+    private Rect getCurrentFrame(){
 
         long time  = System.currentTimeMillis();
         if(isMoving) {// Only animate if is moving
@@ -150,26 +145,6 @@ public class Animation {
         //the next frame on the spritesheet
         frameToDraw.left = currentFrame * frameWidth;
         frameToDraw.right = frameToDraw.left + frameWidth;
-
-//        if (framesInX == 0) {
-//            currFrameX = 0;
-//        } else {
-//            currFrameX = currentFrame % framesInX;
-//        }
-//
-//        if (framesInY == 0) {
-//            currFrameY = 0;
-//        } else {
-//            currFrameY = currentFrame % framesInY;
-//        }
-//
-//        frameToDraw.left = currFrameX * frameWidth;
-//        frameToDraw.right = frameToDraw.left + frameWidth;
-//
-//        frameToDraw.top = currFrameY * frameHeight;
-//        frameToDraw.bottom = frameToDraw.top + frameHeight;
-
-
         return frameToDraw;
     }
 
@@ -191,14 +166,6 @@ public class Animation {
         whereToDraw.set(new RectF(x - frameWidth/2, y - frameHeight, x + frameWidth/2, y));
     }
 
-    public void setFrameCount(int frameCount) {
-        this.frameCount = frameCount;
-    }
-
-    public void setCurrentFrame(int currentFrame) {
-        this.currentFrame = currentFrame;
-    }
-
     private Bitmap resource() {
         return bitmap;
     }
@@ -207,16 +174,5 @@ public class Animation {
         this.frameLengthInMilliseconds = frameLengthInMilliseconds;
     }
 
-//    public void scaleBitmap(int scale){
-//        this.frameWidth = scale*frameWidth;
-//        this.frameHeight = scale*frameHeight;
-//
-//        // use this for hitbox
-//        frameToDraw = new Rect(0,0, frameWidth, frameHeight);
-//        whereToDraw = new RectF(x, y, x + frameWidth, y + frameHeight);
-//
-//        bitmap = Bitmap.createScaledBitmap(bitmap, frameWidth * frameCount, frameHeight,false);
-//
-//    }
 
 }

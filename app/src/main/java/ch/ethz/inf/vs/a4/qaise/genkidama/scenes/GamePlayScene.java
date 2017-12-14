@@ -57,6 +57,7 @@ public class GamePlayScene implements Scene {
     private boolean btn_active = false;
     private boolean new_game = false;
 
+    // TODO: fix tsound...
     MediaPlayer attacksound= new MediaPlayer();
     MediaPlayer specialattacksound= new MediaPlayer();
 
@@ -162,7 +163,6 @@ public class GamePlayScene implements Scene {
                                     if (myPlayer().id != enemy.id) myPlayer().specialAttack(enemy);
                                 }
                             }
-
                         }
                     });
                     specialattacksound.release();
