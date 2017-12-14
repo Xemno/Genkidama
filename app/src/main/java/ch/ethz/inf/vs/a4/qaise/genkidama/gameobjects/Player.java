@@ -65,15 +65,16 @@ public class Player implements GameObject {
     //Done LARA
 
     // TODO: finish these animations, hitbox not yet right position
-    Animation animation;
-    Animation walk_right, walk_left;
-    Animation attack_left, attack_right;
-    Animation block_left, block_right;
-    Animation idle_left, idle_right;
-    Animation death_left, death_right;
+    public Animation animation;
+    public Animation walk_right, walk_left;
+    public Animation attack_left, attack_right;
+    public Animation block_left, block_right;
+    public Animation idle_left, idle_right;
+    public Animation death_left, death_right;
+    public Animation special_attack_left, special_attack_right;
 
 
-    boolean walkInX = false; // false = -x, true = +x
+    public boolean walkInX = false; // false = -x, true = +x
 
     public Player(int id, PointF point, int side) {
 
@@ -128,46 +129,48 @@ public class Player implements GameObject {
 //        walk_left.scaleBitmap(8);
         walk_left.forward = false;
 
-/*
         //Done Lara: frameWidth: 80
         attack_left=new Animation(MainActivity.context,
                 R.drawable.knight_attack_left,
                 80,42,
-                10,point.x, point.y,
-                true);
-        attack_left.scaleBitmap(8);
+                10,point.x, point.y, 8);
+        attack_left.setFrameDuration(28);
+        //attack_left.scaleBitmap(8);
         attack_left.forward=false;
 
         attack_right=new Animation(MainActivity.context,
                 R.drawable.knight_attack_right,
                 80, 42,
-                10, point.x, point.y,
-                8);
-
-        attack_right.scaleBitmap(8);
+                10, point.x, point.y, 8);
+        attack_right.setFrameDuration(28);
+        attack_right.forward = true;
+        //attack_right.scaleBitmap(8);
         //Done Lara: frameWidth: 80
 
         block_left=new Animation(MainActivity.context,
                 R.drawable.knight_block_left,
                 42,42,
                 7,point.x,point.y,
-                8);
-        block_left.scaleBitmap(8);
-        block_left.forward=false;
+                 8);
+        block_left.setFrameDuration(40);
+        //block_left.scaleBitmap(8);
+        block_left.forward = false;
 
         block_right=new Animation(MainActivity.context,
                 R.drawable.knight_block_right,
                 42,42,
                 7,point.x,point.y,
-                8);
-        block_right.scaleBitmap(8);
+                 8);
+        block_right.setFrameDuration(40);
+        block_right.forward = true;
+        //block_right.scaleBitmap(8);
 
         death_left=new Animation(MainActivity.context,
                 R.drawable.knight_death_left,
                 42,42,
                 9, point.x, point.y,
-                8);
-        death_left.scaleBitmap(8);
+                 8);
+        //death_left.scaleBitmap(8);
         death_left.forward=false;
 
         death_right=new Animation(MainActivity.context,
@@ -175,8 +178,27 @@ public class Player implements GameObject {
                 42,42,
                 9, point.x, point.y,
                 8);
-        death_right.scaleBitmap(8);
-*/
+        //death_right.scaleBitmap(8);
+        death_right.forward = true;
+
+        special_attack_left=new Animation(MainActivity.context,
+                R.drawable.knight_attack_left_special,
+                80,42,
+                10,point.x, point.y,
+                 8);
+        special_attack_left.setFrameDuration(28);
+        //attack_left.scaleBitmap(8);
+        special_attack_left.forward=false;
+
+        special_attack_right=new Animation(MainActivity.context,
+                R.drawable.knight_attack_right_special,
+                80, 42,
+                10, point.x, point.y,
+                 8);
+        special_attack_right.setFrameDuration(28);
+        special_attack_right.forward = true;
+        //attack_right.scaleBitmap(8);
+        //Done Lara: frameWidth: 80
 
 
 
@@ -212,6 +234,52 @@ public class Player implements GameObject {
     @Override
     public void update() {
         // you can leave this empty if you don't need it
+    }
+
+    public void attackAnimation(){
+        if(this.walkInX){
+            attack_right.setWhereToDraw((new_point.x),(new_point.y));
+            animation = attack_right;
+            attack_right.setActivate(true);
+        }else{
+            attack_left.setWhereToDraw((new_point.x),(new_point.y));
+            animation = attack_left;
+            attack_left.setActivate(true);
+        }
+    }
+
+    public void specialAttackAnimation(){
+        if(this.walkInX){
+            special_attack_right.setWhereToDraw((new_point.x),(new_point.y));
+            animation = special_attack_right;
+            special_attack_right.setActivate(true);
+        }else{
+            special_attack_left.setWhereToDraw((new_point.x),(new_point.y));
+            animation = special_attack_left;
+            special_attack_left.setActivate(true);
+        }
+    }
+
+    public void blockAnimation(){
+        if(this.walkInX){
+            block_right.setWhereToDraw((new_point.x),(new_point.y));
+            animation = block_right;
+            block_right.setActivate(true);
+        }else{
+            block_left.setWhereToDraw((new_point.x),(new_point.y));
+            animation = block_left;
+            block_left.setActivate(true);
+        }
+    }
+
+    public void idle_leftAnimation(){
+        idle_left.setWhereToDraw((new_point.x) , (new_point.y));
+        animation = idle_left;
+    }
+
+    public void idle_rightAnimation(){
+        idle_right.setWhereToDraw((new_point.x) , (new_point.y));
+        animation = idle_right;
     }
 
     public void update(PointF point) {

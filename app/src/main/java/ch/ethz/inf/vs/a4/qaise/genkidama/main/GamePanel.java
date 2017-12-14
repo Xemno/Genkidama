@@ -187,6 +187,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             else
                 victim.setCurrentHealth(0);
 
+            attacker.attackAnimation();
+            victim.blockAnimation();
+
             attacker.chargebar.update();
             victim.healthbar.update();}
         else { // special attack
@@ -198,6 +201,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 victim.setCurrentHealth(health);
             else
                 victim.setCurrentHealth(0);
+
+            attacker.specialAttackAnimation();
+            victim.blockAnimation();
+
             attacker.chargebar.update();
             victim.healthbar.update();
         }
