@@ -18,7 +18,9 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
+import ch.ethz.inf.vs.a4.qaise.genkidama.network.Network;
 
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.START_GAME;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isIP;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isPort;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isValidString;
@@ -46,6 +48,8 @@ public class JoinGameScene implements Scene {
     private boolean connect = false;
     private boolean checkConnection = false;
     private boolean isConnected = false;
+
+    // TODO: make static variable startGame that is set from the Client by the server
 
     private long lastTime = 0;
     private long timeout = 5000; // 5s timeout like in KryoClient
@@ -128,11 +132,11 @@ public class JoinGameScene implements Scene {
                         public void onClick(View view) {
 
                             // TODO: test this
-                            if (GamePanel.myPlayer() != null && players.size() > 1) { // if my player has been added by the server, terminate
+                            if (GamePanel.myPlayer() != null && players.size() > 1 && START_GAME) { // if my player has been added by the server, terminate
                                 nextScene = Constants.GAMEPLAY_SCENE;
                                 terminate();
                             } else {
-                                Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\n myPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\nmyPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_LONG).show();
                                 if (KryoClient.getClient().isConnected()) {
                                     Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_LONG).show();
                                 } else {
@@ -208,6 +212,10 @@ public class JoinGameScene implements Scene {
 
         }
 
+        if (START_GAME) {
+            nextScene = Constants.GAMEPLAY_SCENE;
+            terminate();
+        }
 
     }
 

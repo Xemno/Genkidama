@@ -179,7 +179,6 @@ public class GamePlayScene implements Scene {
 
         if (!CLIENT_CONNECTED)  { // TODO: test this
             nextScene = Constants.START_SCENE;
-            Toast.makeText(activity.getApplication(), "Disconnected", Toast.LENGTH_LONG).show();
             terminate();
         }
     }

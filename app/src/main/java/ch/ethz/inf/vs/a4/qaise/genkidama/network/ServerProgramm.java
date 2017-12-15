@@ -137,6 +137,17 @@ public class ServerProgramm extends Listener {
 
         }
 
+        /*** ---- START GAME ---- ***/
+        if (object instanceof Network.StartGame) {
+            if (state == null) {
+                //help
+            }
+            Network.StartGame msg = new Network.StartGame();
+            msg.info = 1;
+            KryoServer.server.sendToAllTCP(msg);
+
+        }
+
 
     }
 

@@ -124,16 +124,21 @@ public class CreateGameScene implements Scene{
                         @Override
                         public void onClick(View view) {
 
+                            // TODO: Server sends start game packet
+
                             // TODO: test this
                             if (GamePanel.myPlayer() != null && players.size() > 1) { // if my player has been added by the server, terminate
                                 nextScene = Constants.GAMEPLAY_SCENE;
+
+                                KryoClient.startGame();
+
                                 terminate();
                             } else {
-                                Toast.makeText(activity.getApplication(), "myPlayer not added", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\nmyPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_LONG).show();
                                 if (KryoClient.getClient().isConnected()) {
 //                                    KryoClient.login();
                                     //TODO: test to termiante() here, since already connected
-                                    Toast.makeText(activity.getApplication(), "login message sent again", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(activity.getApplication(), "no connection", Toast.LENGTH_LONG).show();
                                 }

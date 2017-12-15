@@ -25,6 +25,7 @@ public class Constants {
     public static int SCREEN_HEIGHT;
 
     public static boolean CLIENT_CONNECTED = false;
+    public static boolean START_GAME = false;
 
     public static float PLAYER_PERCENTAGE_WIDTH = 10;
     public static float PLAYER_PERCENTAGE_HEIGHT; // defined via player_size

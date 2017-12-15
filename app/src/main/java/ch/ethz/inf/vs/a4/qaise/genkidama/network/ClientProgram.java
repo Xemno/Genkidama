@@ -16,6 +16,7 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.CLIENT_CONNECTED;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIST_RELATIVE;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.ID;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.START_GAME;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.PLAYER_PERCENTAGE_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
@@ -113,6 +114,11 @@ public class ClientProgram extends Listener {
         if (object instanceof Network.PlayAgain){
             Network.PlayAgain msg = (Network.PlayAgain) object;
             GamePanel.rematch(msg);
+        }
+
+
+        if (object instanceof Network.StartGame){
+            START_GAME = true;
         }
 
     }

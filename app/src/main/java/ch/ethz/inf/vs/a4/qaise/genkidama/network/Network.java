@@ -23,6 +23,7 @@ public class Network {
         kryo.register(AttackPlayer.class);
         kryo.register(MovePlayer.class);
         kryo.register(PlayAgain.class);
+        kryo.register(StartGame.class);
     }
 
     public static class Login {
@@ -86,5 +87,9 @@ public class Network {
 
     public static class PlayAgain {
         public int id, answer; // id of player who wants to play again; if other player wants to play again too
+    }
+
+    public static class StartGame {
+        public int info;
     }
 }
