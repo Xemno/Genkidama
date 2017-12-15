@@ -19,6 +19,10 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isIP;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isPort;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isValidString;
+
 /**
  * Created by Qais on 13-Dec-17.
  */
@@ -214,7 +218,7 @@ public class JoinGameScene implements Scene {
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.rgb(240,230,140)); // BACKGROUND color
 
-//        if (checkConnection) loadAnimation.draw(canvas); // TODO: uncomment
+        if (checkConnection) loadAnimation.draw(canvas);
 
     }
 
@@ -265,19 +269,6 @@ public class JoinGameScene implements Scene {
 
         return true;
     }
-    public static boolean isValidString(String str)
-    {
-        return str.matches("\\w+");
-    }
 
-    public static boolean isPort(String str)
-    {
-        return str.matches("(\\d+)");
-    }
-
-    public static boolean isIP(String str)
-    {
-        return str.matches("(\\d+\\.\\d+\\.\\d+\\.\\d+){1}");
-    }
 
 }

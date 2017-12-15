@@ -169,13 +169,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static void attackPlayer(Network.Attack msg) {
         Player victim = players.get(msg.idE);    // the attacked player
         Player attacker = players.get(msg.idA);   // the attacking player
+
+        if (victim == null || attacker == null) return; // TODO: test this, newly added
+
         int dmg = msg.damage;
         int health;
-
-        //TODO: here music for attack
-//        MediaPlayer attacksoundmusic= MediaPlayer.create(MainActivity.context, R.raw.attacksound);
-//        attacksoundmusic.start();
-
 
         if (dmg >= 0) {
             // normal attack
