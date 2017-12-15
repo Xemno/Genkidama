@@ -19,6 +19,8 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_CHARGE;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_HEALTH;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 
 
 //TODO: NOT FINISHED
@@ -45,6 +47,7 @@ public class Player implements GameObject {
     private int currentCharge = 0;
     public boolean isCharged = false;
     public boolean isLoser = false;
+    public boolean reset = false;
 
 
 
@@ -69,7 +72,7 @@ public class Player implements GameObject {
     Animation walk_right, walk_left;
     Animation attack_left, attack_right;
     Animation block_left, block_right;
-    Animation idle_left, idle_right;
+    public Animation idle_left, idle_right;
     Animation death_left, death_right;
 
 
@@ -189,6 +192,7 @@ public class Player implements GameObject {
             animation = idle_right;
         } // otherwise false anyways and animate idle_left
 
+
     }
 
     public void attack(Player enemy){
@@ -222,27 +226,28 @@ public class Player implements GameObject {
         // (left, top, right, bottom)
         this.new_point = point;
 
-        // Qais: added old version again
-        if (new_point.x < old_point.x) {
-            walkInX = false;
-            walk_left.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
-            animation = walk_left;
-        } else if (new_point.x > old_point.x) {
-            walkInX = true;
-            walk_right.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
-            animation = walk_right;
-        } else if (new_point.x == old_point.x) {
-            if (walkInX){
-                idle_right.setWhereToDraw((new_point.x) , (new_point.y));
-                animation = idle_right;
-            } else {
-                idle_left.setWhereToDraw((new_point.x) , (new_point.y));
-                animation = idle_left;
+        //if (!reset) {
+            // Qais: added old version again
+            if (new_point.x < old_point.x) {
+                walkInX = false;
+                walk_left.setWhereToDraw((new_point.x), (new_point.y)); // scale und frame dimension abziehen
+                animation = walk_left;
+            } else if (new_point.x > old_point.x) {
+                walkInX = true;
+                walk_right.setWhereToDraw((new_point.x), (new_point.y)); // scale und frame dimension abziehen
+                animation = walk_right;
+            } else if (new_point.x == old_point.x) {
+                if (walkInX) {
+                    idle_right.setWhereToDraw((new_point.x), (new_point.y));
+                    animation = idle_right;
+                } else {
+                    idle_left.setWhereToDraw((new_point.x), (new_point.y));
+                    animation = idle_left;
+                }
             }
-        }
 
-        //TODO Lara attack, special_attack, block, is_dead put into code and look that only one can be true at each time.
-        //TODO LARA: Animation ( Qais: please revise, the following does not work..)
+            //TODO Lara attack, special_attack, block, is_dead put into code and look that only one can be true at each time.
+            //TODO LARA: Animation ( Qais: please revise, the following does not work..)
 //        if (new_point.x < old_point.x) {
 //            walkInX = false;
 //        } else if (new_point.x > old_point.x) {
@@ -293,9 +298,24 @@ public class Player implements GameObject {
 
 
 
-        if(currentHealth == 0){
+        /*if(currentHealth == 0){
             isLoser = true;
-        }
+        }*/
+
+        /*} else {
+            if (id != GamePanel.myPlayer().id) {
+                if (side % 2 != 0) {
+                    animation = idle_right;
+                    walkInX = true;
+                } else {
+                    animation = idle_left;
+                    walkInX = false;
+                }
+                System.out.println("Enemy pos: " + (new_point.x /SCREEN_WIDTH) + ", " + (new_point.y /SCREEN_HEIGHT ));
+
+            }
+            reset = false;
+        }*/
 
         old_point = new_point;
 
@@ -332,6 +352,22 @@ public class Player implements GameObject {
 
     public void setCurrentCharge(int charge){
         currentCharge = charge;
+    }
+
+    public Animation getAnimation(){
+        return animation;
+    }
+
+    public void setAnimation(Animation animation){
+        this.animation = animation;
+    }
+
+    public void setWalkInX(boolean index){
+        walkInX = index;
+    }
+
+    public void setOld_point(PointF old_point){
+        this.old_point = old_point;
     }
 
     public HealthBar getHealthbar(){

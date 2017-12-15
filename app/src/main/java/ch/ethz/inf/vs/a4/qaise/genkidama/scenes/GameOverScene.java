@@ -1,6 +1,7 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.scenes;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
+import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
+import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoServer;
 
 /**
  * Created by Qais on 26-Nov-17.
@@ -24,9 +27,10 @@ public class GameOverScene implements Scene {
 
     private Activity activity;
     private boolean btn_active=false;
-    private int nextScene;
+    private static int nextScene;
 
     public boolean isWinner = false;
+    public static boolean termination = false;
 
     public static Canvas temp_canvas;
     public static Bitmap test;
@@ -58,7 +62,25 @@ public class GameOverScene implements Scene {
 
                         @Override
                         public void onClick(View view) {
-                            nextScene = Constants.GAMEPLAY_SCENE;
+                            //nextScene = Constants.GAMEPLAY_SCENE;
+                            KryoClient.playAgain(1);
+                            long startTime = System.currentTimeMillis();
+                            long waitTime;
+                            while (!termination){
+                                waitTime = System.currentTimeMillis() - startTime;
+                                if (waitTime >= 15000) {
+                                    nextScene = Constants.START_SCENE;
+                                    termination = true;
+                                    if (KryoServer.server != null){
+                                        KryoServer.server.close();
+                                        activity.stopService(new Intent(activity, KryoServer.class));
+                                        Toast.makeText(activity.getApplication(), "Server stopped.", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        KryoClient.close();
+                                    }
+                                }
+                            //ugly loop to wait for termination
+                            }
                             terminate();
                         }
                     });
@@ -68,7 +90,14 @@ public class GameOverScene implements Scene {
                         public void onClick(View view) {
                             //go back to login, startactivity main (there is our login)
                             //startActivity(new Intent(this, MainActivity.class));
-                            nextScene = Constants.Join_GAME_SCENE;
+                            nextScene = Constants.START_SCENE;
+                            if (KryoServer.server != null){
+                                KryoServer.server.close();
+                                activity.stopService(new Intent(activity, KryoServer.class));
+                                Toast.makeText(activity.getApplication(), "Server stopped.", Toast.LENGTH_LONG).show();
+                            } else {
+                                KryoClient.close();
+                            }
                             terminate();
 
                         }
@@ -80,6 +109,9 @@ public class GameOverScene implements Scene {
 
     }
 
+    public static void setNextScene(int scene){
+        nextScene = scene;
+    }
 
     @Override
     public void draw(Canvas canvas) {
@@ -101,6 +133,20 @@ public class GameOverScene implements Scene {
                 gameOverUI.setVisibility(View.GONE);
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;
+                if (nextScene == Constants.START_SCENE){
+                    if (KryoServer.server != null){
+                        KryoServer.server.close();
+                        activity.stopService(new Intent(activity, KryoServer.class));
+                    } else {
+                        KryoClient.close();
+                    }
+                }
+                termination = false;
+                /*if (nextScene == Constants.LOGIN_SCENE) {
+                    Toast.makeText(activity.getApplication(), "Your opponent didn't want to play anymore", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(activity.getApplication(), "Restarting game...", Toast.LENGTH_SHORT).show();
+                }*/
             }
         });
     }

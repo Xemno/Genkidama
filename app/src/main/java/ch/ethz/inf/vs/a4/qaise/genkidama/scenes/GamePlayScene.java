@@ -27,9 +27,11 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIST_RELATIVE;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.ID;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_HEALTH;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.fixDist;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.myPlayer;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
 
@@ -83,8 +85,40 @@ public class GamePlayScene implements Scene {
         old_point = new PointF(0,0);
     }
 
+    synchronized public void reset(){
+        for (Player player : players.values()){
+            player.setCurrentCharge(0);
+            player.setCurrentHealth(MAX_HEALTH);
+            player.chargebar.update();
+            player.healthbar.update();
+            player.isLoser = false;
+            //player.reset = true;
+            if (myPlayer().id == player.id) {
+                PointF new_point;
+                if (player.side % 2 != 0) { // draw on left side
+                    new_point = new PointF(SCREEN_WIDTH/4, Constants.fixDist);
+                    //player.setAnimation(player.idle_right);
+                    //player.setWalkInX(true);
+                } else {  // draw on right side
+                    new_point = new PointF(3*SCREEN_WIDTH / 4 , Constants.fixDist);
+                    //player.setAnimation(player.idle_left);
+                    //player.setWalkInX(false);
+                }
+                System.out.println("my pos: " + (new_point.x /SCREEN_WIDTH) + ", " + (new_point.y /SCREEN_HEIGHT ));
+                KryoClient.send(new PointF(new_point.x / SCREEN_WIDTH, new_point.y/ SCREEN_HEIGHT));
+                System.out.println(new_point.x +", " +new_point.y);
+                player.setOld_point(new_point);
+                GamePlayScene.setNew_point(new_point);
+            }
+        }
+
+
+    }
+
     @Override
     public void update() {
+
+
 
         // In case something goes wrong with the assigning of the new_point
         if (myPlayer() != null && new_point == null) {
@@ -108,6 +142,10 @@ public class GamePlayScene implements Scene {
             }
         }
 
+        if(new_game){
+            reset();
+            new_game = false;
+        }
 
 
         if (!btn_active) {
@@ -143,8 +181,10 @@ public class GamePlayScene implements Scene {
 
                     } );
                     // TODO: why not moving this to terminate() ? this is released often times..
-                    attacksound.release();
-                    attacksound = null;
+                    if (attacksound != null) {
+                        attacksound.release();
+                        attacksound = null;
+                    }
 
                     
 
@@ -165,9 +205,10 @@ public class GamePlayScene implements Scene {
 
                         }
                     });
-                    specialattacksound.release();
-                    specialattacksound = null;
-
+                    if (specialattacksound != null) {
+                        specialattacksound.release();
+                        specialattacksound = null;
+                    }
 
                 }
             });

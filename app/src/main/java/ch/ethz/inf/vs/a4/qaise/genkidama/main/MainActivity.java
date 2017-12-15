@@ -1,6 +1,7 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Equalizer;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -30,6 +32,8 @@ import java.io.IOException;
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoServer;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.Scene;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.SceneManager;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
@@ -39,11 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static Context context;
     //declaration for sound here
-   private MediaPlayer backgroundsound;
-   //public static MediaPlayer attacksound;
-   //public static MediaPlayer specialattacksound;
-   //initialize mediaplayers here and used in gameplayscene
-   private Equalizer mEqualizer;
+    private MediaPlayer backgroundsound;
+    //public static MediaPlayer attacksound;
+    //public static MediaPlayer specialattacksound;
+    //initialize mediaplayers here and used in gameplayscene
+    private Equalizer mEqualizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
-       // attacksound=MediaPlayer.create(this,R.raw.attacksound);
+        // attacksound=MediaPlayer.create(this,R.raw.attacksound);
         //specialattacksound=MediaPlayer.create(this,R.raw.specialattacksound);
 
 // TODO: uncomment for use
@@ -70,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         Constants.SCREEN_WIDTH = metrics.widthPixels;
         Constants.SCREEN_HEIGHT = metrics.heightPixels;
-        Constants.PLAYER_SIZE = (int)(Constants.SCREEN_WIDTH*Constants.PLAYER_PERCENTAGE_WIDTH/100);
-        Constants.PLAYER_PERCENTAGE_HEIGHT = 100*Constants.PLAYER_SIZE/Constants.SCREEN_HEIGHT;
+        Constants.PLAYER_SIZE = (int) (Constants.SCREEN_WIDTH * Constants.PLAYER_PERCENTAGE_WIDTH / 100);
+        Constants.PLAYER_PERCENTAGE_HEIGHT = 100 * Constants.PLAYER_SIZE / Constants.SCREEN_HEIGHT;
 
 
 
@@ -107,14 +111,14 @@ public class MainActivity extends AppCompatActivity {
         join_btn.setText(R.string.join);
         join_btn.setId(Constants.JOIN_BUTTON);
         join_btn.setTextSize(30);
-        join_btn.setTextColor(Color.rgb(250,250,250));
+        join_btn.setTextColor(Color.rgb(250, 250, 250));
         join_btn.setBackgroundResource(R.drawable.button);
         join_btn.setTypeface(typeface);
 
         create_btn.setText(R.string.create);
         create_btn.setId(Constants.CREATE_BUTTON);
         create_btn.setTextSize(30);
-        create_btn.setTextColor(Color.rgb(250,250,250));
+        create_btn.setTextColor(Color.rgb(250, 250, 250));
         create_btn.setBackgroundResource(R.drawable.button);
         create_btn.setTypeface(typeface);
 
@@ -122,13 +126,13 @@ public class MainActivity extends AppCompatActivity {
         startSceneUI.setVisibility(View.GONE);
 
         // Layout gameUI
-        RelativeLayout.LayoutParams joinParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams joinParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
 //        joinParams.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
         joinParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         joinParams.addRule(RelativeLayout.CENTER_VERTICAL);
         join_btn.setLayoutParams(joinParams);
 
-        RelativeLayout.LayoutParams createParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams createParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
         createParams.addRule(RelativeLayout.BELOW, Constants.JOIN_BUTTON);
         createParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         createParams.topMargin = 10;
@@ -173,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
         ip.setId(Constants.IP_ID);
 
         join_game_btn.setText(R.string.join);
-        join_game_btn.setTextColor(Color.rgb(250,250,250));
+        join_game_btn.setTextColor(Color.rgb(250, 250, 250));
         join_game_btn.setBackgroundResource(R.drawable.button);
         join_game_btn.setTextSize(btnTextSize);
         join_game_btn.setId(Constants.LOGIN_BTN);
 
         start_game_btn.setText(R.string.start);
-        start_game_btn.setTextColor(Color.rgb(250,250,250));
+        start_game_btn.setTextColor(Color.rgb(250, 250, 250));
         start_game_btn.setBackgroundResource(R.drawable.button);
         start_game_btn.setTextSize(btnTextSize);
         start_game_btn.setId(Constants.START_BTN);
@@ -202,14 +206,14 @@ public class MainActivity extends AppCompatActivity {
         port_params.addRule(RelativeLayout.BELOW, Constants.IP_ID);
         port.setLayoutParams(port_params);
 
-        RelativeLayout.LayoutParams enter_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams enter_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
         enter_params.leftMargin = 10;
         enter_params.bottomMargin = 10;
         enter_params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         enter_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         join_game_btn.setLayoutParams(enter_params);
 
-        RelativeLayout.LayoutParams start_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams start_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
         start_params.rightMargin = 10;
         start_params.bottomMargin = 10;
         start_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -249,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setMovementMethod(ScrollingMovementMethod.getInstance());
         textView.setId(Constants.TEXT_VIEW);
 
-        RelativeLayout.LayoutParams textV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/2, 3*Constants.SCREEN_HEIGHT/5); // TODO added
+        RelativeLayout.LayoutParams textV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 2, 3 * Constants.SCREEN_HEIGHT / 5); // TODO added
         textV_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         textV_params.addRule(RelativeLayout.CENTER_IN_PARENT);
         textV_params.rightMargin = 10;
@@ -268,12 +272,12 @@ public class MainActivity extends AppCompatActivity {
         usrname.setLayoutParams(usr_params);
 
         create_game_btn.setText(R.string.create);
-        create_game_btn.setTextColor(Color.rgb(250,250,250));
+        create_game_btn.setTextColor(Color.rgb(250, 250, 250));
         create_game_btn.setBackgroundResource(R.drawable.button);
         create_game_btn.setTextSize(btnTextSize);
         create_game_btn.setId(Constants.CREATE2_BUTTON);
 
-        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
         params1.leftMargin = 10;
         params1.bottomMargin = 10;
         params1.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -281,21 +285,18 @@ public class MainActivity extends AppCompatActivity {
         create_game_btn.setLayoutParams(params1);
 
         start_game_btn2.setText(R.string.start);
-        start_game_btn2.setTextColor(Color.rgb(250,250,250));
+        start_game_btn2.setTextColor(Color.rgb(250, 250, 250));
         start_game_btn2.setBackgroundResource(R.drawable.button);
         start_game_btn2.setTextSize(btnTextSize);
         start_game_btn2.setId(Constants.START2_BTN);
         start_game_btn2.setEnabled(false);
 
-        RelativeLayout.LayoutParams start2_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams start2_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
         start2_params.rightMargin = 10;
         start2_params.bottomMargin = 10;
         start2_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         start2_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         start_game_btn2.setLayoutParams(start2_params);
-
-
-
 
 
         createGameUI.addView(textView);
@@ -331,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
         // Layout gameUI
         //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(175,175);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Constants.PLAYER_SIZE, Constants.PLAYER_SIZE);
-        params.setMargins(12,8,12,8); // TODO: what does this do??
+        params.setMargins(12, 8, 12, 8); // TODO: what does this do??
 
         super_btn.setLayoutParams(params);
         att_btn.setLayoutParams(params);
@@ -361,11 +362,13 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams restart_params = new RelativeLayout.LayoutParams(400, 200);
         restart_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         restartGame_btn.setLayoutParams(restart_params);
+        restartGame_btn.setBackgroundResource(R.drawable.button);
 
         RelativeLayout.LayoutParams login_params = new RelativeLayout.LayoutParams(400, 200);
         login_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         login_params.addRule(RelativeLayout.BELOW, Constants.RESTARTGAME_BTN);
         backToLogin_btn.setLayoutParams(login_params);
+        backToLogin_btn.setBackgroundResource(R.drawable.button);
 
         //add buttons to gameOverUI
         gameOverSceneUI.addView(restartGame_btn);
@@ -373,7 +376,6 @@ public class MainActivity extends AppCompatActivity {
         gameOverSceneUI.setId(Constants.GAME_OVER_UI);
         gameOverSceneUI.setVisibility(View.GONE);
         gameOverSceneUI.setGravity(Gravity.CENTER);
-
 
 
         //add views to game
@@ -391,37 +393,39 @@ public class MainActivity extends AppCompatActivity {
     //to equalize music
 
     private void setupEqualizerFxAndUI() {
-      //create equalizer object and attach it with default priority 0
-      mEqualizer = new Equalizer(0, backgroundsound.getAudioSessionId());
-      mEqualizer.setEnabled(true);
-      short bands = mEqualizer.getNumberOfBands();
-      final short minEQLevel = mEqualizer.getBandLevelRange()[0];
-      final short maxEQLevel = mEqualizer.getBandLevelRange()[1];
+        //create equalizer object and attach it with default priority 0
+        mEqualizer = new Equalizer(0, backgroundsound.getAudioSessionId());
+        mEqualizer.setEnabled(true);
+        short bands = mEqualizer.getNumberOfBands();
+        final short minEQLevel = mEqualizer.getBandLevelRange()[0];
+        final short maxEQLevel = mEqualizer.getBandLevelRange()[1];
 
-      for (short i = 0; i < bands; i++) {
-       final short band = i;
-       SeekBar bar = new SeekBar(this);
-       bar.setMax(maxEQLevel - minEQLevel);
-       bar.setProgress(mEqualizer.getBandLevel(band));
-       bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-         mEqualizer.setBandLevel(band, (short) (progress + minEQLevel));
+        for (short i = 0; i < bands; i++) {
+            final short band = i;
+            SeekBar bar = new SeekBar(this);
+            bar.setMax(maxEQLevel - minEQLevel);
+            bar.setProgress(mEqualizer.getBandLevel(band));
+            bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                    mEqualizer.setBandLevel(band, (short) (progress + minEQLevel));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+
+            });
+        }
     }
 
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
 
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
-    }
-
-   });
-  }
- }
 
     @Override
     protected void onStop() {
@@ -440,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
- @Override
+    @Override
     protected void onResume() {
         super.onResume();
         if ((KryoClient.getClient() == null) || !KryoClient.getClient().isConnected()) {

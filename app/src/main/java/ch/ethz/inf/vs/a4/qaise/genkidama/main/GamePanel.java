@@ -3,28 +3,21 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.PointF;
-import android.media.MediaPlayer;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Random;
 
-import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.engine.GameEngine;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.Network;
-import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.CreateGameScene;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GameOverScene;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GamePlayScene;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.SceneManager;
-import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.CHARGE_AMOUNT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_CHARGE;
@@ -118,6 +111,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     /***** SETUP *****/
     public static HashMap<Integer, Player> players = new HashMap();
 
+    private static HashMap<Integer, Integer> voteResults = new HashMap<>();
+    // Voting on replay works the following:
+    // 1 is rematch
+    // 2 is no rematch
+
+    public static int PLAYERCOUNT = 2;
+
     public static Player myPlayer () {
         if (Constants.ID == 999) return null;
         return players.get(Constants.ID);
@@ -184,8 +184,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             health = victim.getCurrentHealth() - dmg;
             if (health > 0)
                 victim.setCurrentHealth(health);
-            else
+            else {
                 victim.setCurrentHealth(0);
+                victim.isLoser = true;
+            }
 
             attacker.chargebar.update();
             victim.healthbar.update();}
@@ -196,8 +198,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             health = victim.getCurrentHealth() - dmg;
             if (health > 0)
                 victim.setCurrentHealth(health);
-            else
+            else {
                 victim.setCurrentHealth(0);
+                victim.isLoser = true;
+            }
             attacker.chargebar.update();
             victim.healthbar.update();
         }
@@ -205,6 +209,35 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public static void removePlayer (int id) {
         players.remove(id);
+    }
+
+    public static void rematch(Network.PlayAgain msg){ //TODO fix bugs
+        int id = msg.id;
+        int ans = msg.answer;
+        if (!voteResults.containsKey(id)) { //only add vote if client hasn't voted yet.
+            voteResults.put(id, ans);
+            int cnt = 0;
+            for (Player player : players.values()) {
+                if (voteResults.containsKey(player.id)) {
+                    int res = voteResults.get(player.id);
+                    if (res == 2) {
+                        //TODO disconnect from Server
+                        GameOverScene.setNextScene(Constants.START_SCENE);
+                        GameOverScene.termination = true;
+                        voteResults = new HashMap<>();
+                        break;
+                    } else if (res == 1) {
+                        cnt++;
+                        if (cnt == PLAYERCOUNT) {
+                            GameOverScene.setNextScene(Constants.GAMEPLAY_SCENE);
+                            GameOverScene.termination = true;
+                            voteResults = new HashMap<>();
+                        }
+                    }
+                }
+            }
+        }
+
     }
     /* ----------------------------------------------------------------------------------------- */
 
