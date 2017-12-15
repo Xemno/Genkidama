@@ -208,56 +208,15 @@ public class GamePlayScene implements Scene {
         if (players.size() > 0) {
             for (Player player : players.values()) { // draw all players
                 if (player != null){
-                    if(player.attack_right.isLastFrame() && player.walkInX){
-                        player.idle_rightAnimation();
-                        player.attack_right.setActivate(false);
-                        player.attack_right.setLastFrame(false);
-                    }else if(player.attack_right.isLastFrame() && !player.walkInX){
-                        player.idle_leftAnimation();
-                        player.attack_right.setActivate(false);
-                        player.attack_right.setLastFrame(false);
-                    }else if(player.attack_left.isLastFrame() && player.walkInX){
-                        player.idle_rightAnimation();
-                        player.attack_left.setActivate(false);
-                        player.attack_left.setLastFrame(false);
-                    }else if(player.attack_left.isLastFrame() && !player.walkInX) {
-                        player.idle_leftAnimation();
-                        player.attack_left.setActivate(false);
-                        player.attack_left.setLastFrame(false);
-                    }else if(player.special_attack_right.isLastFrame() && player.walkInX){
-                        player.idle_rightAnimation();
-                        player.special_attack_right.setActivate(false);
-                        player.special_attack_right.setLastFrame(false);
-                    }else if(player.special_attack_right.isLastFrame() && !player.walkInX){
-                        player.idle_leftAnimation();
-                        player.special_attack_right.setActivate(false);
-                        player.special_attack_right.setLastFrame(false);
-                    }else if(player.special_attack_left.isLastFrame() && player.walkInX){
-                        player.idle_rightAnimation();
-                        player.special_attack_left.setActivate(false);
-                        player.special_attack_left.setLastFrame(false);
-                    }else if(player.special_attack_left.isLastFrame() && !player.walkInX) {
-                        player.idle_leftAnimation();
-                        player.special_attack_left.setActivate(false);
-                        player.special_attack_left.setLastFrame(false);
-                    }
+                    if(player.animation.isLastFrame()) {
 
-                    if(player.block_right.isLastFrame() && player.walkInX){
-                        player.idle_rightAnimation();
-                        player.block_right.setActivate(false);
-                        player.block_right.setLastFrame(false);
-                    }else if(player.block_right.isLastFrame() && !player.walkInX){
-                        player.idle_leftAnimation();
-                        player.block_right.setActivate(false);
-                        player.block_right.setLastFrame(false);
-                    }else if(player.block_left.isLastFrame() && player.walkInX){
-                        player.idle_rightAnimation();
-                        player.block_left.setActivate(false);
-                        player.block_left.setLastFrame(false);
-                    }else if(player.block_left.isLastFrame() && !player.walkInX) {
-                        player.idle_leftAnimation();
-                        player.block_left.setActivate(false);
-                        player.block_left.setLastFrame(false);
+                        player.animation.setActivate(false);
+                        player.animation.setLastFrame(false);
+                        if (player.walkInX) {
+                            player.idle_rightAnimation();
+                        } else {
+                            player.idle_leftAnimation();
+                        }
                     }
 
                     player.draw(canvas); // changed this to check for null object
