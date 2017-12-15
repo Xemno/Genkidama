@@ -8,13 +8,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import ch.ethz.inf.vs.a4.qaise.genkidama.R;
+import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
+
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isIP;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isPort;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isValidString;
 
 /**
  * Created by Qais on 13-Dec-17.
@@ -24,6 +31,7 @@ public class JoinGameScene implements Scene {
 
     private Activity activity;
 
+    private TextView textView;
     private EditText edit_username;
     private EditText ip_address;
     private EditText port_number;
@@ -33,11 +41,27 @@ public class JoinGameScene implements Scene {
 
     private boolean btn_active = false;
     private boolean setEnabled = false;
+    private boolean connect = false;
+    private boolean checkConnection = false;
+    private boolean isConnected = false;
+
+    private long lastTime = 0;
+    private long timeout = 5000; // 5s timeout like in KryoClient
+
+    Animation loadAnimation;
 
 
 
     public JoinGameScene(Activity activity) {
         this.activity = activity;
+
+        loadAnimation = new Animation(
+                activity, R.drawable.color_pattern_clone_32,
+                32, 32,
+                23,
+                Constants.SCREEN_WIDTH - 32*4 - 25,
+                25,4, 4);
+        loadAnimation.setFrameDuration(50);
     }
 
 
@@ -57,20 +81,42 @@ public class JoinGameScene implements Scene {
                     edit_username = (EditText) activity.findViewById(Constants.USERNAME_ID);
                     ip_address = (EditText) activity.findViewById(Constants.IP_ID);
                     port_number = (EditText) activity.findViewById(Constants.PORT_ID);
+                    textView = (TextView) activity.findViewById(Constants.TEXT_V);
 
                     btn_active = true;
                     join_btn.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View view) {
 
+
                             if(checkInputs()) {
+                                if (!checkConnection) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            textView.append("Trying to connect to the server..\n");
+                                            lastTime = System.currentTimeMillis();
+                                        }
+                                    });
+                                } else {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            textView.append("...trying to find a connection...\n");
+                                        }
+                                    });
+                                }
+
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
                                         KryoClient.getInstance().connect();
+                                        connect = true;
                                     }
                                 }).start();
+
                                 setEnabled = true;
+                                checkConnection = true;
                             } else {
 
                             }
@@ -97,21 +143,74 @@ public class JoinGameScene implements Scene {
                             }
                         }
                     });
-
                 }
             });
         }
 
-        // TODO: test this
-        if (setEnabled && KryoClient.getClient() != null && KryoClient.getClient().isConnected()) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    start_btn.setEnabled(true);
+
+
+
+        if (KryoClient.getClient() != null) {
+            if (KryoClient.getClient().isConnected()) {
+                isConnected = true;
+                if (setEnabled) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            start_btn.setEnabled(true);
+                        }
+                    });
+                    checkConnection = false;
+                    setEnabled = false;
+                    lastTime = 0;
                 }
-            });
-            setEnabled = false;
+
+                if (connect) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            textView.append("You are connected. You can join the game.\n"); // TODO: wait for atleast 2 players
+                        }
+                    });
+                    connect = false;
+
+                }
+
+            } else {
+
+                if (checkConnection) {
+                    long time = System.currentTimeMillis();
+                    if (time > lastTime + timeout ) {
+                        lastTime = time;
+                        checkConnection = false;
+                        lastTime = 0;
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                textView.append("Failed to find a server...\n");
+                            }
+                        });
+                    }
+                }
+
+                if (isConnected){ // if we are connected but server crashed or closed, then we dont want to join!
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            start_btn.setEnabled(false);
+                            textView.append("Connection to server closed...\n");
+                        }
+                    });
+                    checkConnection = false;
+                    lastTime = 0;
+                    isConnected = false;
+                }
+
+            }
+
+
         }
+
 
     }
 
@@ -119,6 +218,7 @@ public class JoinGameScene implements Scene {
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.rgb(240,230,140)); // BACKGROUND color
 
+        if (checkConnection) loadAnimation.draw(canvas);
 
     }
 
@@ -127,11 +227,8 @@ public class JoinGameScene implements Scene {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                RelativeLayout startUI = (RelativeLayout) activity.findViewById(Constants.START_UI);
-                RelativeLayout loginUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
-                startUI.setVisibility(View.GONE);
-                //TODO: anja question:  so that login also invisible after this scene , kennt loginUI hier nicht
-                loginUI.setVisibility(View.GONE);
+                RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
+                joinGameUI.setVisibility(View.GONE);
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;
             }
@@ -156,8 +253,8 @@ public class JoinGameScene implements Scene {
             Toast.makeText(activity.getApplication(), "Invalid IP format!", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (!isPort(port)) {
-            Toast.makeText(activity.getApplication(), "Invalid Port! Only numbers allowed", Toast.LENGTH_LONG).show();
+        if (!isPort(port) || Integer.parseInt(port) < 1024 || Integer.parseInt(port) > 65535) {
+            Toast.makeText(activity.getApplication(), "Invalid Port or not in range of [1024, 65535].", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -172,19 +269,6 @@ public class JoinGameScene implements Scene {
 
         return true;
     }
-    public static boolean isValidString(String str)
-    {
-        return str.matches("\\w+");
-    }
 
-    public static boolean isPort(String str)
-    {
-        return str.matches("\\d+");
-    }
-
-    public static boolean isIP(String str)
-    {
-        return str.matches("(\\d+\\.\\d+\\.\\d+\\.\\d+){1}");
-    }
 
 }

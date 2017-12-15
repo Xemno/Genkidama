@@ -51,6 +51,7 @@ public class Constants {
     public static int USERNAME2_ID = 1347;
     public static int START2_BTN = 1348;
     public static int CREATE2_BUTTON = 1349;
+    public static int TEXT_V = 1350;
 
 
     public static int GAME_PLAY_UI = 2000;

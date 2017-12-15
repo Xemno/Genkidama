@@ -15,8 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
+import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
@@ -25,6 +29,8 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoServer;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isValidString;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.myPlayer;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
 
 /**
  * Created by Qais on 10-Dec-17.
@@ -42,14 +48,20 @@ public class CreateGameScene implements Scene{
 
     private int nextScene;
     private int top, right, left, bottom;
+    private int playersSize = 0;
 
     private boolean btn_active = false;
     private boolean serviceStarted = false;
     private boolean clientConnect = false;
     private boolean setEnabled = false;
+    private boolean loadAnimating = false;
+
+
+    HashSet<String> names = new HashSet<>();
+
 
     private Drawable genkidamaLogo;
-    private Animation coinAnimation;
+    private Animation loadingAnimation;
 
 
     public CreateGameScene(Activity activity) {
@@ -67,14 +79,13 @@ public class CreateGameScene implements Scene{
         left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
         bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
 
-        coinAnimation = new Animation(
-                activity, R.drawable.coins,
-                15, 16,
-                8,
-                Constants.SCREEN_WIDTH/4,
-                Constants.SCREEN_HEIGHT/3 ,
-                true, 4);
-        coinAnimation.setFrameDuration(100);
+        loadingAnimation = new Animation(
+                activity, R.drawable.loading_32,
+                32, 32,
+                16,
+                Constants.SCREEN_WIDTH - 32*4 - 50,
+                50, 4, 4);
+        loadingAnimation.setFrameDuration(50);
     }
 
     @Override
@@ -138,6 +149,7 @@ public class CreateGameScene implements Scene{
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    loadAnimating = true;
                     KryoClient.getInstance().connect();
                 }
             }).start();
@@ -148,21 +160,55 @@ public class CreateGameScene implements Scene{
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    textView.append("Server Address: ");
-                    textView.setTextColor(Color.rgb(32,178,170));
-                    textView.append("" + Constants.SERVER_ADDRESS + "\n");
-//                    textView.setTextColor(Color.DKGRAY);
-                    textView.append("Port Number: ");
-//                    textView.setTextColor(Color.rgb(32,178,170));
-                    textView.append("" + Constants.PORT_NUMBER + "\n");
-//                    textView.setTextColor(Color.DKGRAY);
+                    textView.append("Server Address: "
+                            + Constants.SERVER_ADDRESS + "\n"
+                            + "Port Number: "
+                            + Constants.PORT_NUMBER + "\n"
+                    );
                     start_btn.setEnabled(true);
                 }
             });
             setEnabled = true;
         }
 
+        if (players.size() != playersSize) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
 
+
+
+                    if (players.size() < playersSize) {
+                        playersSize--;
+                        for (Player p : players.values()) {
+                            if (names.contains(p.name)) {
+                                names.remove(p.name);
+                                textView.append(p.name + " left the game.\n");
+                            }
+                        }
+
+                    } else if (players.size() > playersSize) {
+                        playersSize++;
+                        for (Player p : players.values()) {
+                            if (!names.contains(p.name)) {
+                                names.add(p.name);
+                                textView.append(p.name + " joined the game.\n");
+                            }
+                        }
+                    }
+
+                    if (playersSize > 1) loadAnimating = false;
+
+                    textView.append("Players [" + playersSize + "]: [|");
+                    for (Player player : players.values()) {
+                        names.add(player.name);
+                        textView.append(player.name + "|");
+                    }
+                    textView.append("]\n");
+
+                }
+            });
+        }
     }
 
     @Override
@@ -174,10 +220,7 @@ public class CreateGameScene implements Scene{
         genkidamaLogo.setBounds(left, top, right, bottom);
         genkidamaLogo.draw(canvas);
 
-        coinAnimation.setWhereToDraw(left - 40, (bottom - top) - 30);
-        coinAnimation.draw(canvas);
-        coinAnimation.setWhereToDraw(right + 20, (bottom - top) - 30);
-        coinAnimation.draw(canvas);
+        if (serviceStarted && loadAnimating) loadingAnimation.draw(canvas);
     }
 
     @Override
@@ -189,6 +232,7 @@ public class CreateGameScene implements Scene{
                 startUI.setVisibility(View.GONE);
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;
+//                loadingAnimation.recycle();
             }
         });
     }

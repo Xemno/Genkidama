@@ -43,6 +43,7 @@ public class Network {
     }
 
     public static class AddPlayer {
+        public String name;
         public int id, side;
         public float x, y;
 //        public int id, x ,y;

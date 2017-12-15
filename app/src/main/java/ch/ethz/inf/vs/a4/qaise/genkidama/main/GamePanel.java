@@ -3,21 +3,28 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.PointF;
+import android.media.MediaPlayer;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Random;
 
+import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.engine.GameEngine;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.Network;
-import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GameOverScene;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.CreateGameScene;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GamePlayScene;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.SceneManager;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.CHARGE_AMOUNT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_CHARGE;
@@ -36,7 +43,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private GameEngine thread;
     private static SceneManager manager;
 
-
+    private static MediaPlayer attacksound;
+    private static MediaPlayer specialattacksound;
     /*
      * This class sets up the game and the server updates the Players from this class
      */
@@ -131,20 +139,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static void addPlayer (Player player) {
         players.put(player.id, player);
 
-        // TODO: test this, should be done always once
         if (player.id == Constants.ID) { // if my palyer is added, initialize the new_point in GamePlayerScene
             GamePlayScene.setNew_point(player.new_point);
-            Log.i(TAG, "MYPLAYER with ID " + player.id + " is added to the game");
-        }
+            Log.i(TAG, "MYPLAYER " + player.name + " with ID " + player.id + " is added to the game");
+        } else
+            Log.i(TAG, "PLAYER " + player.name + " with ID " + player.id + " is added to the game");
 
-//        if (GamePanel.manager.ACTIVE_SCENE == Constants.CREATE_GAME_SCENE) {
-//            CreateGameScene.updateTextView(player.id, player.name);
-//            try {
-//                manager.getCurrentScene().upda
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
 
     public static void updatePlayer(Network.UpdatePlayer msg) {
@@ -159,18 +159,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             player.update(new PointF((float) Constants.SCREEN_WIDTH, y));
         else
             player.update(new PointF(x, y));
+
+        Log.i(TAG, "PLAYER " + player.name + " with ID " + player.id + " updated " + "(" + player.new_point.x + ", " + player.new_point.y + ")");
+
     }
 
     public static void attackPlayer(Network.Attack msg) {
         Player victim = players.get(msg.idE);    // the attacked player
         Player attacker = players.get(msg.idA);   // the attacking player
+
+        if (victim == null || attacker == null) return; // TODO: test this, newly added
+
         int dmg = msg.damage;
         int health;
-
-        //TODO: here music for attack
-//        MediaPlayer attacksoundmusic= MediaPlayer.create(MainActivity.context, R.raw.attacksound);
-//        attacksoundmusic.start();
-
 
         if (dmg >= 0) {
             // normal attack
@@ -189,6 +190,28 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 victim.isLoser = true;
             }
 
+            attacker.attackAnimation();
+            victim.blockAnimation();
+            //TODO: music here for attack
+
+
+            if (attacksound == null)  {
+                attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+                attacksound.setLooping(false);
+                attacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer) {
+                        attacksound.start();
+                    }
+                });
+            } else {
+
+                if (attacksound.isPlaying()) attacksound.pause();
+                attacksound.seekTo(0);
+                attacksound.start();
+            }
+
+            //TODO: end changemusic
             attacker.chargebar.update();
             victim.healthbar.update();}
         else { // special attack
@@ -202,6 +225,25 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 victim.setCurrentHealth(0);
                 victim.isLoser = true;
             }
+            attacker.specialAttackAnimation();
+            victim.blockAnimation();
+            //todo here specialattackusic
+            if (specialattacksound == null)  {
+                specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
+                specialattacksound.setLooping(false);
+                specialattacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer) {
+                        specialattacksound.start();
+                    }
+                });
+            } else {
+                if (specialattacksound.isPlaying()) specialattacksound.pause();
+                specialattacksound.seekTo(0);
+                specialattacksound.start();
+            }
+            //Todo music end
+
             attacker.chargebar.update();
             victim.healthbar.update();
         }

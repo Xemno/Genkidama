@@ -49,48 +49,39 @@ public class Player implements GameObject {
     public boolean isLoser = false;
     public boolean reset = false;
 
-
-
-//    private Rect rectangle; // for collision detection
-    private int rectWidth, rectHight;
-    private int color;
-
     public PointF new_point, old_point;  // ###
 
     public HealthBar healthbar;
     public ChargeBar chargebar;
 
-    //Done LARA: variables
-    boolean block;
-    boolean attack;
-    boolean special_attack;
-    boolean is_dead;
-    //Done LARA
-
     // TODO: finish these animations, hitbox not yet right position
-    Animation animation;
-    Animation walk_right, walk_left;
-    Animation attack_left, attack_right;
-    Animation block_left, block_right;
+    public Animation animation;
+    public Animation walk_right, walk_left;
+    public Animation attack_left, attack_right;
+    public Animation block_left, block_right;
     public Animation idle_left, idle_right;
-    Animation death_left, death_right;
+    public Animation death_left, death_right;
+    public Animation special_attack_left, special_attack_right;
 
 
-    boolean walkInX = false; // false = -x, true = +x
+    public boolean walkInX = false; // false = -x, true = +x
 
-    public Player(int id, PointF point, int side) {
+    public Player(int id, String name, PointF point, int side) {
 
         /* Initialize settings of this player */
         //|--------------------------------------------|//
         this.new_point = point;
         this.old_point = point;
         this.id = id;
+        this.name = name;
         this.maxHealth = MAX_HEALTH;
         this.currentHealth = MAX_HEALTH;
         this.maxCharge = MAX_CHARGE;
         this.side = side; // Jela did this
         this.healthbar = new HealthBar(this);
         this.chargebar = new ChargeBar(this);
+        int scaleFactor = 8*Constants.SCREEN_WIDTH/1920;
+        float scaleHit = 8.f*Constants.SCREEN_WIDTH/1920;
         //|--------------------------------------------|//
 
 
@@ -100,9 +91,7 @@ public class Player implements GameObject {
                 42, 42,
                 4,
                 point.x, point.y,
-                true, 8);
-//        idle_right.scaleBitmap(8);
-        idle_right.forward = true;      // always true for right animations
+                scaleFactor, scaleHit, true);
 
         idle_left = new Animation(
                 MainActivity.context,
@@ -110,9 +99,7 @@ public class Player implements GameObject {
                 42, 42,
                 4,
                 point.x, point.y,
-                true, 8);
-//        idle_left.scaleBitmap(8);
-        idle_left.forward = false;      // always false for left animations
+                scaleFactor, scaleHit, false);
 
 
         walk_right = new Animation(
@@ -121,9 +108,7 @@ public class Player implements GameObject {
                 42, 42,
                 8,
                 point.x, point.y,
-                true, 8);
-//        walk_right.scaleBitmap(8);
-        walk_right.forward = true;
+                scaleFactor, scaleHit, true);
 
         walk_left = new Animation(
                 MainActivity.context,
@@ -131,59 +116,64 @@ public class Player implements GameObject {
                 42, 42,
                 8,
                 point.x, point.y,
-                true, 8);
-//        walk_left.scaleBitmap(8);
-        walk_left.forward = false;
+                scaleFactor, scaleHit, false);
 
-/*
         //Done Lara: frameWidth: 80
         attack_left=new Animation(MainActivity.context,
                 R.drawable.knight_attack_left,
                 80,42,
                 10,point.x, point.y,
-                true);
-        attack_left.scaleBitmap(8);
-        attack_left.forward=false;
+                scaleFactor, scaleHit, false);
+        attack_left.setFrameDuration(28);
 
         attack_right=new Animation(MainActivity.context,
                 R.drawable.knight_attack_right,
                 80, 42,
                 10, point.x, point.y,
-                true);
-
-        attack_right.scaleBitmap(8);
-        //Done Lara: frameWidth: 80
+                scaleFactor, scaleHit, true);
+        attack_right.setFrameDuration(28);
 
         block_left=new Animation(MainActivity.context,
                 R.drawable.knight_block_left,
                 42,42,
                 7,point.x,point.y,
-                true);
-        block_left.scaleBitmap(8);
-        block_left.forward=false;
+                scaleFactor, scaleHit, false);
+        block_left.setFrameDuration(40);
 
         block_right=new Animation(MainActivity.context,
                 R.drawable.knight_block_right,
                 42,42,
                 7,point.x,point.y,
-                true);
-        block_right.scaleBitmap(8);
+                scaleFactor, scaleHit, true);
+        block_right.setFrameDuration(40);
 
-        death_left=new Animation(MainActivity.context,
-                R.drawable.knight_death_left,
-                42,42,
-                9, point.x, point.y,
-                true);
-        death_left.scaleBitmap(8);
-        death_left.forward=false;
+//        death_left=new Animation(MainActivity.context,
+//                R.drawable.knight_death_left,
+//                42,42,
+//                9, point.x, point.y,
+//                scaleFactor, scaleHit, false);
+//
+//        death_right=new Animation(MainActivity.context,
+//                R.drawable.knight_death_right,
+//                42,42,
+//                9, point.x, point.y,
+//                scaleFactor, scaleHit);
+//        //death_right.scaleBitmap(8);
+//        death_right.forward = true;
 
-        death_right=new Animation(MainActivity.context,
-                R.drawable.knight_death_right,
-                42,42,
-                9, point.x, point.y,
-                true);
-        death_right.scaleBitmap(8);
-*/
+        special_attack_left=new Animation(MainActivity.context,
+                R.drawable.knight_attack_left_special,
+                80,42,
+                10,point.x, point.y,
+                scaleFactor, scaleHit, false);
+        special_attack_left.setFrameDuration(28);
+
+        special_attack_right=new Animation(MainActivity.context,
+                R.drawable.knight_attack_right_special,
+                80, 42,
+                10, point.x, point.y,
+                scaleFactor, scaleHit, true);
+        special_attack_right.setFrameDuration(28);
 
 
 
@@ -191,7 +181,6 @@ public class Player implements GameObject {
             walkInX = true;  // if on the left side, animate idle_right
             animation = idle_right;
         } // otherwise false anyways and animate idle_left
-
 
     }
 
@@ -222,100 +211,79 @@ public class Player implements GameObject {
         // you can leave this empty if you don't need it
     }
 
+    public void attackAnimation(){
+        if(this.walkInX){
+            attack_right.setWhereToDraw((new_point.x),(new_point.y));
+            animation = attack_right;
+            attack_right.setActivate(true);
+        }else{
+            attack_left.setWhereToDraw((new_point.x),(new_point.y));
+            animation = attack_left;
+            attack_left.setActivate(true);
+        }
+    }
+
+    public void specialAttackAnimation(){
+        if(this.walkInX){
+            special_attack_right.setWhereToDraw((new_point.x),(new_point.y));
+            animation = special_attack_right;
+            special_attack_right.setActivate(true);
+        }else{
+            special_attack_left.setWhereToDraw((new_point.x),(new_point.y));
+            animation = special_attack_left;
+            special_attack_left.setActivate(true);
+        }
+    }
+
+    public void blockAnimation(){
+        if(this.walkInX){
+            block_right.setWhereToDraw((new_point.x),(new_point.y));
+            animation = block_right;
+            block_right.setActivate(true);
+        }else{
+            block_left.setWhereToDraw((new_point.x),(new_point.y));
+            animation = block_left;
+            block_left.setActivate(true);
+        }
+    }
+
+    public void idle_leftAnimation(){
+        idle_left.setWhereToDraw((new_point.x) , (new_point.y));
+        animation = idle_left;
+    }
+
+    public void idle_rightAnimation(){
+        idle_right.setWhereToDraw((new_point.x) , (new_point.y));
+        animation = idle_right;
+    }
+
     public void update(PointF point) {
         // (left, top, right, bottom)
         this.new_point = point;
 
-        //if (!reset) {
-            // Qais: added old version again
-            if (new_point.x < old_point.x) {
-                walkInX = false;
-                walk_left.setWhereToDraw((new_point.x), (new_point.y)); // scale und frame dimension abziehen
-                animation = walk_left;
-            } else if (new_point.x > old_point.x) {
-                walkInX = true;
-                walk_right.setWhereToDraw((new_point.x), (new_point.y)); // scale und frame dimension abziehen
-                animation = walk_right;
-            } else if (new_point.x == old_point.x) {
-                if (walkInX) {
-                    idle_right.setWhereToDraw((new_point.x), (new_point.y));
-                    animation = idle_right;
-                } else {
-                    idle_left.setWhereToDraw((new_point.x), (new_point.y));
-                    animation = idle_left;
-                }
+        // Qais: added old version again
+        if (new_point.x < old_point.x) {
+            walkInX = false;
+            walk_left.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
+            animation = walk_left;
+        } else if (new_point.x > old_point.x) {
+            walkInX = true;
+            walk_right.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
+            animation = walk_right;
+        } else if (new_point.x == old_point.x) {
+            if (walkInX){
+                idle_right.setWhereToDraw((new_point.x) , (new_point.y));
+                animation = idle_right;
+            } else {
+                idle_left.setWhereToDraw((new_point.x) , (new_point.y));
+                animation = idle_left;
             }
-
-            //TODO Lara attack, special_attack, block, is_dead put into code and look that only one can be true at each time.
-            //TODO LARA: Animation ( Qais: please revise, the following does not work..)
-//        if (new_point.x < old_point.x) {
-//            walkInX = false;
-//        } else if (new_point.x > old_point.x) {
-//            walkInX = true;
-//        }
-//
-//        if (!attack && !special_attack &&!block && !is_dead){
-//            if (!walkInX) {
-//                walk_left.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
-//                animation = walk_left;
-//            } else if (walkInX) {
-//                walk_right.setWhereToDraw((new_point.x) , (new_point.y)); // scale und frame dimension abziehen
-//                animation = walk_right;
-//            } else if (new_point.x == old_point.x) {
-//                if (walkInX){
-//                    idle_right.setWhereToDraw((new_point.x) , (new_point.y));
-//                    animation = idle_right;
-//                } else {
-//                    idle_left.setWhereToDraw((new_point.x) , (new_point.y));
-//                    animation = idle_left;
-//                }
-//            }
-//        }else if(attack && !special_attack && !block && !is_dead && walkInX){
-//            attack_right.setWhereToDraw((new_point.x),(new_point.y));
-//            animation = attack_right;
-//        }else if(!attack && special_attack && !block && !is_dead && walkInX){
-//            attack_right.setWhereToDraw((new_point.x),(new_point.y));
-//            animation = attack_right;
-//        }else if(!attack && !special_attack && block && !is_dead && walkInX){
-//            block_left.setWhereToDraw((new_point.x),(new_point.y));
-//            animation = block_left;
-//        }else if(!attack && !special_attack && !block && is_dead && walkInX){
-//            death_left.setWhereToDraw((new_point.x),(new_point.y));
-//            animation = death_left;
-//        }else if(attack && !special_attack && !block && !is_dead && !walkInX){
-//            attack_left.setWhereToDraw((new_point.x),(new_point.y));
-//            animation = attack_left;
-//        }else if(!attack && special_attack && !block && !is_dead && !walkInX){
-//            attack_left.setWhereToDraw((new_point.x),(new_point.y));
-//            animation = attack_left;
-//        }else if(!attack && !special_attack && block && !is_dead && !walkInX){
-//            block_right.setWhereToDraw((new_point.x),(new_point.y));
-//            animation = block_right;
-//        }else if(!attack && !special_attack &&! block && is_dead && !walkInX){
-//            death_right.setWhereToDraw((new_point.x),(new_point.y));
-//            animation = death_right;
-//        }
-
+        }
 
 
         /*if(currentHealth == 0){
             isLoser = true;
-        }*/
-
-        /*} else {
-            if (id != GamePanel.myPlayer().id) {
-                if (side % 2 != 0) {
-                    animation = idle_right;
-                    walkInX = true;
-                } else {
-                    animation = idle_left;
-                    walkInX = false;
-                }
-                System.out.println("Enemy pos: " + (new_point.x /SCREEN_WIDTH) + ", " + (new_point.y /SCREEN_HEIGHT ));
-
-            }
-            reset = false;
-        }*/
+        }
 
         old_point = new_point;
 
@@ -324,10 +292,6 @@ public class Player implements GameObject {
     //not needed anywhere and doesn't make sense
     public void update(int damage) {
         this.currentHealth = this.currentHealth - damage;
-    }
-
-    public void setColor (int color) {
-        this.color = color;
     }
 
     public int getMaxHealth(){
@@ -376,6 +340,6 @@ public class Player implements GameObject {
 
     public boolean collidesWith(Player enemy){
         if (enemy == null) return false;
-        return RectF.intersects(animation.getWhereToDraw(), enemy.animation.getWhereToDraw());
+        return RectF.intersects(animation.getHitbox(), enemy.animation.getHitbox());
     }
 }

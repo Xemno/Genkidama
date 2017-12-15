@@ -150,9 +150,6 @@ public class ServerProgramm extends Listener {
 
             onlinePlayers.remove(connection.state);
 
-            System.out.println(onlinePlayers);
-            System.out.println(onlinePlayers.toString() + "\n");
-
             Network.RemovePlayer removePlayer = new Network.RemovePlayer();
             removePlayer.id = connection.state.id;
             KryoServer.server.sendToAllTCP(removePlayer);
@@ -169,6 +166,7 @@ public class ServerProgramm extends Listener {
         // Add existing states of other already logged in players to the new logged in state connection
         for (StateObject other : onlinePlayers) {
             Network.AddPlayer addPlayer = new Network.AddPlayer();
+            addPlayer.name = other.name;
             addPlayer.id = other.id;
             addPlayer.side = other.side;
             addPlayer.x = other.x;
@@ -180,6 +178,7 @@ public class ServerProgramm extends Listener {
 
         // Now add the logged in players state to all existing connections
         Network.AddPlayer addPlayer = new Network.AddPlayer();
+        addPlayer.name = state.name;
         addPlayer.id = state.id;
         addPlayer.side = state.side;
         addPlayer.x = state.x;

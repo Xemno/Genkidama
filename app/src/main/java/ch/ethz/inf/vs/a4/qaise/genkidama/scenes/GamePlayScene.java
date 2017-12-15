@@ -17,8 +17,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
-import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
-import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.BaseFloor;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
@@ -52,35 +50,21 @@ public class GamePlayScene implements Scene {
 
     private boolean sendOnce = true;
 
-    private BaseFloor floor;
-
-    private Drawable layer1, layer2, layer3, layer4, layer5, layer6;
+    private Drawable layer1_5, layer6;
 
     private boolean btn_active = false;
     private boolean new_game = false;
 
-    MediaPlayer attacksound= new MediaPlayer();
-    MediaPlayer specialattacksound= new MediaPlayer();
+    MediaPlayer attacksound;
+    MediaPlayer specialattacksound;
 
     private float touch_old, touch_new; // used for movement detection. DO NOT confuse with old_point and new_point
 
 
-//    private int frameLengthInMilliseconds = 50;
-//    private long lastFrameChangeTime = 0;
-//    private int dx = 0;
-//    private boolean fromLeftToRight = true;
-
     public GamePlayScene(Activity activity) {
         this.activity = activity;
 
-        floor = new BaseFloor();
-        fixDist = floor.getFixHeight();
-
-/*        if (myPlayer() != null) { // can be null at his point
-            new_point = myPlayer().new_point;
-        } else {
-            new_point = new PointF(SCREEN_WIDTH/4, fixDist);
-        }*/
+        fixDist = FLOOR_CEILING_DIST_RELATIVE*SCREEN_HEIGHT/100;
 
         old_point = new PointF(0,0);
     }
@@ -118,8 +102,6 @@ public class GamePlayScene implements Scene {
     @Override
     public void update() {
 
-
-
         // In case something goes wrong with the assigning of the new_point
         if (myPlayer() != null && new_point == null) {
             new_point = new PointF(SCREEN_WIDTH/4, fixDist);
@@ -155,7 +137,7 @@ public class GamePlayScene implements Scene {
 
                     LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                     gameUI.setVisibility(View.VISIBLE);
-                    Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
+                    final Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
                     Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
                     btn_active = true;
 
@@ -163,12 +145,24 @@ public class GamePlayScene implements Scene {
                     att_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // TODO: we always destroy and create the same resoruce for the sound...!!
-                            if(attacksound != null){attacksound.release();}
+                           /* if (attacksound == null)  {
+                                attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+                                attacksound.setLooping(false);
+                                attacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                    @Override
+                                    public void onPrepared(MediaPlayer mediaPlayer) {
+                                        attacksound.start();
+                                    }
+                                });
+                            } else {
 
+                                if (attacksound.isPlaying()) attacksound.pause();
+                                attacksound.seekTo(0);
+                                attacksound.start();
+                            }
                             // TODO: why not moving this to constructor
-                            attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
-                            attacksound.start();
+//                            attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+                            */
 
                             //start sound for attackbutton 
                             if (players.size() > 1) {
@@ -180,11 +174,7 @@ public class GamePlayScene implements Scene {
                         }
 
                     } );
-                    // TODO: why not moving this to terminate() ? this is released often times..
-                    if (attacksound != null) {
-                        attacksound.release();
-                        attacksound = null;
-                    }
+
 
                     
 
@@ -192,23 +182,16 @@ public class GamePlayScene implements Scene {
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(specialattacksound != null){specialattacksound.release();}
-
-                            specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
-                            specialattacksound.start();
 
                             if (players.size() > 1) {
                                 for (Player enemy : players.values()) {
                                     if (myPlayer().id != enemy.id) myPlayer().specialAttack(enemy);
                                 }
                             }
-
                         }
                     });
-                    if (specialattacksound != null) {
-                        specialattacksound.release();
-                        specialattacksound = null;
-                    }
+
+
 
                 }
             });
@@ -236,30 +219,27 @@ public class GamePlayScene implements Scene {
 //            }
 //        }
 
-        layer1 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1);
-        layer1.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        layer1.draw(canvas);
-
-        layer2 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer2);
-        layer2.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        layer2.draw(canvas);
-
-        layer3 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer3);
-        layer3.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        layer3.draw(canvas);
-
-        layer4 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer4);
-        layer4.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        layer4.draw(canvas);
-
-        layer5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer5);
-        layer5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        layer5.draw(canvas);
+        layer1_5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1_5);
+        layer1_5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+        layer1_5.draw(canvas);
 
         // Draw players inbetween layer5 and layer6
         if (players.size() > 0) {
             for (Player player : players.values()) { // draw all players
-                if (player != null) player.draw(canvas); // changed this to check for null object
+                if (player != null){
+                    if(player.animation.isLastFrame()) {
+
+                        player.animation.setActivate(false);
+                        player.animation.setLastFrame(false);
+                        if (player.walkInX) {
+                            player.idle_rightAnimation();
+                        } else {
+                            player.idle_leftAnimation();
+                        }
+                    }
+
+                    player.draw(canvas); // changed this to check for null object
+                }
             }
 
             for (Player player : players.values()) {
@@ -269,25 +249,9 @@ public class GamePlayScene implements Scene {
 
                     canvas.drawColor(Color.WHITE); // BACKGROUND color
 
-                    layer1 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1);
-                    layer1.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer1.draw(temp_canvas);
-
-                    layer2 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer2);
-                    layer2.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer2.draw(temp_canvas);
-
-                    layer3 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer3);
-                    layer3.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer3.draw(temp_canvas);
-
-                    layer4 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer4);
-                    layer4.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer4.draw(temp_canvas);
-
-                    layer5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer5);
-                    layer5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer5.draw(temp_canvas);
+                    layer1_5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1_5);
+                    layer1_5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+                    layer1_5.draw(temp_canvas);
 
                     for (Player pl : players.values()) { // draw all players. Cannot use players from above, because the loop stops when loser is found
                         if (pl != null) pl.draw(temp_canvas); // changed this to check for null object
@@ -310,10 +274,6 @@ public class GamePlayScene implements Scene {
         layer6.draw(canvas);
 
 
-
-//        floor.draw(canvas);
-
-
     }
 
     @Override
@@ -324,6 +284,10 @@ public class GamePlayScene implements Scene {
                 LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                 gameUI.setVisibility(View.GONE);
                 btn_active = false;
+                specialattacksound.release();
+                attacksound.release();
+                specialattacksound = null;
+                attacksound = null;
             }
         });
         new_game = true;

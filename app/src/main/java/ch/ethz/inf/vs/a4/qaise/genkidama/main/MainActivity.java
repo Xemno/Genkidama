@@ -1,7 +1,6 @@
 package ch.ethz.inf.vs.a4.qaise.genkidama.main;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -10,7 +9,6 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Equalizer;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -56,14 +54,15 @@ public class MainActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
-        // attacksound=MediaPlayer.create(this,R.raw.attacksound);
-        //specialattacksound=MediaPlayer.create(this,R.raw.specialattacksound);
-
-// TODO: uncomment for use
-//       backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
-//       backgroundsound.setLooping(true);
-//       backgroundsound.start();
-//       setupEqualizerFxAndUI(); //to equalize music that it works correctly
+        backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
+        backgroundsound.setLooping(true);
+        backgroundsound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                backgroundsound.start();
+            }
+        });
+        setupEqualizerFxAndUI(); //to equalize music that it works correctly
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
@@ -74,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         Constants.SCREEN_WIDTH = metrics.widthPixels;
         Constants.SCREEN_HEIGHT = metrics.heightPixels;
-        Constants.PLAYER_SIZE = (int) (Constants.SCREEN_WIDTH * Constants.PLAYER_PERCENTAGE_WIDTH / 100);
-        Constants.PLAYER_PERCENTAGE_HEIGHT = 100 * Constants.PLAYER_SIZE / Constants.SCREEN_HEIGHT;
+        Constants.PLAYER_SIZE = (int)(Constants.SCREEN_WIDTH*Constants.PLAYER_PERCENTAGE_WIDTH/100);
+        Constants.PLAYER_PERCENTAGE_HEIGHT = 100*Constants.PLAYER_SIZE/Constants.SCREEN_HEIGHT;
 
 
 
@@ -111,14 +110,14 @@ public class MainActivity extends AppCompatActivity {
         join_btn.setText(R.string.join);
         join_btn.setId(Constants.JOIN_BUTTON);
         join_btn.setTextSize(30);
-        join_btn.setTextColor(Color.rgb(250, 250, 250));
+        join_btn.setTextColor(Color.rgb(250,250,250));
         join_btn.setBackgroundResource(R.drawable.button);
         join_btn.setTypeface(typeface);
 
         create_btn.setText(R.string.create);
         create_btn.setId(Constants.CREATE_BUTTON);
         create_btn.setTextSize(30);
-        create_btn.setTextColor(Color.rgb(250, 250, 250));
+        create_btn.setTextColor(Color.rgb(250,250,250));
         create_btn.setBackgroundResource(R.drawable.button);
         create_btn.setTypeface(typeface);
 
@@ -126,13 +125,13 @@ public class MainActivity extends AppCompatActivity {
         startSceneUI.setVisibility(View.GONE);
 
         // Layout gameUI
-        RelativeLayout.LayoutParams joinParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
+        RelativeLayout.LayoutParams joinParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
 //        joinParams.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
         joinParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         joinParams.addRule(RelativeLayout.CENTER_VERTICAL);
         join_btn.setLayoutParams(joinParams);
 
-        RelativeLayout.LayoutParams createParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
+        RelativeLayout.LayoutParams createParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
         createParams.addRule(RelativeLayout.BELOW, Constants.JOIN_BUTTON);
         createParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         createParams.topMargin = 10;
@@ -147,17 +146,32 @@ public class MainActivity extends AppCompatActivity {
          *       Join Game SCENE UI         *
          ********************************** */
 
+        TextView textV = new TextView(this);
         EditText username = new EditText(this);
         EditText ip = new EditText(this);
         EditText port = new EditText(this);
         Button join_game_btn = new Button(this);    // Button for logging in to the server
         Button start_game_btn = new Button(this);    // Button for entering a game if logged in with server
 
+        textV.setTypeface(typefaceBandit);
         username.setTypeface(typeface);
         ip.setTypeface(typeface);
         port.setTypeface(typeface);
         join_game_btn.setTypeface(typeface);
         start_game_btn.setTypeface(typeface);
+
+        textV.setHint("Here you can join a created game...");
+//        textView.setBackgroundResource(R.drawable.);
+        textV.setTextSize(20);
+        textV.setTextColor(Color.DKGRAY);
+        textV.setMovementMethod(ScrollingMovementMethod.getInstance());
+        textV.setId(Constants.TEXT_V);
+
+        RelativeLayout.LayoutParams tV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/2, 3*Constants.SCREEN_HEIGHT/5); // TODO added
+        tV_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        tV_params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        tV_params.rightMargin = 10;
+        textV.setLayoutParams(tV_params);
 
         joinGameUI.setId(Constants.JOIN_GAME_UI);
         joinGameUI.setVisibility(View.GONE);
@@ -177,13 +191,13 @@ public class MainActivity extends AppCompatActivity {
         ip.setId(Constants.IP_ID);
 
         join_game_btn.setText(R.string.join);
-        join_game_btn.setTextColor(Color.rgb(250, 250, 250));
+        join_game_btn.setTextColor(Color.rgb(250,250,250));
         join_game_btn.setBackgroundResource(R.drawable.button);
         join_game_btn.setTextSize(btnTextSize);
         join_game_btn.setId(Constants.LOGIN_BTN);
 
         start_game_btn.setText(R.string.start);
-        start_game_btn.setTextColor(Color.rgb(250, 250, 250));
+        start_game_btn.setTextColor(Color.rgb(250,250,250));
         start_game_btn.setBackgroundResource(R.drawable.button);
         start_game_btn.setTextSize(btnTextSize);
         start_game_btn.setId(Constants.START_BTN);
@@ -193,27 +207,31 @@ public class MainActivity extends AppCompatActivity {
 
         RelativeLayout.LayoutParams user_params = new RelativeLayout.LayoutParams(600, 200);
 //        user_params.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
-        user_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//        user_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        user_params.topMargin = Constants.SCREEN_HEIGHT/20;
+        user_params.leftMargin = 20;
         username.setLayoutParams(user_params);
 
         RelativeLayout.LayoutParams ip_params = new RelativeLayout.LayoutParams(600, 200);
-        ip_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//        ip_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         ip_params.addRule(RelativeLayout.BELOW, Constants.USERNAME_ID);
+        ip_params.leftMargin = 20;
         ip.setLayoutParams(ip_params);
 
         RelativeLayout.LayoutParams port_params = new RelativeLayout.LayoutParams(600, 200);
-        port_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//        port_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         port_params.addRule(RelativeLayout.BELOW, Constants.IP_ID);
+        port_params.leftMargin = 20;
         port.setLayoutParams(port_params);
 
-        RelativeLayout.LayoutParams enter_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
+        RelativeLayout.LayoutParams enter_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
         enter_params.leftMargin = 10;
         enter_params.bottomMargin = 10;
         enter_params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         enter_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         join_game_btn.setLayoutParams(enter_params);
 
-        RelativeLayout.LayoutParams start_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
+        RelativeLayout.LayoutParams start_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
         start_params.rightMargin = 10;
         start_params.bottomMargin = 10;
         start_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -221,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
         start_game_btn.setLayoutParams(start_params);
 
         //add button and edittext to loginUI
+        joinGameUI.addView(textV);
         joinGameUI.addView(username);
         joinGameUI.addView(ip);
         joinGameUI.addView(port);
@@ -253,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setMovementMethod(ScrollingMovementMethod.getInstance());
         textView.setId(Constants.TEXT_VIEW);
 
-        RelativeLayout.LayoutParams textV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 2, 3 * Constants.SCREEN_HEIGHT / 5); // TODO added
+        RelativeLayout.LayoutParams textV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/2, 3*Constants.SCREEN_HEIGHT/5); // TODO added
         textV_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         textV_params.addRule(RelativeLayout.CENTER_IN_PARENT);
         textV_params.rightMargin = 10;
@@ -272,12 +291,12 @@ public class MainActivity extends AppCompatActivity {
         usrname.setLayoutParams(usr_params);
 
         create_game_btn.setText(R.string.create);
-        create_game_btn.setTextColor(Color.rgb(250, 250, 250));
+        create_game_btn.setTextColor(Color.rgb(250,250,250));
         create_game_btn.setBackgroundResource(R.drawable.button);
         create_game_btn.setTextSize(btnTextSize);
         create_game_btn.setId(Constants.CREATE2_BUTTON);
 
-        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
+        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
         params1.leftMargin = 10;
         params1.bottomMargin = 10;
         params1.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -285,18 +304,21 @@ public class MainActivity extends AppCompatActivity {
         create_game_btn.setLayoutParams(params1);
 
         start_game_btn2.setText(R.string.start);
-        start_game_btn2.setTextColor(Color.rgb(250, 250, 250));
+        start_game_btn2.setTextColor(Color.rgb(250,250,250));
         start_game_btn2.setBackgroundResource(R.drawable.button);
         start_game_btn2.setTextSize(btnTextSize);
         start_game_btn2.setId(Constants.START2_BTN);
         start_game_btn2.setEnabled(false);
 
-        RelativeLayout.LayoutParams start2_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 6);
+        RelativeLayout.LayoutParams start2_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
         start2_params.rightMargin = 10;
         start2_params.bottomMargin = 10;
         start2_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         start2_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         start_game_btn2.setLayoutParams(start2_params);
+
+
+
 
 
         createGameUI.addView(textView);
@@ -332,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
         // Layout gameUI
         //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(175,175);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Constants.PLAYER_SIZE, Constants.PLAYER_SIZE);
-        params.setMargins(12, 8, 12, 8); // TODO: what does this do??
+        params.setMargins(12,8,12,8); // TODO: what does this do??
 
         super_btn.setLayoutParams(params);
         att_btn.setLayoutParams(params);
@@ -376,6 +398,7 @@ public class MainActivity extends AppCompatActivity {
         gameOverSceneUI.setId(Constants.GAME_OVER_UI);
         gameOverSceneUI.setVisibility(View.GONE);
         gameOverSceneUI.setGravity(Gravity.CENTER);
+
 
 
         //add views to game
@@ -425,18 +448,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     @Override
     protected void onStop() {
         super.onStop();
-        KryoClient.close(); // TODO: test this, newly added
+        KryoClient.close();
 
-/*        if (backgroundsound != null) {
+        if (backgroundsound != null) {
             backgroundsound.stop();
             backgroundsound.release();
             backgroundsound = null;
-        }*/
+        }
 
         // stop the server
         stopService(new Intent(this, KryoServer.class));
@@ -444,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
+ @Override
     protected void onResume() {
         super.onResume();
         if ((KryoClient.getClient() == null) || !KryoClient.getClient().isConnected()) {
