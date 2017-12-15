@@ -264,10 +264,6 @@ public class GamePlayScene implements Scene {
                 LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                 gameUI.setVisibility(View.GONE);
                 btn_active = false;
-                specialattacksound.release();
-                attacksound.release();
-                specialattacksound = null;
-                attacksound = null;
             }
         });
         new_game = true;

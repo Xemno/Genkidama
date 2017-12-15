@@ -283,7 +283,7 @@ public class Player implements GameObject {
 
         /*if(currentHealth == 0){
             isLoser = true;
-        }
+        }*/
 
         old_point = new_point;
 

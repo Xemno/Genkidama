@@ -22,6 +22,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.engine.GameEngine;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.Network;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.CreateGameScene;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GameOverScene;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GamePlayScene;
 import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.SceneManager;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
