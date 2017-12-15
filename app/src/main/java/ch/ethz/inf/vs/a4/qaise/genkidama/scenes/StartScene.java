@@ -134,8 +134,6 @@ public class StartScene implements Scene {
         coinAnimation.setWhereToDraw(right + 20, (bottom - top) - 30);
         coinAnimation.draw(canvas);
 
-        anim1.draw(canvas);
-
     }
 
     @Override

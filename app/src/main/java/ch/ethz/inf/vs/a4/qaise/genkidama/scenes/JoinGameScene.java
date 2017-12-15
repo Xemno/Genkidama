@@ -55,8 +55,8 @@ public class JoinGameScene implements Scene {
                 activity, R.drawable.color_pattern_clone_32,
                 32, 32,
                 23,
-                Constants.SCREEN_WIDTH/2,
-                Constants.SCREEN_HEIGHT/2,4);
+                Constants.SCREEN_WIDTH - 32*4 - 25,
+                25,4);
         loadAnimation.setFrameDuration(50);
     }
 
@@ -249,8 +249,8 @@ public class JoinGameScene implements Scene {
             Toast.makeText(activity.getApplication(), "Invalid IP format!", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (!isPort(port)) {
-            Toast.makeText(activity.getApplication(), "Invalid Port! Only numbers allowed", Toast.LENGTH_LONG).show();
+        if (!isPort(port) || Integer.parseInt(port) < 1024 || Integer.parseInt(port) > 65535) {
+            Toast.makeText(activity.getApplication(), "Invalid Port or not in range of [1024, 65535].", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -272,7 +272,7 @@ public class JoinGameScene implements Scene {
 
     public static boolean isPort(String str)
     {
-        return str.matches("\\d+");
+        return str.matches("(\\d+)");
     }
 
     public static boolean isIP(String str)
