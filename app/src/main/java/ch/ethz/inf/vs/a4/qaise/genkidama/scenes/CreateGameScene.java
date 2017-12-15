@@ -51,11 +51,11 @@ public class CreateGameScene implements Scene{
     private boolean serviceStarted = false;
     private boolean clientConnect = false;
     private boolean setEnabled = false;
-    private boolean loadAnimating = false;
+//    private boolean loadAnimating = false;
 
 
     private Drawable genkidamaLogo;
-    private Animation loadingAnimation;
+//    private Animation loadingAnimation;
 
 
     public CreateGameScene(Activity activity) {
@@ -73,13 +73,13 @@ public class CreateGameScene implements Scene{
         left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
         bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
 
-        loadingAnimation = new Animation(
-                activity, R.drawable.loading_32,
-                32, 32,
-                16,
-                Constants.SCREEN_WIDTH - 32*4 - 50,
-                50, 4);
-        loadingAnimation.setFrameDuration(50);
+//        loadingAnimation = new Animation(
+//                activity, R.drawable.loading_32,
+//                32, 32,
+//                16,
+//                Constants.SCREEN_WIDTH - 32*4 - 50,
+//                50, 4);
+//        loadingAnimation.setFrameDuration(50);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class CreateGameScene implements Scene{
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    loadAnimating = true;
+//                    loadAnimating = true;
                     KryoClient.getInstance().connect();
                 }
             }).start();
@@ -178,7 +178,7 @@ public class CreateGameScene implements Scene{
                         textView.append("Player joined the game. \nPlayers = " + playersSize + "\n");
                     }
 
-                    if (playersSize > 1) loadAnimating = false;
+//                    if (playersSize > 1) loadAnimating = false;
 
                 }
             });
@@ -194,7 +194,7 @@ public class CreateGameScene implements Scene{
         genkidamaLogo.setBounds(left, top, right, bottom);
         genkidamaLogo.draw(canvas);
 
-        if (serviceStarted && loadAnimating) loadingAnimation.draw(canvas);
+//        if (serviceStarted && loadAnimating) loadingAnimation.draw(canvas); // TODO: add
     }
 
     @Override

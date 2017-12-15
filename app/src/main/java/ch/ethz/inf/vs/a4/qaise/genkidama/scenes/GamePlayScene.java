@@ -74,6 +74,10 @@ public class GamePlayScene implements Scene {
     public GamePlayScene(Activity activity) {
         this.activity = activity;
 
+        fixDist = FLOOR_CEILING_DIST_RELATIVE*SCREEN_HEIGHT/100;
+
+
+
         old_point = new PointF(0,0);
     }
 

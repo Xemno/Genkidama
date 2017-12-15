@@ -134,8 +134,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         // TODO: test this, should be done always once
         if (player.id == Constants.ID) { // if my palyer is added, initialize the new_point in GamePlayerScene
             GamePlayScene.setNew_point(player.new_point);
-            Log.i(TAG, "MYPLAYER with ID " + player.id + " is added to the game");
-        }
+            Log.i(TAG, "MYPLAYER " + player.name + " with ID " + player.id + " is added to the game");
+        } else
+            Log.i(TAG, "PLAYER " + player.name + " with ID " + player.id + " is added to the game");
+
 
 //        if (GamePanel.manager.ACTIVE_SCENE == Constants.CREATE_GAME_SCENE) {
 //            CreateGameScene.updateTextView(player.id, player.name);
@@ -159,6 +161,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             player.update(new PointF((float) Constants.SCREEN_WIDTH, y));
         else
             player.update(new PointF(x, y));
+
+        Log.i(TAG, "PLAYER " + player.name + " with ID " + player.id + " updated " + "(" + player.new_point.x + ", " + player.new_point.y + ")");
+
     }
 
     public static void attackPlayer(Network.Attack msg) {
