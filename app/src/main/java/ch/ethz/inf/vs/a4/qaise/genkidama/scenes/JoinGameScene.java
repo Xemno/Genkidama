@@ -214,7 +214,7 @@ public class JoinGameScene implements Scene {
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.rgb(240,230,140)); // BACKGROUND color
 
-//        if (checkConnection) loadAnimation.draw(canvas); // TODO: uncomment
+        if (checkConnection) loadAnimation.draw(canvas);
 
     }
 

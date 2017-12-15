@@ -17,8 +17,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
-import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
-import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.BaseFloor;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
@@ -50,8 +48,6 @@ public class GamePlayScene implements Scene {
 
     private boolean sendOnce = true;
 
-    private BaseFloor floor;
-
     private Drawable layer1, layer2, layer3, layer4, layer5, layer6;
 
     private boolean btn_active = false;
@@ -75,8 +71,6 @@ public class GamePlayScene implements Scene {
         this.activity = activity;
 
         fixDist = FLOOR_CEILING_DIST_RELATIVE*SCREEN_HEIGHT/100;
-
-
 
         old_point = new PointF(0,0);
     }
@@ -129,12 +123,26 @@ public class GamePlayScene implements Scene {
                             if (attacksound == null)  {
                                 attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
                                 attacksound.setLooping(false);
+                                attacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                    @Override
+                                    public void onPrepared(MediaPlayer mediaPlayer) {
+                                        attacksound.start();
+                                    }
+                                });
+                            } else {
+
+                                if (attacksound.isPlaying()) attacksound.pause();
+                                attacksound.seekTo(0);
+                                attacksound.start();
+//                                attacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                                    @Override
+//                                    public void onPrepared(MediaPlayer mediaPlayer) {
+//                                        attacksound.start();
+//                                    }
+//                                });
                             }
                             // TODO: why not moving this to constructor
 //                            attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
-
-                            attacksound.reset();
-                            attacksound.start();
 
 
                             //start sound for attackbutton 
@@ -157,15 +165,6 @@ public class GamePlayScene implements Scene {
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-//                            if(specialattacksound != null){specialattacksound.release();}
-
-                            if (specialattacksound == null) {
-                                specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
-                                specialattacksound.setLooping(false);
-                            }
-//                            specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
-                            specialattacksound.reset();
-                            specialattacksound.start();
 
                             if (players.size() > 1) {
                                 for (Player enemy : players.values()) {
@@ -174,8 +173,7 @@ public class GamePlayScene implements Scene {
                             }
                         }
                     });
-//                    specialattacksound.release();
-//                    specialattacksound = null;
+
 
 
                 }
