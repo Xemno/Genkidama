@@ -53,19 +53,11 @@ public class GamePlayScene implements Scene {
     private boolean btn_active = false;
     private boolean new_game = false;
 
-    // TODO: fix tsound...
-//    MediaPlayer attacksound= new MediaPlayer();
-//    MediaPlayer specialattacksound= new MediaPlayer();
     MediaPlayer attacksound;
     MediaPlayer specialattacksound;
 
     private float touch_old, touch_new; // used for movement detection. DO NOT confuse with old_point and new_point
 
-
-//    private int frameLengthInMilliseconds = 50;
-//    private long lastFrameChangeTime = 0;
-//    private int dx = 0;
-//    private boolean fromLeftToRight = true;
 
     public GamePlayScene(Activity activity) {
         this.activity = activity;
@@ -117,9 +109,6 @@ public class GamePlayScene implements Scene {
                     att_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // TODO: we always destroy and create the same resoruce for the sound...!!
-//                            if(attacksound != null){attacksound.release();}
-
                             if (attacksound == null)  {
                                 attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
                                 attacksound.setLooping(false);
@@ -134,12 +123,6 @@ public class GamePlayScene implements Scene {
                                 if (attacksound.isPlaying()) attacksound.pause();
                                 attacksound.seekTo(0);
                                 attacksound.start();
-//                                attacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                                    @Override
-//                                    public void onPrepared(MediaPlayer mediaPlayer) {
-//                                        attacksound.start();
-//                                    }
-//                                });
                             }
                             // TODO: why not moving this to constructor
 //                            attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
@@ -165,6 +148,21 @@ public class GamePlayScene implements Scene {
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+
+                            if (specialattacksound == null)  {
+                                specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
+                                specialattacksound.setLooping(false);
+                                specialattacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                    @Override
+                                    public void onPrepared(MediaPlayer mediaPlayer) {
+                                        specialattacksound.start();
+                                    }
+                                });
+                            } else {
+                                if (specialattacksound.isPlaying()) specialattacksound.pause();
+                                specialattacksound.seekTo(0);
+                                specialattacksound.start();
+                            }
 
                             if (players.size() > 1) {
                                 for (Player enemy : players.values()) {
