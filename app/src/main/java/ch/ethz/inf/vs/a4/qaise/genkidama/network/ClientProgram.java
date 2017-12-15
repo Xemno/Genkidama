@@ -10,6 +10,7 @@ import com.esotericsoftware.kryonet.Listener;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.CreateGameScene;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.CLIENT_CONNECTED;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIST_RELATIVE;
@@ -119,6 +120,9 @@ public class ClientProgram extends Listener {
     public void disconnected (Connection connection) {
         Log.i(TAG, "Disconnected");
         CLIENT_CONNECTED = false;
+        CreateGameScene.clientConnect = false; // TODO: test this
+        CreateGameScene.setEnabled = false; // TODO: test this
+
     }
 
 }

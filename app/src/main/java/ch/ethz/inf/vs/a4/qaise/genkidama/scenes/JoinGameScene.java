@@ -22,6 +22,8 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isIP;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isPort;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isValidString;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.myPlayer;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
 
 /**
  * Created by Qais on 13-Dec-17.
@@ -125,15 +127,14 @@ public class JoinGameScene implements Scene {
                         @Override
                         public void onClick(View view) {
 
-                            if (GamePanel.myPlayer() != null /*&& players.size() > 1*/) { // if my player has been added by the server, terminate
+                            // TODO: test this
+                            if (GamePanel.myPlayer() != null && players.size() > 1) { // if my player has been added by the server, terminate
                                 nextScene = Constants.GAMEPLAY_SCENE;
-                                terminate();   // TODO: we want to wait for other players too
+                                terminate();
                             } else {
-                                Toast.makeText(activity.getApplication(), "myPlayer not added", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\n myPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_LONG).show();
                                 if (KryoClient.getClient().isConnected()) {
-//                                    KryoClient.login();
-                                    //TODO: test to termiante() here, since already connected
-                                    Toast.makeText(activity.getApplication(), "login message sent again", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(activity.getApplication(), "no connection", Toast.LENGTH_LONG).show();
                                 }

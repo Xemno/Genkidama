@@ -52,8 +52,8 @@ public class CreateGameScene implements Scene{
 
     private boolean btn_active = false;
     private boolean serviceStarted = false;
-    private boolean clientConnect = false;
-    private boolean setEnabled = false;
+    public static boolean clientConnect = false; // TODO: is set o staic
+    public static boolean setEnabled = false; // TODO: is set o staic
     private boolean loadAnimating = false;
 
 
@@ -114,7 +114,7 @@ public class CreateGameScene implements Scene{
                                 serviceStarted = true;
 
                             } else if(serviceStarted) {
-                                Toast.makeText(activity.getApplication(), "Service already started!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -124,9 +124,10 @@ public class CreateGameScene implements Scene{
                         @Override
                         public void onClick(View view) {
 
-                            if (GamePanel.myPlayer() != null /*&& players.size() > 1*/) { // if my player has been added by the server, terminate
+                            // TODO: test this
+                            if (GamePanel.myPlayer() != null && players.size() > 1) { // if my player has been added by the server, terminate
                                 nextScene = Constants.GAMEPLAY_SCENE;
-                                terminate();   // TODO: we want to wait for other players too
+                                terminate();
                             } else {
                                 Toast.makeText(activity.getApplication(), "myPlayer not added", Toast.LENGTH_LONG).show();
                                 if (KryoClient.getClient().isConnected()) {
@@ -175,8 +176,6 @@ public class CreateGameScene implements Scene{
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-
 
                     if (players.size() < playersSize) {
                         playersSize--;

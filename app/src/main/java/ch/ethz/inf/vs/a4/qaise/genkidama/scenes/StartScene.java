@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
@@ -87,6 +88,8 @@ public class StartScene implements Scene {
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    TextView textView = (TextView) activity.findViewById(Constants.TEXT_V);
+                                    textView.setHint("Waiting for some action...");
                                     nextScene = Constants.Join_GAME_SCENE;
                                     terminate();
                                 }
@@ -102,6 +105,8 @@ public class StartScene implements Scene {
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    TextView textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
+                                    textView.setHint("Waiting for some action...");
                                     nextScene = Constants.CREATE_GAME_SCENE;
                                     terminate();
                                 }

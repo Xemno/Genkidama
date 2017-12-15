@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
@@ -23,8 +24,10 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.CLIENT_CONNECTED;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIST_RELATIVE;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.ID;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_HEALTH;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.fixDist;
@@ -54,9 +57,6 @@ public class GamePlayScene implements Scene {
 
     private boolean btn_active = false;
     private boolean new_game = false;
-
-    MediaPlayer attacksound;
-    MediaPlayer specialattacksound;
 
     private float touch_old, touch_new; // used for movement detection. DO NOT confuse with old_point and new_point
 
@@ -177,7 +177,7 @@ public class GamePlayScene implements Scene {
             });
         }
 
-        if (!CLIENT_CONNECTED)  {
+        if (!CLIENT_CONNECTED)  { // TODO: test this
             nextScene = Constants.START_SCENE;
             Toast.makeText(activity.getApplication(), "Disconnected", Toast.LENGTH_LONG).show();
             terminate();
@@ -271,10 +271,6 @@ public class GamePlayScene implements Scene {
                 LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                 gameUI.setVisibility(View.GONE);
                 btn_active = false;
-                specialattacksound.release();
-                attacksound.release();
-                specialattacksound = null;
-                attacksound = null;
             }
         });
         new_game = true;
