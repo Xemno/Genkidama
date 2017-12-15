@@ -25,6 +25,7 @@ public class Animation {
     // As long as the ratio doesn't distort the sprite too much
     private int frameWidth;
     private int frameHeight;
+    private float frameWidthHit;
 
     boolean activate = false;
 
@@ -53,12 +54,13 @@ public class Animation {
     private RectF whereToDraw;
     private float x, y;
 
+    private RectF hitbox;
 
     Paint paint;
 
     // Animation from a one-dimensional sprite sheet
     public Animation(Context context, int drawable, int frameWidth,
-                     int frameHeight, int frameCount, float x, float y, int scaleFactor) {
+                     int frameHeight, int frameCount, float x, float y, int scaleFactor, float scaleHit) {
 
         if (scaleFactor < 1) scaleFactor = 1;
 
@@ -68,9 +70,11 @@ public class Animation {
         this.frameCount = frameCount;
         this.frameWidth = scaleFactor*frameWidth;
         this.frameHeight = scaleFactor*frameHeight;
+        this.frameWidthHit = scaleHit*frameWidth;
 
         frameToDraw = new Rect(0,0, this.frameWidth, this.frameHeight);
         whereToDraw = new RectF(x, y, x + this.frameWidth, y + this.frameHeight);
+        hitbox = new RectF(x + this.frameWidthHit/4, y, x + 3*this.frameWidthHit/4, y + this.frameHeight);
 
         paint = new Paint();
 
@@ -157,6 +161,7 @@ public class Animation {
     }
 
     public void draw(Canvas canvas){
+        canvas.drawRect(hitbox, paint);
         canvas.drawBitmap(
                 this.resource(),
                 this.getCurrentFrame(),
@@ -170,8 +175,12 @@ public class Animation {
     }
 
     public void setWhereToDraw(float x, float y) {
-
         whereToDraw.set(new RectF(x - frameWidth/2, y - frameHeight, x + frameWidth/2, y));
+        hitbox.set(new RectF(x - frameWidthHit/4, y - frameHeight, x + frameWidthHit/4, y));
+    }
+
+    public RectF getHitbox() {
+        return hitbox;
     }
 
     private Bitmap resource() {
