@@ -119,14 +119,10 @@ public class GamePlayScene implements Scene {
                                     }
                                 });
                             } else {
-
                                 if (attacksound.isPlaying()) attacksound.pause();
                                 attacksound.seekTo(0);
                                 attacksound.start();
                             }
-                            // TODO: why not moving this to constructor
-//                            attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
-
 
                             //start sound for attackbutton 
                             if (players.size() > 1) {
@@ -138,11 +134,7 @@ public class GamePlayScene implements Scene {
                         }
 
                     } );
-                    // TODO: why not moving this to terminate() ? this is released often times..
-//                    attacksound.release();
-//                    attacksound = null;
 
-                    
 
 
                     super_btn.setOnClickListener(new View.OnClickListener() {

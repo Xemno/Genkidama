@@ -15,6 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
@@ -52,6 +55,9 @@ public class CreateGameScene implements Scene{
     private boolean clientConnect = false;
     private boolean setEnabled = false;
     private boolean loadAnimating = false;
+
+
+    HashSet<String> names = new HashSet<>();
 
 
     private Drawable genkidamaLogo;
@@ -170,15 +176,35 @@ public class CreateGameScene implements Scene{
                 @Override
                 public void run() {
 
+
+
                     if (players.size() < playersSize) {
                         playersSize--;
-                        textView.append("Player left the game. \nPlayers = " + playersSize + "\n");
+                        for (Player p : players.values()) {
+                            if (names.contains(p.name)) {
+                                names.remove(p.name);
+                                textView.append(p.name + " left the game.\n");
+                            }
+                        }
+
                     } else if (players.size() > playersSize) {
                         playersSize++;
-                        textView.append("Player joined the game. \nPlayers = " + playersSize + "\n");
+                        for (Player p : players.values()) {
+                            if (!names.contains(p.name)) {
+                                names.add(p.name);
+                                textView.append(p.name + " joined the game.\n");
+                            }
+                        }
                     }
 
                     if (playersSize > 1) loadAnimating = false;
+
+                    textView.append("Players [" + playersSize + "]: [|");
+                    for (Player player : players.values()) {
+                        names.add(player.name);
+                        textView.append(player.name + "|");
+                    }
+                    textView.append("]\n");
 
                 }
             });

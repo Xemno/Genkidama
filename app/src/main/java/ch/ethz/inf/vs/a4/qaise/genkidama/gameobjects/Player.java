@@ -76,13 +76,14 @@ public class Player implements GameObject {
 
     public boolean walkInX = false; // false = -x, true = +x
 
-    public Player(int id, PointF point, int side) {
+    public Player(int id, String name, PointF point, int side) {
 
         /* Initialize settings of this player */
         //|--------------------------------------------|//
         this.new_point = point;
         this.old_point = point;
         this.id = id;
+        this.name = name;
         this.maxHealth = MAX_HEALTH;
         this.currentHealth = MAX_HEALTH;
         this.maxCharge = MAX_CHARGE;

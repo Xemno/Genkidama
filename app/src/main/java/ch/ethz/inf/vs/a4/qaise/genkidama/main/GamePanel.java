@@ -131,22 +131,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static void addPlayer (Player player) {
         players.put(player.id, player);
 
-        // TODO: test this, should be done always once
         if (player.id == Constants.ID) { // if my palyer is added, initialize the new_point in GamePlayerScene
             GamePlayScene.setNew_point(player.new_point);
             Log.i(TAG, "MYPLAYER " + player.name + " with ID " + player.id + " is added to the game");
         } else
             Log.i(TAG, "PLAYER " + player.name + " with ID " + player.id + " is added to the game");
 
-
-//        if (GamePanel.manager.ACTIVE_SCENE == Constants.CREATE_GAME_SCENE) {
-//            CreateGameScene.updateTextView(player.id, player.name);
-//            try {
-//                manager.getCurrentScene().upda
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
 
     public static void updatePlayer(Network.UpdatePlayer msg) {

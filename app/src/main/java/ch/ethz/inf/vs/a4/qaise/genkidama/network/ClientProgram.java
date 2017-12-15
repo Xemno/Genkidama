@@ -66,7 +66,7 @@ public class ClientProgram extends Listener {
                 return;
             }
 
-            GamePanel.addPlayer(new Player(msg.id, new PointF(msg.x, msg.y), msg.side));
+            GamePanel.addPlayer(new Player(msg.id, msg.name, new PointF(msg.x, msg.y), msg.side));
             return;
         }
 

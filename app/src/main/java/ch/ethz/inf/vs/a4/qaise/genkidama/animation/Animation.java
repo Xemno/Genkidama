@@ -84,7 +84,6 @@ public class Animation {
         int imageWidth = options.outWidth;  // should be same as frameWidth, so we don't use it
         String imageType = options.outMimeType;
 
-
         /*---- 2. Load a Scaled Down Version into Memory ----*/
         bitmap = decodeSampledBitmapFromResource(context.getResources(), drawable, frameWidth, frameHeight);
         bitmap = Bitmap.createScaledBitmap(bitmap, this.frameWidth*frameCount, this.frameHeight,false);
@@ -94,7 +93,6 @@ public class Animation {
         bitmap = BitmapFactory.decodeResource(context.getResources(), drawable);
         bitmap = Bitmap.createScaledBitmap(bitmap, this.frameWidth * frameCount, this.frameHeight,false);
         */
-
 
     }
 
