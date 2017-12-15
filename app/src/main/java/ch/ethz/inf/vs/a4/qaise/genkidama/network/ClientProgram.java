@@ -11,6 +11,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.CLIENT_CONNECTED;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIST_RELATIVE;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.ID;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
@@ -25,6 +26,7 @@ public class ClientProgram extends Listener {
     private static final String TAG = "#ClientProgram# ";
 
     public void connected (Connection connection) {
+        CLIENT_CONNECTED = true;
         Log.i(TAG, "Connected with " + connection.getRemoteAddressTCP().getHostString());
     }
 
@@ -89,7 +91,6 @@ public class ClientProgram extends Listener {
         }
 
         if (object instanceof Network.RemovePlayer) {
-            // TODO: return if player not in list
             Network.RemovePlayer msg = (Network.RemovePlayer) object;
             GamePanel.removePlayer(msg.id);
             return;
@@ -99,6 +100,7 @@ public class ClientProgram extends Listener {
 
     public void disconnected (Connection connection) {
         Log.i(TAG, "Disconnected");
+        CLIENT_CONNECTED = false;
     }
 
 }

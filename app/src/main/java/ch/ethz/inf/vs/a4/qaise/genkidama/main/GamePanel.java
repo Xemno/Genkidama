@@ -43,8 +43,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private GameEngine thread;
     private static SceneManager manager;
 
-    private static MediaPlayer attacksound;
-    private static MediaPlayer specialattacksound;
+    public static MediaPlayer attacksound, specialattacksound;
     /*
      * This class sets up the game and the server updates the Players from this class
      */
@@ -183,8 +182,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
             attacker.attackAnimation();
             victim.blockAnimation();
-            //TODO: music here for attack
-
 
             if (attacksound == null)  {
                 attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
@@ -202,7 +199,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 attacksound.start();
             }
 
-            //TODO: end changemusic
             attacker.chargebar.update();
             victim.healthbar.update();}
         else { // special attack
@@ -216,7 +212,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 victim.setCurrentHealth(0);
             attacker.specialAttackAnimation();
             victim.blockAnimation();
-            //todo here specialattackusic
+
             if (specialattacksound == null)  {
                 specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
                 specialattacksound.setLooping(false);
@@ -231,7 +227,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 specialattacksound.seekTo(0);
                 specialattacksound.start();
             }
-            //Todo music end
+
 
             attacker.chargebar.update();
             victim.healthbar.update();

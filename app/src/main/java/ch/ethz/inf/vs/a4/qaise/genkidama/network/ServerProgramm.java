@@ -91,7 +91,6 @@ public class ServerProgramm extends Listener {
             }
 
             Network.MovePlayer msg = (Network.MovePlayer) object;
-
             Network.UpdatePlayer update = new Network.UpdatePlayer();
             update.id = msg.id;
             update.x = msg.x;
@@ -114,8 +113,6 @@ public class ServerProgramm extends Listener {
             }
 
             Network.AttackPlayer msg = (Network.AttackPlayer) object;
-
-
             Network.Attack attack = new Network.Attack();
             attack.idA = msg.idA;
             attack.idE = msg.idE;

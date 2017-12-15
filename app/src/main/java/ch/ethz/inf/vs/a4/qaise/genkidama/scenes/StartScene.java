@@ -61,7 +61,6 @@ public class StartScene implements Scene {
                 Constants.SCREEN_HEIGHT/3,5, 5, false);
         coinAnimation.setFrameDuration(65);
 
-
     }
 
 

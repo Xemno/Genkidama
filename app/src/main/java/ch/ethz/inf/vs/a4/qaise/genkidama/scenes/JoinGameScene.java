@@ -88,7 +88,6 @@ public class JoinGameScene implements Scene {
                         @Override
                         public void onClick(View view) {
 
-
                             if(checkInputs()) {
                                 if (!checkConnection) {
                                     activity.runOnUiThread(new Runnable() {
@@ -117,8 +116,6 @@ public class JoinGameScene implements Scene {
 
                                 setEnabled = true;
                                 checkConnection = true;
-                            } else {
-
                             }
 
                         }
@@ -141,13 +138,12 @@ public class JoinGameScene implements Scene {
                                     Toast.makeText(activity.getApplication(), "no connection", Toast.LENGTH_LONG).show();
                                 }
                             }
+
                         }
                     });
                 }
             });
         }
-
-
 
 
         if (KryoClient.getClient() != null) {

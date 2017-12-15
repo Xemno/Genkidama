@@ -38,7 +38,7 @@ public class Animation {
 
     // Start at the first frame
     private int currentFrame;
-    public boolean forward = true; // forward animation if true; backward animation if false
+    private boolean forward = true; // forward animation if true; backward animation if false
 
 
     // What time was it when we last changed frames
@@ -60,7 +60,8 @@ public class Animation {
 
     // Animation from a one-dimensional sprite sheet
     public Animation(Context context, int drawable, int frameWidth,
-                     int frameHeight, int frameCount, float x, float y, int scaleFactor, float scaleHit, boolean forward) {
+                     int frameHeight, int frameCount, float x, float y,
+                     int scaleFactor, float scaleHit, boolean forward) {
 
         if (scaleFactor < 1) scaleFactor = 1;
 
@@ -161,6 +162,7 @@ public class Animation {
                 }
             }
         }
+
         //update the left and right values of the source of
         //the next frame on the spritesheet
         frameToDraw.left = currentFrame * frameWidth;

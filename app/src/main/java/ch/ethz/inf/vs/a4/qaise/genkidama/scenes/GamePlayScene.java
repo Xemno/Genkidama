@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
@@ -23,6 +24,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.CLIENT_CONNECTED;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIST_RELATIVE;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.ID;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
@@ -46,15 +48,14 @@ public class GamePlayScene implements Scene {
     private PointF old_point;
     private boolean movingPlayer = false;
 
+    private int nextScene = 0;
+
     private boolean sendOnce = true;
 
     private Drawable layer1_5, layer6;
 
     private boolean btn_active = false;
     private boolean new_game = false;
-
-    MediaPlayer attacksound;
-    MediaPlayer specialattacksound;
 
     private float touch_old, touch_new; // used for movement detection. DO NOT confuse with old_point and new_point
 
@@ -92,8 +93,6 @@ public class GamePlayScene implements Scene {
             }
         }
 
-
-
         if (!btn_active) {
             activity.runOnUiThread(new Runnable() {
                 @Override
@@ -105,7 +104,6 @@ public class GamePlayScene implements Scene {
                     Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
                     btn_active = true;
 
-
                     att_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -116,12 +114,9 @@ public class GamePlayScene implements Scene {
                                     if (myPlayer().id != enemy.id) myPlayer().attack(enemy);
                                 }
                             }
-
-
                         }
 
                     } );
-
 
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -139,6 +134,12 @@ public class GamePlayScene implements Scene {
 
                 }
             });
+        }
+
+        if (!CLIENT_CONNECTED)  {
+            nextScene = Constants.START_SCENE;
+            Toast.makeText(activity.getApplication(), "Disconnected", Toast.LENGTH_LONG).show();
+            terminate();
         }
     }
 
@@ -181,7 +182,6 @@ public class GamePlayScene implements Scene {
                             player.idle_leftAnimation();
                         }
                     }
-
                     player.draw(canvas); // changed this to check for null object
                 }
             }
@@ -205,7 +205,8 @@ public class GamePlayScene implements Scene {
                     layer6.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
                     layer6.draw(canvas);
 
-                    terminate(); // TODO: switch to gameoverscene
+                    nextScene = Constants.GAMEOVER_SCENE;
+                    terminate();
                 }
             }
 
@@ -217,7 +218,6 @@ public class GamePlayScene implements Scene {
         layer6.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
         layer6.draw(canvas);
 
-
     }
 
     @Override
@@ -228,14 +228,10 @@ public class GamePlayScene implements Scene {
                 LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                 gameUI.setVisibility(View.GONE);
                 btn_active = false;
-                specialattacksound.release();
-                attacksound.release();
-                specialattacksound = null;
-                attacksound = null;
             }
         });
         new_game = true;
-        SceneManager.ACTIVE_SCENE = Constants.GAMEOVER_SCENE;
+        SceneManager.ACTIVE_SCENE = nextScene;
     }
 
     @Override

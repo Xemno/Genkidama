@@ -455,6 +455,18 @@ public class MainActivity extends AppCompatActivity {
             backgroundsound = null;
         }
 
+        if (GamePanel.attacksound != null) {
+            GamePanel.attacksound.stop();
+            GamePanel.attacksound.release();
+            GamePanel.attacksound = null;
+        }
+
+        if (GamePanel.specialattacksound != null) {
+            GamePanel.specialattacksound.stop();
+            GamePanel.specialattacksound.release();
+            GamePanel.specialattacksound = null;
+        }
+
         // stop the server
         stopService(new Intent(this, KryoServer.class));
 
