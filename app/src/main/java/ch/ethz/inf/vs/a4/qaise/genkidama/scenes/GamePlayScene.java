@@ -58,8 +58,10 @@ public class GamePlayScene implements Scene {
     private boolean new_game = false;
 
     // TODO: fix tsound...
-    MediaPlayer attacksound= new MediaPlayer();
-    MediaPlayer specialattacksound= new MediaPlayer();
+//    MediaPlayer attacksound= new MediaPlayer();
+//    MediaPlayer specialattacksound= new MediaPlayer();
+    MediaPlayer attacksound;
+    MediaPlayer specialattacksound;
 
     private float touch_old, touch_new; // used for movement detection. DO NOT confuse with old_point and new_point
 
@@ -71,15 +73,6 @@ public class GamePlayScene implements Scene {
 
     public GamePlayScene(Activity activity) {
         this.activity = activity;
-
-        floor = new BaseFloor();
-        fixDist = floor.getFixHeight();
-
-/*        if (myPlayer() != null) { // can be null at his point
-            new_point = myPlayer().new_point;
-        } else {
-            new_point = new PointF(SCREEN_WIDTH/4, fixDist);
-        }*/
 
         old_point = new PointF(0,0);
     }
@@ -118,7 +111,7 @@ public class GamePlayScene implements Scene {
 
                     LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                     gameUI.setVisibility(View.VISIBLE);
-                    Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
+                    final Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
                     Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
                     btn_active = true;
 
@@ -127,11 +120,18 @@ public class GamePlayScene implements Scene {
                         @Override
                         public void onClick(View view) {
                             // TODO: we always destroy and create the same resoruce for the sound...!!
-                            if(attacksound != null){attacksound.release();}
+//                            if(attacksound != null){attacksound.release();}
 
+                            if (attacksound == null)  {
+                                attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+                                attacksound.setLooping(false);
+                            }
                             // TODO: why not moving this to constructor
-                            attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+//                            attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+
+                            attacksound.reset();
                             attacksound.start();
+
 
                             //start sound for attackbutton 
                             if (players.size() > 1) {
@@ -144,8 +144,8 @@ public class GamePlayScene implements Scene {
 
                     } );
                     // TODO: why not moving this to terminate() ? this is released often times..
-                    attacksound.release();
-                    attacksound = null;
+//                    attacksound.release();
+//                    attacksound = null;
 
                     
 
@@ -153,9 +153,14 @@ public class GamePlayScene implements Scene {
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(specialattacksound != null){specialattacksound.release();}
+//                            if(specialattacksound != null){specialattacksound.release();}
 
-                            specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
+                            if (specialattacksound == null) {
+                                specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
+                                specialattacksound.setLooping(false);
+                            }
+//                            specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
+                            specialattacksound.reset();
                             specialattacksound.start();
 
                             if (players.size() > 1) {
@@ -165,8 +170,8 @@ public class GamePlayScene implements Scene {
                             }
                         }
                     });
-                    specialattacksound.release();
-                    specialattacksound = null;
+//                    specialattacksound.release();
+//                    specialattacksound = null;
 
 
                 }
@@ -333,6 +338,10 @@ public class GamePlayScene implements Scene {
                 LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                 gameUI.setVisibility(View.GONE);
                 btn_active = false;
+                specialattacksound.release();
+                attacksound.release();
+                specialattacksound = null;
+                attacksound = null;
             }
         });
         new_game = true;

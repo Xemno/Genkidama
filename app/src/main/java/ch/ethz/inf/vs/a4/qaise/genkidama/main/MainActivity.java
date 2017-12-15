@@ -52,14 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
-       // attacksound=MediaPlayer.create(this,R.raw.attacksound);
-        //specialattacksound=MediaPlayer.create(this,R.raw.specialattacksound);
-
-// TODO: uncomment for use
-//       backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
-//       backgroundsound.setLooping(true);
-//       backgroundsound.start();
-//       setupEqualizerFxAndUI(); //to equalize music that it works correctly
+        backgroundsound = MediaPlayer.create(this,R.raw.loginmusic );
+        backgroundsound.setLooping(true);
+        backgroundsound.start();
+        setupEqualizerFxAndUI(); //to equalize music that it works correctly
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //  landscape mode
@@ -446,13 +442,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        KryoClient.close(); // TODO: test this, newly added
+        KryoClient.close();
 
-/*        if (backgroundsound != null) {
+        if (backgroundsound != null) {
             backgroundsound.stop();
             backgroundsound.release();
             backgroundsound = null;
-        }*/
+        }
 
         // stop the server
         stopService(new Intent(this, KryoServer.class));
