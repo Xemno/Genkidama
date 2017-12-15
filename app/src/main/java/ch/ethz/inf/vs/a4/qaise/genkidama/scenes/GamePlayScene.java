@@ -50,9 +50,7 @@ public class GamePlayScene implements Scene {
 
     private boolean sendOnce = true;
 
-    private BaseFloor floor;
-
-    private Drawable layer1, layer2, layer3, layer4, layer5, layer6;
+    private Drawable layer1_5, layer6;
 
     private boolean btn_active = false;
     private boolean new_game = false;
@@ -204,25 +202,9 @@ public class GamePlayScene implements Scene {
 //            }
 //        }
 
-        layer1 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1);
-        layer1.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        layer1.draw(canvas);
-
-        layer2 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer2);
-        layer2.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        layer2.draw(canvas);
-
-        layer3 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer3);
-        layer3.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        layer3.draw(canvas);
-
-        layer4 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer4);
-        layer4.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        layer4.draw(canvas);
-
-        layer5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer5);
-        layer5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-        layer5.draw(canvas);
+        layer1_5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1_5);
+        layer1_5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+        layer1_5.draw(canvas);
 
         // Draw players inbetween layer5 and layer6
         if (players.size() > 0) {
@@ -291,25 +273,9 @@ public class GamePlayScene implements Scene {
 
                     canvas.drawColor(Color.WHITE); // BACKGROUND color
 
-                    layer1 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1);
-                    layer1.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer1.draw(temp_canvas);
-
-                    layer2 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer2);
-                    layer2.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer2.draw(temp_canvas);
-
-                    layer3 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer3);
-                    layer3.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer3.draw(temp_canvas);
-
-                    layer4 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer4);
-                    layer4.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer4.draw(temp_canvas);
-
-                    layer5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer5);
-                    layer5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer5.draw(temp_canvas);
+                    layer1_5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1_5);
+                    layer1_5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+                    layer1_5.draw(temp_canvas);
 
                     for (Player pl : players.values()) { // draw all players. Cannot use players from above, because the loop stops when loser is found
                         if (pl != null) pl.draw(temp_canvas); // changed this to check for null object

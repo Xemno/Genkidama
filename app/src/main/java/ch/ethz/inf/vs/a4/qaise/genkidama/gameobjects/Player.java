@@ -46,23 +46,10 @@ public class Player implements GameObject {
     public boolean isCharged = false;
     public boolean isLoser = false;
 
-
-
-//    private Rect rectangle; // for collision detection
-    private int rectWidth, rectHight;
-    private int color;
-
     public PointF new_point, old_point;  // ###
 
     public HealthBar healthbar;
     public ChargeBar chargebar;
-
-    //Done LARA: variables
-    boolean block;
-    boolean attack;
-    boolean special_attack;
-    boolean is_dead;
-    //Done LARA
 
     // TODO: finish these animations, hitbox not yet right position
     public Animation animation;
@@ -89,6 +76,8 @@ public class Player implements GameObject {
         this.side = side; // Jela did this
         this.healthbar = new HealthBar(this);
         this.chargebar = new ChargeBar(this);
+        int scaleFactor = 8*Constants.SCREEN_WIDTH/1920;
+        float scaleHit = 8.f*Constants.SCREEN_WIDTH/1920;
         //|--------------------------------------------|//
 
 
@@ -97,7 +86,8 @@ public class Player implements GameObject {
                 R.drawable.knight_idle_right,
                 42, 42,
                 4,
-                point.x, point.y, 8);
+                point.x, point.y,
+                scaleFactor, scaleHit);
 //        idle_right.scaleBitmap(8);
         idle_right.forward = true;      // always true for right animations
 
@@ -106,7 +96,8 @@ public class Player implements GameObject {
                 R.drawable.knight_idle_left,
                 42, 42,
                 4,
-                point.x, point.y, 8);
+                point.x, point.y,
+                scaleFactor, scaleHit);
 //        idle_left.scaleBitmap(8);
         idle_left.forward = false;      // always false for left animations
 
@@ -116,7 +107,8 @@ public class Player implements GameObject {
                 R.drawable.knight_walk_right_42x42,
                 42, 42,
                 8,
-                point.x, point.y, 8);
+                point.x, point.y,
+                scaleFactor, scaleHit);
 //        walk_right.scaleBitmap(8);
         walk_right.forward = true;
 
@@ -125,7 +117,8 @@ public class Player implements GameObject {
                 R.drawable.knight_walk_left_42x42,
                 42, 42,
                 8,
-                point.x, point.y, 8);
+                point.x, point.y,
+                scaleFactor, scaleHit);
 //        walk_left.scaleBitmap(8);
         walk_left.forward = false;
 
@@ -133,7 +126,8 @@ public class Player implements GameObject {
         attack_left=new Animation(MainActivity.context,
                 R.drawable.knight_attack_left,
                 80,42,
-                10,point.x, point.y, 8);
+                10,point.x, point.y,
+                scaleFactor, scaleHit);
         attack_left.setFrameDuration(28);
         //attack_left.scaleBitmap(8);
         attack_left.forward=false;
@@ -141,7 +135,8 @@ public class Player implements GameObject {
         attack_right=new Animation(MainActivity.context,
                 R.drawable.knight_attack_right,
                 80, 42,
-                10, point.x, point.y, 8);
+                10, point.x, point.y,
+                scaleFactor, scaleHit);
         attack_right.setFrameDuration(28);
         attack_right.forward = true;
         //attack_right.scaleBitmap(8);
@@ -151,7 +146,7 @@ public class Player implements GameObject {
                 R.drawable.knight_block_left,
                 42,42,
                 7,point.x,point.y,
-                 8);
+                scaleFactor, scaleHit);
         block_left.setFrameDuration(40);
         //block_left.scaleBitmap(8);
         block_left.forward = false;
@@ -160,7 +155,7 @@ public class Player implements GameObject {
                 R.drawable.knight_block_right,
                 42,42,
                 7,point.x,point.y,
-                 8);
+                scaleFactor, scaleHit);
         block_right.setFrameDuration(40);
         block_right.forward = true;
         //block_right.scaleBitmap(8);
@@ -169,7 +164,7 @@ public class Player implements GameObject {
                 R.drawable.knight_death_left,
                 42,42,
                 9, point.x, point.y,
-                 8);
+                scaleFactor, scaleHit);
         //death_left.scaleBitmap(8);
         death_left.forward=false;
 
@@ -177,7 +172,7 @@ public class Player implements GameObject {
                 R.drawable.knight_death_right,
                 42,42,
                 9, point.x, point.y,
-                8);
+                scaleFactor, scaleHit);
         //death_right.scaleBitmap(8);
         death_right.forward = true;
 
@@ -185,7 +180,7 @@ public class Player implements GameObject {
                 R.drawable.knight_attack_left_special,
                 80,42,
                 10,point.x, point.y,
-                 8);
+                scaleFactor, scaleHit);
         special_attack_left.setFrameDuration(28);
         //attack_left.scaleBitmap(8);
         special_attack_left.forward=false;
@@ -194,7 +189,7 @@ public class Player implements GameObject {
                 R.drawable.knight_attack_right_special,
                 80, 42,
                 10, point.x, point.y,
-                 8);
+                scaleFactor, scaleHit);
         special_attack_right.setFrameDuration(28);
         special_attack_right.forward = true;
         //attack_right.scaleBitmap(8);
@@ -319,10 +314,6 @@ public class Player implements GameObject {
         this.currentHealth = this.currentHealth - damage;
     }
 
-    public void setColor (int color) {
-        this.color = color;
-    }
-
     public int getMaxHealth(){
         return maxHealth;
     }
@@ -353,6 +344,6 @@ public class Player implements GameObject {
 
     public boolean collidesWith(Player enemy){
         if (enemy == null) return false;
-        return RectF.intersects(animation.getWhereToDraw(), enemy.animation.getWhereToDraw());
+        return RectF.intersects(animation.getHitbox(), enemy.animation.getHitbox());
     }
 }
