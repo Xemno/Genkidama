@@ -60,7 +60,7 @@ public class JoinGameScene implements Scene {
                 32, 32,
                 23,
                 Constants.SCREEN_WIDTH - 32*4 - 25,
-                25,4, 4);
+                25,4, 4, false);
         loadAnimation.setFrameDuration(50);
     }
 
