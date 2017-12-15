@@ -19,6 +19,8 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_CHARGE;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_HEALTH;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 
 
 //TODO: NOT FINISHED
@@ -45,6 +47,7 @@ public class Player implements GameObject {
     private int currentCharge = 0;
     public boolean isCharged = false;
     public boolean isLoser = false;
+    public boolean reset = false;
 
     public PointF new_point, old_point;  // ###
 
@@ -278,9 +281,9 @@ public class Player implements GameObject {
         }
 
 
-        if(currentHealth == 0){
+        /*if(currentHealth == 0){
             isLoser = true;
-        }
+        }*/
 
         old_point = new_point;
 
@@ -313,6 +316,22 @@ public class Player implements GameObject {
 
     public void setCurrentCharge(int charge){
         currentCharge = charge;
+    }
+
+    public Animation getAnimation(){
+        return animation;
+    }
+
+    public void setAnimation(Animation animation){
+        this.animation = animation;
+    }
+
+    public void setWalkInX(boolean index){
+        walkInX = index;
+    }
+
+    public void setOld_point(PointF old_point){
+        this.old_point = old_point;
     }
 
     public HealthBar getHealthbar(){

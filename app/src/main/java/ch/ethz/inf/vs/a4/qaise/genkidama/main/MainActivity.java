@@ -30,6 +30,8 @@ import java.io.IOException;
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoServer;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.Scene;
+import ch.ethz.inf.vs.a4.qaise.genkidama.scenes.SceneManager;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
@@ -39,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static Context context;
     //declaration for sound here
-   private MediaPlayer backgroundsound;
-   //public static MediaPlayer attacksound;
-   //public static MediaPlayer specialattacksound;
-   //initialize mediaplayers here and used in gameplayscene
-   private Equalizer mEqualizer;
+    private MediaPlayer backgroundsound;
+    //public static MediaPlayer attacksound;
+    //public static MediaPlayer specialattacksound;
+    //initialize mediaplayers here and used in gameplayscene
+    private Equalizer mEqualizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -382,11 +384,13 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams restart_params = new RelativeLayout.LayoutParams(400, 200);
         restart_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         restartGame_btn.setLayoutParams(restart_params);
+        restartGame_btn.setBackgroundResource(R.drawable.button);
 
         RelativeLayout.LayoutParams login_params = new RelativeLayout.LayoutParams(400, 200);
         login_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         login_params.addRule(RelativeLayout.BELOW, Constants.RESTARTGAME_BTN);
         backToLogin_btn.setLayoutParams(login_params);
+        backToLogin_btn.setBackgroundResource(R.drawable.button);
 
         //add buttons to gameOverUI
         gameOverSceneUI.addView(restartGame_btn);
@@ -412,37 +416,37 @@ public class MainActivity extends AppCompatActivity {
     //to equalize music
 
     private void setupEqualizerFxAndUI() {
-      //create equalizer object and attach it with default priority 0
-      mEqualizer = new Equalizer(0, backgroundsound.getAudioSessionId());
-      mEqualizer.setEnabled(true);
-      short bands = mEqualizer.getNumberOfBands();
-      final short minEQLevel = mEqualizer.getBandLevelRange()[0];
-      final short maxEQLevel = mEqualizer.getBandLevelRange()[1];
+        //create equalizer object and attach it with default priority 0
+        mEqualizer = new Equalizer(0, backgroundsound.getAudioSessionId());
+        mEqualizer.setEnabled(true);
+        short bands = mEqualizer.getNumberOfBands();
+        final short minEQLevel = mEqualizer.getBandLevelRange()[0];
+        final short maxEQLevel = mEqualizer.getBandLevelRange()[1];
 
-      for (short i = 0; i < bands; i++) {
-       final short band = i;
-       SeekBar bar = new SeekBar(this);
-       bar.setMax(maxEQLevel - minEQLevel);
-       bar.setProgress(mEqualizer.getBandLevel(band));
-       bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-         mEqualizer.setBandLevel(band, (short) (progress + minEQLevel));
+        for (short i = 0; i < bands; i++) {
+            final short band = i;
+            SeekBar bar = new SeekBar(this);
+            bar.setMax(maxEQLevel - minEQLevel);
+            bar.setProgress(mEqualizer.getBandLevel(band));
+            bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                    mEqualizer.setBandLevel(band, (short) (progress + minEQLevel));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+
+            });
+        }
     }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
-    }
-
-   });
-  }
- }
 
     @Override
     protected void onStop() {

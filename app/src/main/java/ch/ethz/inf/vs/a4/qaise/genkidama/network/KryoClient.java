@@ -55,7 +55,7 @@ public class KryoClient {
 
     public static void attack(Player enemy, int damage) {
         if (client != null && client.isConnected()) {
-            new AttackMessage().execute(enemy.id, damage, 0);
+            new AttackMessage().execute(enemy.id, damage);
         }
     }
 
@@ -72,6 +72,10 @@ public class KryoClient {
         Log.i(TAG, "Login message sent");
     }
 
+    public static void playAgain(int ans) {
+        new PlayAgainMessage().execute(ans);
+    }
+
     private static class AttackMessage extends AsyncTask<Integer, int[], String> {
         @Override
         protected String doInBackground(Integer... arg0) {
@@ -82,6 +86,25 @@ public class KryoClient {
                 message.idA = Constants.ID;  // move our player
                 message.idE = arg0[0];
                 message.damage = arg0[1];
+                client.sendTCP(message);
+                return null;
+
+            } catch (Exception e) {
+                Log.i(TAG, "Error connecting: " + e.getMessage());
+                return null;
+            }
+        }
+    }
+
+    private static class PlayAgainMessage extends AsyncTask<Integer, int[], String> {
+        @Override
+        protected String doInBackground(Integer... arg0) {
+            try {
+                Network.PlayAgain message = new Network.PlayAgain();
+
+                if (Constants.ID == 999) return null; // if default ID, that is ID is not yet set by server
+                message.id = Constants.ID;  // move our player
+                message.answer = arg0[0];
                 client.sendTCP(message);
                 return null;
 

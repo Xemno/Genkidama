@@ -15,7 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
@@ -24,7 +23,6 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.MainActivity;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 
-import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.CLIENT_CONNECTED;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.FLOOR_CEILING_DIST_RELATIVE;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.ID;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
@@ -57,6 +55,9 @@ public class GamePlayScene implements Scene {
     private boolean btn_active = false;
     private boolean new_game = false;
 
+    MediaPlayer attacksound;
+    MediaPlayer specialattacksound;
+
     private float touch_old, touch_new; // used for movement detection. DO NOT confuse with old_point and new_point
 
 
@@ -66,6 +67,36 @@ public class GamePlayScene implements Scene {
         fixDist = FLOOR_CEILING_DIST_RELATIVE*SCREEN_HEIGHT/100;
 
         old_point = new PointF(0,0);
+    }
+
+    synchronized public void reset(){
+        for (Player player : players.values()){
+            player.setCurrentCharge(0);
+            player.setCurrentHealth(MAX_HEALTH);
+            player.chargebar.update();
+            player.healthbar.update();
+            player.isLoser = false;
+            //player.reset = true;
+            if (myPlayer().id == player.id) {
+                PointF new_point;
+                if (player.side % 2 != 0) { // draw on left side
+                    new_point = new PointF(SCREEN_WIDTH/4, Constants.fixDist);
+                    //player.setAnimation(player.idle_right);
+                    //player.setWalkInX(true);
+                } else {  // draw on right side
+                    new_point = new PointF(3*SCREEN_WIDTH / 4 , Constants.fixDist);
+                    //player.setAnimation(player.idle_left);
+                    //player.setWalkInX(false);
+                }
+                System.out.println("my pos: " + (new_point.x /SCREEN_WIDTH) + ", " + (new_point.y /SCREEN_HEIGHT ));
+                KryoClient.send(new PointF(new_point.x / SCREEN_WIDTH, new_point.y/ SCREEN_HEIGHT));
+                System.out.println(new_point.x +", " +new_point.y);
+                player.setOld_point(new_point);
+                GamePlayScene.setNew_point(new_point);
+            }
+        }
+
+
     }
 
     @Override
@@ -93,6 +124,12 @@ public class GamePlayScene implements Scene {
             }
         }
 
+        if(new_game){
+            reset();
+            new_game = false;
+        }
+
+
         if (!btn_active) {
             activity.runOnUiThread(new Runnable() {
                 @Override
@@ -104,6 +141,7 @@ public class GamePlayScene implements Scene {
                     Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
                     btn_active = true;
 
+
                     att_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -114,9 +152,12 @@ public class GamePlayScene implements Scene {
                                     if (myPlayer().id != enemy.id) myPlayer().attack(enemy);
                                 }
                             }
+
+
                         }
 
                     } );
+
 
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -182,6 +223,7 @@ public class GamePlayScene implements Scene {
                             player.idle_leftAnimation();
                         }
                     }
+
                     player.draw(canvas); // changed this to check for null object
                 }
             }
@@ -218,6 +260,7 @@ public class GamePlayScene implements Scene {
         layer6.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
         layer6.draw(canvas);
 
+
     }
 
     @Override
@@ -228,6 +271,10 @@ public class GamePlayScene implements Scene {
                 LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                 gameUI.setVisibility(View.GONE);
                 btn_active = false;
+                specialattacksound.release();
+                attacksound.release();
+                specialattacksound = null;
+                attacksound = null;
             }
         });
         new_game = true;

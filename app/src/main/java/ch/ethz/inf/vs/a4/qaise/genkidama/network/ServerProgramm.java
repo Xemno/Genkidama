@@ -120,6 +120,23 @@ public class ServerProgramm extends Listener {
             KryoServer.server.sendToAllTCP(attack);
         }
 
+        /*** ---- PLAY AGAIN ---- ***/
+        if (object instanceof Network.PlayAgain) {
+            if (state == null) {
+                //help
+            }
+
+            Network.PlayAgain msg = (Network.PlayAgain) object;
+
+            Network.PlayAgain broadcast = new Network.PlayAgain();
+            broadcast.id = msg.id;
+            broadcast.answer = msg.answer;
+            KryoServer.server.sendToAllTCP(broadcast);
+
+            System.out.println(msg.id + " is voting for " + msg.answer);
+
+        }
+
 
     }
 
