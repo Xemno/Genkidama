@@ -84,7 +84,7 @@ public class CreateGameScene implements Scene{
                 32, 32,
                 16,
                 Constants.SCREEN_WIDTH - 32*4 - 50,
-                50, 4, 4);
+                50, 4, 4, false);
         loadingAnimation.setFrameDuration(50);
     }
 

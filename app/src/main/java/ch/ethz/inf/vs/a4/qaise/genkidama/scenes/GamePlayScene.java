@@ -109,24 +109,6 @@ public class GamePlayScene implements Scene {
                     att_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                           /* if (attacksound == null)  {
-                                attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
-                                attacksound.setLooping(false);
-                                attacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                                    @Override
-                                    public void onPrepared(MediaPlayer mediaPlayer) {
-                                        attacksound.start();
-                                    }
-                                });
-                            } else {
-
-                                if (attacksound.isPlaying()) attacksound.pause();
-                                attacksound.seekTo(0);
-                                attacksound.start();
-                            }
-                            // TODO: why not moving this to constructor
-//                            attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
-                            */
 
                             //start sound for attackbutton 
                             if (players.size() > 1) {
@@ -139,32 +121,11 @@ public class GamePlayScene implements Scene {
                         }
 
                     } );
-                    // TODO: why not moving this to terminate() ? this is released often times..
-//                    attacksound.release();
-//                    attacksound = null;
-
-                    
 
 
                     super_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
-                           /* if (specialattacksound == null)  {
-                                specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
-                                specialattacksound.setLooping(false);
-                                specialattacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                                    @Override
-                                    public void onPrepared(MediaPlayer mediaPlayer) {
-                                        specialattacksound.start();
-                                    }
-                                });
-                            } else {
-                                if (specialattacksound.isPlaying()) specialattacksound.pause();
-                                specialattacksound.seekTo(0);
-                                specialattacksound.start();
-                            }
-                            */
 
                             if (players.size() > 1) {
                                 for (Player enemy : players.values()) {
