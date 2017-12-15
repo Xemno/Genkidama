@@ -43,7 +43,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private GameEngine thread;
     private static SceneManager manager;
 
-
+    private static MediaPlayer attacksound;
+    private static MediaPlayer specialattacksound;
     /*
      * This class sets up the game and the server updates the Players from this class
      */
@@ -192,7 +193,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
             attacker.attackAnimation();
             victim.blockAnimation();
+            //TODO: music here for attack
 
+
+            if (attacksound == null)  {
+                attacksound = MediaPlayer.create(MainActivity.context, R.raw.attacksound);
+                attacksound.setLooping(false);
+                attacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer) {
+                        attacksound.start();
+                    }
+                });
+            } else {
+
+                if (attacksound.isPlaying()) attacksound.pause();
+                attacksound.seekTo(0);
+                attacksound.start();
+            }
+
+            //TODO: end changemusic
             attacker.chargebar.update();
             victim.healthbar.update();}
         else { // special attack
@@ -204,9 +224,24 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 victim.setCurrentHealth(health);
             else
                 victim.setCurrentHealth(0);
-
             attacker.specialAttackAnimation();
             victim.blockAnimation();
+            //todo here specialattackusic
+            if (specialattacksound == null)  {
+                specialattacksound = MediaPlayer.create(MainActivity.context, R.raw.specialattacksound);
+                specialattacksound.setLooping(false);
+                specialattacksound.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer) {
+                        specialattacksound.start();
+                    }
+                });
+            } else {
+                if (specialattacksound.isPlaying()) specialattacksound.pause();
+                specialattacksound.seekTo(0);
+                specialattacksound.start();
+            }
+            //Todo music end
 
             attacker.chargebar.update();
             victim.healthbar.update();
