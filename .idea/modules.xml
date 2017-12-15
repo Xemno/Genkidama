@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Genkidama.iml" filepath="$PROJECT_DIR$/.idea/Genkidama.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Genkidama.iml" filepath="$PROJECT_DIR$/Genkidama.iml" />
+      <module fileurl="file://C:\Users\Qais\AndroidStudioProjects\Genkidama\.idea\Genkidama.iml" filepath="C:\Users\Qais\AndroidStudioProjects\Genkidama\.idea\Genkidama.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

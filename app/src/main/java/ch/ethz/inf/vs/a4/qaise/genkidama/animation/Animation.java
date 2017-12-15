@@ -37,7 +37,7 @@ public class Animation {
 //    private int currFrameX, currFrameY;
 
     // Start at the first frame
-    private int currentFrame = 0;
+    private int currentFrame;
     public boolean forward = true; // forward animation if true; backward animation if false
 
 
@@ -60,9 +60,17 @@ public class Animation {
 
     // Animation from a one-dimensional sprite sheet
     public Animation(Context context, int drawable, int frameWidth,
-                     int frameHeight, int frameCount, float x, float y, int scaleFactor, float scaleHit) {
+                     int frameHeight, int frameCount, float x, float y, int scaleFactor, float scaleHit, boolean forward) {
 
         if (scaleFactor < 1) scaleFactor = 1;
+
+        this.forward = forward;
+
+        if (forward) {
+            currentFrame = 0;
+        } else {
+            currentFrame = frameCount - 1;
+        }
 
         this.x = x;
         this.y = y;

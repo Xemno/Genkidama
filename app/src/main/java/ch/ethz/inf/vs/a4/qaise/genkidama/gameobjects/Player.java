@@ -88,9 +88,7 @@ public class Player implements GameObject {
                 42, 42,
                 4,
                 point.x, point.y,
-                scaleFactor, scaleHit);
-//        idle_right.scaleBitmap(8);
-        idle_right.forward = true;      // always true for right animations
+                scaleFactor, scaleHit, true);
 
         idle_left = new Animation(
                 MainActivity.context,
@@ -98,9 +96,7 @@ public class Player implements GameObject {
                 42, 42,
                 4,
                 point.x, point.y,
-                scaleFactor, scaleHit);
-//        idle_left.scaleBitmap(8);
-        idle_left.forward = false;      // always false for left animations
+                scaleFactor, scaleHit, false);
 
 
         walk_right = new Animation(
@@ -109,9 +105,7 @@ public class Player implements GameObject {
                 42, 42,
                 8,
                 point.x, point.y,
-                scaleFactor, scaleHit);
-//        walk_right.scaleBitmap(8);
-        walk_right.forward = true;
+                scaleFactor, scaleHit, true);
 
         walk_left = new Animation(
                 MainActivity.context,
@@ -119,82 +113,64 @@ public class Player implements GameObject {
                 42, 42,
                 8,
                 point.x, point.y,
-                scaleFactor, scaleHit);
-//        walk_left.scaleBitmap(8);
-        walk_left.forward = false;
+                scaleFactor, scaleHit, false);
 
         //Done Lara: frameWidth: 80
         attack_left=new Animation(MainActivity.context,
                 R.drawable.knight_attack_left,
                 80,42,
                 10,point.x, point.y,
-                scaleFactor, scaleHit);
+                scaleFactor, scaleHit, false);
         attack_left.setFrameDuration(28);
-        //attack_left.scaleBitmap(8);
-        attack_left.forward=false;
 
         attack_right=new Animation(MainActivity.context,
                 R.drawable.knight_attack_right,
                 80, 42,
                 10, point.x, point.y,
-                scaleFactor, scaleHit);
+                scaleFactor, scaleHit, true);
         attack_right.setFrameDuration(28);
-        attack_right.forward = true;
-        //attack_right.scaleBitmap(8);
-        //Done Lara: frameWidth: 80
 
         block_left=new Animation(MainActivity.context,
                 R.drawable.knight_block_left,
                 42,42,
                 7,point.x,point.y,
-                scaleFactor, scaleHit);
+                scaleFactor, scaleHit, false);
         block_left.setFrameDuration(40);
-        //block_left.scaleBitmap(8);
-        block_left.forward = false;
 
         block_right=new Animation(MainActivity.context,
                 R.drawable.knight_block_right,
                 42,42,
                 7,point.x,point.y,
-                scaleFactor, scaleHit);
+                scaleFactor, scaleHit, true);
         block_right.setFrameDuration(40);
-        block_right.forward = true;
-        //block_right.scaleBitmap(8);
 
-        death_left=new Animation(MainActivity.context,
-                R.drawable.knight_death_left,
-                42,42,
-                9, point.x, point.y,
-                scaleFactor, scaleHit);
-        //death_left.scaleBitmap(8);
-        death_left.forward=false;
-
-        death_right=new Animation(MainActivity.context,
-                R.drawable.knight_death_right,
-                42,42,
-                9, point.x, point.y,
-                scaleFactor, scaleHit);
-        //death_right.scaleBitmap(8);
-        death_right.forward = true;
+//        death_left=new Animation(MainActivity.context,
+//                R.drawable.knight_death_left,
+//                42,42,
+//                9, point.x, point.y,
+//                scaleFactor, scaleHit, false);
+//
+//        death_right=new Animation(MainActivity.context,
+//                R.drawable.knight_death_right,
+//                42,42,
+//                9, point.x, point.y,
+//                scaleFactor, scaleHit);
+//        //death_right.scaleBitmap(8);
+//        death_right.forward = true;
 
         special_attack_left=new Animation(MainActivity.context,
                 R.drawable.knight_attack_left_special,
                 80,42,
                 10,point.x, point.y,
-                scaleFactor, scaleHit);
+                scaleFactor, scaleHit, false);
         special_attack_left.setFrameDuration(28);
-        //attack_left.scaleBitmap(8);
-        special_attack_left.forward=false;
 
         special_attack_right=new Animation(MainActivity.context,
                 R.drawable.knight_attack_right_special,
                 80, 42,
                 10, point.x, point.y,
-                scaleFactor, scaleHit);
+                scaleFactor, scaleHit, true);
         special_attack_right.setFrameDuration(28);
-        special_attack_right.forward = true;
-        //attack_right.scaleBitmap(8);
-        //Done Lara: frameWidth: 80
 
 
 
