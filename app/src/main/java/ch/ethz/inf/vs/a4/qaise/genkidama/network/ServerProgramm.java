@@ -14,6 +14,7 @@ public class ServerProgramm extends Listener {
     private static final String TAG = "#ClientProgram# ";
 
     private static int counter = 0; // ID counter for clients
+    private static final int MAX_PLAYERS = 4;
 
     HashSet<StateObject> onlinePlayers = new HashSet<StateObject>();
 
@@ -49,6 +50,7 @@ public class ServerProgramm extends Listener {
             }
 
             counter++;
+//            if (!(counter <= MAX_PLAYERS)) return; // TODO: add this
             Network.RegistrationRequired register = new Network.RegistrationRequired();
             register.id = counter;
             register.side = (onlinePlayers.size()) + 1; // First player has side 1, second side 2, etc...

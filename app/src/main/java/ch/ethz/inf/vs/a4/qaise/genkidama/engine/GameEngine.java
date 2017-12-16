@@ -48,17 +48,20 @@ public class GameEngine extends Thread{
 //            this.gamePanel.update(); <-- MAYBE MOVE IT HERE, BETTER
 
             try {
-                canvas = this.surfaceHolder.lockCanvas();   // locks the canvas and start editing the pixels in the surface.
-                synchronized (surfaceHolder) {
-                    this.gamePanel.update();    // updates the game objects. CAN BE UPDATED OUTSIDE THIS BLOCK!
-                    this.gamePanel.draw(canvas);    // draws the updated game objects
+                if (this.surfaceHolder.getSurface().isValid()) {
+                    canvas = this.surfaceHolder.lockCanvas();   // locks the canvas and start editing the pixels in the surface.
+                    synchronized (surfaceHolder) {
+                        this.gamePanel.update();    // updates the game objects. CAN BE UPDATED OUTSIDE THIS BLOCK!
+                        this.gamePanel.draw(canvas);    // draws the updated game objects
+                    }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 if (canvas != null) {
                     try {
-                        surfaceHolder.unlockCanvasAndPost(canvas);  // releases the canvas
+                        this.surfaceHolder.unlockCanvasAndPost(canvas);  // releases the canvas
                     } catch (Exception e) {e.printStackTrace();}
 
                 }

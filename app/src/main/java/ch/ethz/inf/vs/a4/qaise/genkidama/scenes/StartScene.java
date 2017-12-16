@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -25,11 +26,15 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 
 public class StartScene implements Scene {
 
+    private static final String TAG = "#StartScene#";
+
+
     private Activity activity;
     private Button join_btn, create_btn;
 
     private boolean btn_active = false;
     private int nextScene;
+    public static boolean backToStart = false; // TODO: [*] not sure if needed
 
     private int top, right, left, bottom;
 
@@ -67,6 +72,33 @@ public class StartScene implements Scene {
 
     @Override
     public void update() {
+
+//        if (backToStart) {
+//            RelativeLayout createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
+//            if (createGameUI.getVisibility() == View.VISIBLE) {
+//                Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");
+//            }
+//            createGameUI.setVisibility(View.GONE);
+//
+//            RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
+//            if (joinGameUI.getVisibility() == View.VISIBLE) {
+//                Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");
+//            }
+//            joinGameUI.setVisibility(View.GONE);
+//            backToStart = false;
+//        }
+
+        RelativeLayout createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
+        if (createGameUI.getVisibility() == View.VISIBLE) {
+            Log.e(TAG, "VIEW BACK TO VISIBLE");
+        }
+
+        RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
+        if (joinGameUI.getVisibility() == View.VISIBLE) {
+            Log.e(TAG, "VIEW BACK TO VISIBLE");
+        }
+
+        // TODO: check for internet connection here
 
         if (!btn_active){
             activity.runOnUiThread(new Runnable() {
@@ -127,8 +159,7 @@ public class StartScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawColor(Color.rgb(240, 230, 140)); // BACKGROUND color
-
+        canvas.drawColor(Color.rgb(240, 230, 140)); // BACKGROUND color khaki
 
         // Draw Genkidama Text, centered and scales accordingly to the screen size
         genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
@@ -151,7 +182,7 @@ public class StartScene implements Scene {
                 startUI.setVisibility(View.GONE);
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;
-//                coinAnimation.recycle(); // TODO: TEST
+//                coinAnimation.recycle();
 
             }
         });

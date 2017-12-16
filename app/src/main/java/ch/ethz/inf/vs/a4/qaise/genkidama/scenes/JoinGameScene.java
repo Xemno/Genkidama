@@ -3,6 +3,8 @@ package ch.ethz.inf.vs.a4.qaise.genkidama.scenes;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,8 +20,11 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
+import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoServer;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.Network;
 
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.START_GAME;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isIP;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.isPort;
@@ -33,13 +38,15 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
 
 public class JoinGameScene implements Scene {
 
+    private static final String TAG = "#JoinGameScene#";
+
     private Activity activity;
 
     private TextView textView;
     private EditText edit_username;
     private EditText ip_address;
     private EditText port_number;
-    private Button join_btn, start_btn;
+    private Button join_btn, start_btn, back_btn;
 
     private int nextScene;
 
@@ -48,6 +55,7 @@ public class JoinGameScene implements Scene {
     private boolean connect = false;
     private boolean checkConnection = false;
     private boolean isConnected = false;
+    private boolean backToStart = false;
 
     // TODO: make static variable startGame that is set from the Client by the server
 
@@ -56,10 +64,24 @@ public class JoinGameScene implements Scene {
 
     Animation loadAnimation;
 
+    private Drawable genkidamaLogo;
+    private int top, right, left, bottom;
+
 
 
     public JoinGameScene(Activity activity) {
         this.activity = activity;
+
+        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
+            top = 5;
+        } else {
+            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
+        }
+
+        // Scale rest of genkidamaLogo drawable
+        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
+        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
+        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
 
         loadAnimation = new Animation(
                 activity, R.drawable.color_pattern_clone_32,
@@ -84,6 +106,7 @@ public class JoinGameScene implements Scene {
 
                     join_btn = (Button) activity.findViewById(Constants.LOGIN_BTN);
                     start_btn = (Button) activity.findViewById(Constants.START_BTN);
+                    back_btn = (Button) activity.findViewById(Constants.BTN_BACK_J);
                     edit_username = (EditText) activity.findViewById(Constants.USERNAME_ID);
                     ip_address = (EditText) activity.findViewById(Constants.IP_ID);
                     port_number = (EditText) activity.findViewById(Constants.PORT_ID);
@@ -144,6 +167,16 @@ public class JoinGameScene implements Scene {
                                 }
                             }
 
+                        }
+                    });
+
+                    back_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            nextScene = Constants.START_SCENE;
+                            backToStart = true;
+                            StartScene.backToStart = true;
+                            terminate();
                         }
                     });
                 }
@@ -221,7 +254,12 @@ public class JoinGameScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawColor(Color.rgb(240,230,140)); // BACKGROUND color
+        canvas.drawColor(Color.rgb(238,232,170)); // BACKGROUND color pale golden rod
+
+        // Draw Genkidama Text, centered and scales accordingly to the screen size
+        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
+        genkidamaLogo.setBounds(left, top, right, bottom);
+        genkidamaLogo.draw(canvas);
 
         if (checkConnection) loadAnimation.draw(canvas);
 
@@ -234,7 +272,35 @@ public class JoinGameScene implements Scene {
             public void run() {
                 RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
                 joinGameUI.setVisibility(View.GONE);
+
+                switch (joinGameUI.getVisibility()) {
+                    case View.VISIBLE :
+                        Log.e(TAG, "IN TERMINATE VIEW VISIBLE");
+                        break;
+                    case View.INVISIBLE :
+                        Log.e(TAG, "IN TERMINATE VIEW INVISIBLE");
+                        break;
+                    case View.GONE :
+                        Log.e(TAG, "IN TERMINATE VIEW GONE");
+                        break;
+                }
+
                 btn_active = false;
+                setEnabled = false;
+                checkConnection = false;
+
+                if (backToStart) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            KryoClient.close(); // close client connection
+                        }
+                    }).start();
+                    isConnected = false;
+                    connect = false;
+                    backToStart = false;
+                }
+
                 SceneManager.ACTIVE_SCENE = nextScene;
             }
         });
@@ -269,6 +335,7 @@ public class JoinGameScene implements Scene {
             Toast.makeText(activity.getApplication(), "Invalid Port Number!", Toast.LENGTH_LONG).show();
             return false;
         }
+
         Constants.NAME = name;
         Constants.SERVER_ADDRESS = ip;
 

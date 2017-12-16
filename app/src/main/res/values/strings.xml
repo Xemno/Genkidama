@@ -3,13 +3,13 @@
     <string name="att_string">attack</string>
     <string name="special">special</string>
     <string name="start">START</string>
-    <string name="hinte">Enter username:</string>
-    <string name="hintip">Enter IP address:</string>
-    <string name="hintport">Enter Port number:</string>
-    <string name="restartbuttonstring">Restart Game</string>
-    <string name="backtologinbuttonstring">Back to Login</string>
+    <string name="hinte">Enter Username:</string>
+    <string name="hintip">Enter IP Address:</string>
+    <string name="hintport">Enter Port Number:</string>
+    <string name="restartbuttonstring">RESTART GAME</string>
+    <string name="backtologinbuttonstring">BACK TO LOGIN</string>
     <string name="join">JOIN</string>
     <string name="create">CREATE</string>
-
+    <string name="back">BACK</string>
 
 </resources>

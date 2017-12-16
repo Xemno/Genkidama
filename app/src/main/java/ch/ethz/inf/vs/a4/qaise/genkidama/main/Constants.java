@@ -53,6 +53,9 @@ public class Constants {
     public static int START2_BTN = 1348;
     public static int CREATE2_BUTTON = 1349;
     public static int TEXT_V = 1350;
+    public static int PORT_ET = 1351;
+    public static int BTN_BACK_J = 1352;
+    public static int BTN_BACK_C = 1353;
 
 
     public static int GAME_PLAY_UI = 2000;

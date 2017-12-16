@@ -27,7 +27,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
 public class KryoServer extends Service {
 
-    public static final int port = 15555;
+    private static int port = 15555;
     public static Server server;
 
     @Override
@@ -45,9 +45,9 @@ public class KryoServer extends Service {
 
         Network.register(server);
         server.start();
+        port = Constants.PORT_NUMBER;
         try {
             server.bind(port);
-            Constants.PORT_NUMBER = port;
         } catch (IOException e) {
             e.printStackTrace();
             //TODO: maybe we can retry with another port nr.
@@ -60,12 +60,6 @@ public class KryoServer extends Service {
         Toast.makeText(getApplication(), "Server started", Toast.LENGTH_LONG).show();
 
     }
-
-    public Server getServer()
-    {
-        return server;
-    }
-
 
     public String getIP(){
         try {
@@ -97,6 +91,7 @@ public class KryoServer extends Service {
         }
         Toast.makeText(getApplication(), "Server stopped.", Toast.LENGTH_LONG).show();
     }
+
 
     @Override
     public IBinder onBind(Intent intent) {

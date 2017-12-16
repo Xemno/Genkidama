@@ -80,6 +80,11 @@ public class GameOverScene implements Scene {
                                     }
                                 }
                             //ugly loop to wait for termination
+                                // TODO:
+                                // Qais to Rahel: I think while loop waiting in a UI thread is not a good idea...
+                                // you dont need to wait in this while loop, start the the same code with a
+                                // boolean variable in the update() outside of the UI thead, which is called every time anyways,
+                                // where then you can check for the waitTime, better then doing it here!!
                             }
                             terminate();
                         }
@@ -106,6 +111,8 @@ public class GameOverScene implements Scene {
             });
 
         }
+
+        // TODO: do your countdown here rahel
 
     }
 
