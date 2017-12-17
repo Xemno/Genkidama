@@ -41,7 +41,6 @@ public class GameOverScene implements Scene {
 
     public GameOverScene (Activity activity){
         this.activity=activity;
-        //player1 = new Player(new Rect(0,0,200,200), Color.RED, 100, 500, 300, 0);
         temp_canvas = new Canvas();
 
     }
