@@ -56,6 +56,7 @@ public class Constants {
     public static int PORT_ET = 1351;
     public static int BTN_BACK_J = 1352;
     public static int BTN_BACK_C = 1353;
+    public static int WINNER_MSG = 1354;
 
 
     public static int GAME_PLAY_UI = 2000;

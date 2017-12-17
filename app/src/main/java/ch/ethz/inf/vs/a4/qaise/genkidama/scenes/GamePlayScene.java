@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
@@ -31,6 +33,7 @@ import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_HEALTH;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.fixDist;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.side;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.myPlayer;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
 
@@ -76,17 +79,15 @@ public class GamePlayScene implements Scene {
             player.chargebar.update();
             player.healthbar.update();
             player.isLoser = false;
+            player.isWinner = false;
             //player.reset = true;
             if (myPlayer().id == player.id) {
                 PointF new_point;
-                if (player.side % 2 != 0) { // draw on left side
-                    new_point = new PointF(SCREEN_WIDTH/4, Constants.fixDist);
-                    //player.setAnimation(player.idle_right);
-                    //player.setWalkInX(true);
+                int count = 4;
+                if (side % 2 != 0) { // draw on left side
+                    new_point = new PointF(side * SCREEN_WIDTH/count, Constants.fixDist);
                 } else {  // draw on right side
-                    new_point = new PointF(3*SCREEN_WIDTH / 4 , Constants.fixDist);
-                    //player.setAnimation(player.idle_left);
-                    //player.setWalkInX(false);
+                    new_point = new PointF(SCREEN_WIDTH - ((side) * SCREEN_WIDTH/count) , Constants.fixDist);
                 }
                 System.out.println("my pos: " + (new_point.x /SCREEN_WIDTH) + ", " + (new_point.y /SCREEN_HEIGHT ));
                 KryoClient.send(new PointF(new_point.x / SCREEN_WIDTH, new_point.y/ SCREEN_HEIGHT));
@@ -101,6 +102,10 @@ public class GamePlayScene implements Scene {
 
     @Override
     public void update() {
+        if(new_game){
+            reset();
+            new_game = false;
+        }
 
         // In case something goes wrong with the assigning of the new_point
         if (myPlayer() != null && new_point == null) {
@@ -123,10 +128,25 @@ public class GamePlayScene implements Scene {
                 sendOnce = false;
             }
         }
+        if (myPlayer().isCharged){ //TODO enable and disable special button if not needed (MAYBE)
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
 
-        if(new_game){
-            reset();
-            new_game = false;
+                }
+            });
+        }
+
+        if (myPlayer().isLoser){
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
+                    Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
+                    att_btn.setEnabled(false);
+                    super_btn.setEnabled(false);
+                }
+            });
         }
 
 
@@ -185,50 +205,45 @@ public class GamePlayScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-//        canvas.drawColor(Color.WHITE); // BACKGROUND color
-
-//        long time = System.currentTimeMillis();
-//
-//        if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
-//            lastFrameChangeTime = time;
-//            if (fromLeftToRight) {
-//                dx += 2;
-//            } else {
-//                dx -= 2;
-//            }
-//
-//            if (SCREEN_WIDTH/5 <= dx) {
-//                fromLeftToRight = false;
-//            } if (dx <= -SCREEN_WIDTH/5) {
-//                fromLeftToRight = true;
-//            }
-//        }
-
         layer1_5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1_5);
         layer1_5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
         layer1_5.draw(canvas);
 
         // Draw players inbetween layer5 and layer6
         if (players.size() > 0) {
+            if (players.size() == 1){
+                myPlayer().isWinner = true; // if all other players disconnected you must be the winner
+            }
+            ArrayList<Player> winnerlist = new ArrayList<>();
             for (Player player : players.values()) { // draw all players
-                if (player != null){
-                    if(player.animation.isLastFrame()) {
+                if (!player.isLoser)
+                    winnerlist.add(player);
 
-                        player.animation.setActivate(false);
-                        player.animation.setLastFrame(false);
-                        if (player.walkInX) {
-                            player.idle_rightAnimation();
-                        } else {
-                            player.idle_leftAnimation();
+                if (player != null){ //only draw player if he's still in game
+                    if (!player.isLoser) {
+                        if (player.animation.isLastFrame()) {
+
+                            player.animation.setActivate(false);
+                            player.animation.setLastFrame(false);
+                            if (player.walkInX) {
+                                player.idle_rightAnimation();
+                            } else {
+                                player.idle_leftAnimation();
+                            }
                         }
-                    }
 
-                    player.draw(canvas); // changed this to check for null object
+                        player.draw(canvas); // changed this to check for null object
+                    } else {
+                        player.healthbar.draw(canvas); //if player is dead only draw his health- and chargebar
+                        player.chargebar.draw(canvas);
+                    }
                 }
             }
-
+            if (winnerlist.size() == 1){
+                winnerlist.get(0).isWinner = true;  //if list only contains one winner, then he must have won the game
+            }
             for (Player player : players.values()) {
-                if (player.isLoser){
+                if (player.isWinner){ //if a winner is found "save" the scene
                     GameOverScene.test = Bitmap.createBitmap(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Bitmap.Config.RGB_565);
                     Canvas temp_canvas = new Canvas(GameOverScene.test);
 
@@ -239,12 +254,12 @@ public class GamePlayScene implements Scene {
                     layer1_5.draw(temp_canvas);
 
                     for (Player pl : players.values()) { // draw all players. Cannot use players from above, because the loop stops when loser is found
-                        if (pl != null) pl.draw(temp_canvas); // changed this to check for null object
+                        if (pl != null && !pl.isLoser) pl.draw(temp_canvas); // changed this to check for null object
                     }
 
                     layer6 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer6);
                     layer6.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
-                    layer6.draw(canvas);
+                    layer6.draw(temp_canvas);
 
                     nextScene = Constants.GAMEOVER_SCENE;
                     terminate();
@@ -267,9 +282,16 @@ public class GamePlayScene implements Scene {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (myPlayer().isLoser){ //reenables the buttons for next game if player lost
+                    Button att_btn = (Button) activity.findViewById(Constants.ATT_BTN);
+                    Button super_btn = (Button) activity.findViewById(Constants.SUPER_BTN);
+                    att_btn.setEnabled(true);
+                    super_btn.setEnabled(true);
+                }
                 LinearLayout gameUI = (LinearLayout) activity.findViewById(Constants.GAME_PLAY_UI);
                 gameUI.setVisibility(View.GONE);
                 btn_active = false;
+
             }
         });
         new_game = true;

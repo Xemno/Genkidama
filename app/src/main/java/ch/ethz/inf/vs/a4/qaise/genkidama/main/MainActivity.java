@@ -406,6 +406,19 @@ public class MainActivity extends AppCompatActivity {
          ********************************** */
         Button restartGame_btn = new Button(this);
         Button backToLogin_btn = new Button(this);
+        TextView winner_msg = new TextView(this);
+
+        winner_msg.setText("");
+        winner_msg.setId(Constants.WINNER_MSG);
+        winner_msg.setTypeface(typefaceBandit);
+        winner_msg.setTextColor(Color.BLACK);
+        winner_msg.setTextSize(btnTextSize);
+        winner_msg.setGravity(Gravity.CENTER);
+
+
+        RelativeLayout.LayoutParams winner_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT/6);
+        winner_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        winner_msg.setLayoutParams(winner_params);
 
         restartGame_btn.setText(R.string.restartbuttonstring);
         restartGame_btn.setId(Constants.RESTARTGAME_BTN);
@@ -421,6 +434,7 @@ public class MainActivity extends AppCompatActivity {
 
         RelativeLayout.LayoutParams restart_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
         restart_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        restart_params.addRule(RelativeLayout.BELOW, Constants.WINNER_MSG);
         restartGame_btn.setLayoutParams(restart_params);
         restartGame_btn.setBackgroundResource(R.drawable.button);
 
@@ -430,9 +444,12 @@ public class MainActivity extends AppCompatActivity {
         backToLogin_btn.setLayoutParams(login_params);
         backToLogin_btn.setBackgroundResource(R.drawable.button);
 
+
+
         //add buttons to gameOverUI
         gameOverSceneUI.addView(restartGame_btn);
         gameOverSceneUI.addView(backToLogin_btn);
+        gameOverSceneUI.addView(winner_msg);
         gameOverSceneUI.setId(Constants.GAME_OVER_UI);
         gameOverSceneUI.setVisibility(View.GONE);
         gameOverSceneUI.setGravity(Gravity.CENTER);

@@ -48,6 +48,7 @@ public class Player implements GameObject {
     public boolean isCharged = false;
     public boolean isLoser = false;
     public boolean reset = false;
+    public boolean isWinner = false;
 
     public PointF new_point, old_point;  // ###
 
@@ -339,7 +340,7 @@ public class Player implements GameObject {
     }
 
     public boolean collidesWith(Player enemy){
-        if (enemy == null) return false;
+        if (enemy == null || enemy.isLoser) return false; //extended collision detection, so it only attacks when enemy is not dead
         return RectF.intersects(animation.getHitbox(), enemy.animation.getHitbox());
     }
 }

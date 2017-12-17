@@ -54,11 +54,11 @@ public class CreateGameScene implements Scene{
     private int playersSize = 0;
 
     private boolean btn_active = false;
-    private boolean serviceStarted = false;
+    private static boolean serviceStarted = false;
     public static boolean clientConnect = false; // TODO: is set o staic
     public static boolean setEnabled = false; // TODO: is set o staic
-    private boolean loadAnimating = false;
-    private boolean backToStart = false;
+    private static boolean loadAnimating = false;
+    private static boolean backToStart = false;
 
 
 
@@ -93,6 +93,13 @@ public class CreateGameScene implements Scene{
         loadingAnimation.setFrameDuration(50);
     }
 
+    public static void reset(){
+        serviceStarted = false;
+        clientConnect = false;
+        setEnabled = false;
+        loadAnimating = false;
+        backToStart = false; //not sure if needed
+    }
     @Override
     public void update() {
 
