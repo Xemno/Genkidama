@@ -50,7 +50,7 @@ public class CreateGameScene implements Scene{
     private TextView textView;
 
     private int nextScene;
-    private int top, right, left, bottom;
+//    private int top, right, left, bottom;
     private int playersSize = 0;
 
     private boolean btn_active = false;
@@ -65,7 +65,7 @@ public class CreateGameScene implements Scene{
     HashSet<String> names = new HashSet<>();
 
 
-    private Drawable genkidamaLogo;
+//    private Drawable genkidamaLogo;
     private Animation loadingAnimation;
 
 
@@ -73,16 +73,19 @@ public class CreateGameScene implements Scene{
         this.activity = activity;
 
         // Scale top of genkidamaLogo drawable
-        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
-            top = 5;
-        } else {
-            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
-        }
+//        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
+//            top = 5;
+//        } else {
+//            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
+//        }
 
         // Scale rest of genkidamaLogo drawable
-        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
-        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
-        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
+//        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
+//        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
+//        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
+
+//        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
+//        genkidamaLogo.setBounds(left, top, right, bottom);
 
         loadingAnimation = new Animation(
                 activity, R.drawable.loading_32,
@@ -222,6 +225,16 @@ public class CreateGameScene implements Scene{
                 }
             });
         }
+
+        if (loadingAnimation == null) {
+            loadingAnimation = new Animation(
+                    activity, R.drawable.loading_32,
+                    32, 32,
+                    16,
+                    Constants.SCREEN_WIDTH - 32*4 - 50,
+                    50, 4, 4, false);
+            loadingAnimation.setFrameDuration(50);
+        }
     }
 
     @Override
@@ -229,11 +242,9 @@ public class CreateGameScene implements Scene{
         canvas.drawColor(Color.rgb(255,215,0)); // BACKGROUND color gold
 
         // Draw Genkidama Text, centered and scales accordingly to the screen size
-        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
-        genkidamaLogo.setBounds(left, top, right, bottom);
-        genkidamaLogo.draw(canvas);
+        StartScene.genkidamaLogo.draw(canvas);
 
-        if (serviceStarted && loadAnimating) loadingAnimation.draw(canvas);
+        if (serviceStarted && loadAnimating && (loadingAnimation != null)) loadingAnimation.draw(canvas);
     }
 
     @Override
@@ -259,7 +270,8 @@ public class CreateGameScene implements Scene{
                 btn_active = false;
                 loadAnimating = false;
 
-//                loadingAnimation.recycle();
+                loadingAnimation.recycle();
+                loadingAnimation = null;
 
                 if (backToStart) {
                     serviceStarted = false;

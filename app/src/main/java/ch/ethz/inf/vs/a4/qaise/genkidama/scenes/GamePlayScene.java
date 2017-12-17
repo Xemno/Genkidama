@@ -185,24 +185,6 @@ public class GamePlayScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-//        canvas.drawColor(Color.WHITE); // BACKGROUND color
-
-//        long time = System.currentTimeMillis();
-//
-//        if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
-//            lastFrameChangeTime = time;
-//            if (fromLeftToRight) {
-//                dx += 2;
-//            } else {
-//                dx -= 2;
-//            }
-//
-//            if (SCREEN_WIDTH/5 <= dx) {
-//                fromLeftToRight = false;
-//            } if (dx <= -SCREEN_WIDTH/5) {
-//                fromLeftToRight = true;
-//            }
-//        }
 
         layer1_5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1_5);
         layer1_5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );

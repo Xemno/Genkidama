@@ -64,24 +64,27 @@ public class JoinGameScene implements Scene {
 
     Animation loadAnimation;
 
-    private Drawable genkidamaLogo;
-    private int top, right, left, bottom;
+//    private Drawable genkidamaLogo;
+//    private int top, right, left, bottom;
 
 
 
     public JoinGameScene(Activity activity) {
         this.activity = activity;
 
-        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
-            top = 5;
-        } else {
-            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
-        }
+//        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
+//            top = 5;
+//        } else {
+//            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
+//        }
+//
+//        // Scale rest of genkidamaLogo drawable
+//        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
+//        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
+//        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
 
-        // Scale rest of genkidamaLogo drawable
-        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
-        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
-        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
+//        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
+//        genkidamaLogo.setBounds(left, top, right, bottom);
 
         loadAnimation = new Animation(
                 activity, R.drawable.color_pattern_clone_32,
@@ -248,6 +251,16 @@ public class JoinGameScene implements Scene {
             terminate();
         }
 
+        if (loadAnimation == null) {
+            loadAnimation = new Animation(
+                    activity, R.drawable.color_pattern_clone_32,
+                    32, 32,
+                    23,
+                    Constants.SCREEN_WIDTH - 32*4 - 25,
+                    25,4, 4, false);
+            loadAnimation.setFrameDuration(50);
+        }
+
     }
 
     @Override
@@ -255,11 +268,9 @@ public class JoinGameScene implements Scene {
         canvas.drawColor(Color.rgb(238,232,170)); // BACKGROUND color pale golden rod
 
         // Draw Genkidama Text, centered and scales accordingly to the screen size
-        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
-        genkidamaLogo.setBounds(left, top, right, bottom);
-        genkidamaLogo.draw(canvas);
+        StartScene.genkidamaLogo.draw(canvas);
 
-        if (checkConnection) loadAnimation.draw(canvas);
+        if (checkConnection && (loadAnimation != null)) loadAnimation.draw(canvas);
 
     }
 
@@ -270,6 +281,9 @@ public class JoinGameScene implements Scene {
             public void run() {
                 RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
                 joinGameUI.setVisibility(View.GONE);
+
+                loadAnimation.recycle();
+                loadAnimation = null;
 
                 switch (joinGameUI.getVisibility()) {
                     case View.VISIBLE :

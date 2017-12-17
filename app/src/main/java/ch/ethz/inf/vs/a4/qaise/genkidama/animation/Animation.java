@@ -33,13 +33,10 @@ public class Animation {
 
     // How many frames are there on the sprite sheet?
     private int frameCount;     // total frame count
-//    private int framesInX, framesInY; // count of frame in x and y direction
-//    private int currFrameX, currFrameY;
 
     // Start at the first frame
     private int currentFrame;
     private boolean forward = true; // forward animation if true; backward animation if false
-
 
     // What time was it when we last changed frames
     private long lastFrameChangeTime = 0;
@@ -171,7 +168,7 @@ public class Animation {
     }
 
     public void draw(Canvas canvas){
-        canvas.drawRect(hitbox, paint);
+//        canvas.drawRect(hitbox, paint);
         canvas.drawBitmap(
                 this.resource(),
                 this.getCurrentFrame(),
@@ -212,9 +209,9 @@ public class Animation {
         this.activate = activate;
     }
 
-//    public void recycle(){ // TODO: TEST THIS
-//        bitmap.recycle();
-//    }
+    public void recycle(){
+        bitmap.recycle();
+    }
 
 
 }
