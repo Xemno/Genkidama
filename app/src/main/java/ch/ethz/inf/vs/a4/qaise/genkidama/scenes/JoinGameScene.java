@@ -126,6 +126,13 @@ public class JoinGameScene implements Scene {
                                             lastTime = System.currentTimeMillis();
                                         }
                                     });
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            KryoClient.getInstance().connect();
+                                            connect = true;
+                                        }
+                                    }).start();
                                 } else {
                                     activity.runOnUiThread(new Runnable() {
                                         @Override
@@ -134,14 +141,6 @@ public class JoinGameScene implements Scene {
                                         }
                                     });
                                 }
-
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        KryoClient.getInstance().connect();
-                                        connect = true;
-                                    }
-                                }).start();
 
                                 setEnabled = true;
                                 checkConnection = true;
@@ -161,7 +160,7 @@ public class JoinGameScene implements Scene {
                             } else {
                                 Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\nmyPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_LONG).show();
                                 if (KryoClient.getClient().isConnected()) {
-                                    Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity.getApplication(), "Group Leader can only can start the game", Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(activity.getApplication(), "no connection", Toast.LENGTH_LONG).show();
                                 }
@@ -287,6 +286,7 @@ public class JoinGameScene implements Scene {
                 btn_active = false;
                 setEnabled = false;
                 checkConnection = false;
+                START_GAME = false; ////////
 
                 if (backToStart) {
                     new Thread(new Runnable() {
@@ -297,8 +297,9 @@ public class JoinGameScene implements Scene {
                     }).start();
                     isConnected = false;
                     connect = false;
-                    backToStart = false;
+//                    backToStart = false;
                 }
+                backToStart = false;
 
                 SceneManager.ACTIVE_SCENE = nextScene;
             }

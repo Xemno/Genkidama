@@ -19,6 +19,8 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoServer;
 
+import static ch.ethz.inf.vs.a4.qaise.genkidama.scenes.CreateGameScene.isMyServiceRunning;
+
 /**
  * Created by Qais on 26-Nov-17.
  */
@@ -101,13 +103,7 @@ public class GameOverScene implements Scene {
                             //go back to login, startactivity main (there is our login)
                             //startActivity(new Intent(this, MainActivity.class));
                             nextScene = Constants.START_SCENE;
-                            if (KryoServer.server != null){
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        KryoServer.server.close();
-                                    }
-                                }).start();
+                            if (isMyServiceRunning(KryoServer.class, activity)){
                                 activity.stopService(new Intent(activity, KryoServer.class));
                                 Toast.makeText(activity.getApplication(), "Server stopped.", Toast.LENGTH_LONG).show();
                             } else {
@@ -156,6 +152,7 @@ public class GameOverScene implements Scene {
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;
                 if (nextScene == Constants.START_SCENE){
+                    // TODO: why doing this twice? Above in loin_btn and here
                     if (KryoServer.server != null){
                         KryoServer.server.close();
                         activity.stopService(new Intent(activity, KryoServer.class));

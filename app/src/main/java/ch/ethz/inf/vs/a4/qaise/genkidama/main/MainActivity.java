@@ -370,14 +370,14 @@ public class MainActivity extends AppCompatActivity {
 
         att_btn.setText(R.string.att_string);
         att_btn.setAlpha(0.6f);
-        att_btn.setTextSize(textSize);
+        att_btn.setTextSize(20);
         att_btn.setId(Constants.ATT_BTN);
         att_btn.setBackgroundResource(R.drawable.roundedbutton);
         att_btn.setTypeface(typeface);
 
         super_btn.setText(R.string.special);
         super_btn.setAlpha(0.6f);
-        super_btn.setTextSize(textSize);
+        super_btn.setTextSize(20);
         super_btn.setId(Constants.SUPER_BTN);
         super_btn.setBackgroundResource(R.drawable.roundedbutton);
         super_btn.setTypeface(typeface);

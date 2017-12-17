@@ -79,6 +79,11 @@ public class StartScene implements Scene {
     @Override
     public void update() {
 
+        if (backToStart) {
+            createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
+            joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
+            backToStart = false;
+        }
 
         if (createGameUI != null && createGameUI.getVisibility() == View.VISIBLE) {
             Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");

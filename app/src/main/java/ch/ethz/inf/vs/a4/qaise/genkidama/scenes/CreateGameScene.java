@@ -212,10 +212,10 @@ public class CreateGameScene implements Scene{
 
                     if (playersSize > 1) loadAnimating = false;
 
-                    textView.append("Players [" + playersSize + "]: [|");
+                    textView.append("Players [" + playersSize + "]: [ | ");
                     for (Player player : players.values()) {
                         names.add(player.name);
-                        textView.append(player.name + "|");
+                        textView.append(player.name + " | ");
                     }
                     textView.append("]\n");
 
@@ -265,8 +265,13 @@ public class CreateGameScene implements Scene{
                     serviceStarted = false;
                     clientConnect = false;
                     setEnabled = false;
-                    KryoClient.close(); // close client connection
-                    if (isMyServiceRunning(KryoServer.class)) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            KryoClient.close(); // close client connection
+                        }
+                    }).start();
+                    if (isMyServiceRunning(KryoServer.class, activity)) {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -274,8 +279,9 @@ public class CreateGameScene implements Scene{
                             }
                         }).start();
                     }
-                    backToStart = false;
+//                    backToStart = false;
                 }
+                backToStart = false;
 
                 SceneManager.ACTIVE_SCENE = nextScene;
             }
@@ -312,7 +318,7 @@ public class CreateGameScene implements Scene{
         return true;
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
+    static boolean isMyServiceRunning(Class<?> serviceClass, Activity activity) {
         ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
