@@ -70,7 +70,7 @@ public class StartScene implements Scene {
                 15, 16,
                 8,
                 Constants.SCREEN_WIDTH/4,
-                Constants.SCREEN_HEIGHT/3,5, 5, false);
+                top,5, 5, false);
         coinAnimation.setFrameDuration(65);
 
     }
@@ -174,9 +174,9 @@ public class StartScene implements Scene {
         genkidamaLogo.setBounds(left, top, right, bottom);
         genkidamaLogo.draw(canvas);
 
-        coinAnimation.setWhereToDraw(left - 40, (bottom - top) - 30);
+        coinAnimation.setWhereToDraw(left - 40, (top < 75) ? (bottom - 40) : ((bottom - top) - 30));
         coinAnimation.draw(canvas);
-        coinAnimation.setWhereToDraw(right + 20, (bottom - top) - 30);
+        coinAnimation.setWhereToDraw(right + 20, (top < 75) ? (bottom - 40) : ((bottom - top) - 30));
         coinAnimation.draw(canvas);
 
     }

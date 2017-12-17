@@ -121,7 +121,7 @@ public class CreateGameScene implements Scene{
                                 serviceStarted = true;
 
                             } else if(serviceStarted) {
-                                Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -135,9 +135,9 @@ public class CreateGameScene implements Scene{
                                 KryoClient.startGame();
                                 terminate();
                             } else {
-                                Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\nmyPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\nmyPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_SHORT).show();
                                 if (KryoClient.getClient().isConnected()) {
-                                    Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(activity.getApplication(), "no connection", Toast.LENGTH_LONG).show();
                                 }
@@ -298,19 +298,19 @@ public class CreateGameScene implements Scene{
         String port = edit_port.getText().toString();
 
         if (!isValidString(name)){
-            Toast.makeText(activity.getApplication(), "Invalid Name! Only Characters allowed", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Name! Only Characters allowed", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (!isPort(port) || Integer.parseInt(port) < 1024 || Integer.parseInt(port) > 65535) {
-            Toast.makeText(activity.getApplication(), "Invalid Port or not in range of [1024, 65535].", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Port or not in range of [1024, 65535].", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         try {
             Constants.PORT_NUMBER = Integer.parseInt(port);
         } catch (NumberFormatException nfe){
-            Toast.makeText(activity.getApplication(), "Invalid Port Number!", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Port Number!", Toast.LENGTH_SHORT).show();
             return false;
         }
 
