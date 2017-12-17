@@ -25,20 +25,15 @@ public class ChargeBar implements GameObject {
     private final int ALPHA_BORDER = 200;      // [0...255] // missing charge
 
     // fixed position values, i.e. percentage of screen something should be
-    /*private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
-    private final int GAP_TOP_PART = 4;
-    private final int BACKGROUND_WIDTH_PART = 4;
-    private final int BACKGROUND_HEIGHT_PART = 24;
-    private final int BORDER_SIZE = 6;*/
+    
     private final int GAP_SIDE_PART = 20; // e.g. gap is one 16th of the screen
-    private final int GAP_TOP_PART = 6;
+    private final int GAP_TOP_PART = 8; // 6
     private final int BACKGROUND_WIDTH_PART = 4;
     private final int BACKGROUND_HEIGHT_PART = 28;
-    private final int BORDER_SIZE = 5;
-
+    private int borderSize;  // = 5;
 
     // relative position values:
-    private int gapSide, gapTop;                                // parameters for drawing: position and size
+    private int gapSide, gapTop, gapTopLow;                                // parameters for drawing: position and size
     private int backgroundWidth, backgroundHeight, chargeWidth;
 
     private int side;
@@ -54,6 +49,9 @@ public class ChargeBar implements GameObject {
         // Scaling size and position of the background part with final parameters above
         gapSide = Constants.SCREEN_WIDTH/GAP_SIDE_PART;        // where you want the charge bar
         gapTop = Constants.SCREEN_HEIGHT/GAP_TOP_PART;
+        gapTopLow = 5*Constants.SCREEN_HEIGHT/16;
+        borderSize = Constants.SCREEN_HEIGHT/200;
+
         backgroundWidth = Constants.SCREEN_WIDTH/ BACKGROUND_WIDTH_PART;         // how large it should be
         backgroundHeight = Constants.SCREEN_HEIGHT/ BACKGROUND_HEIGHT_PART;
 
@@ -66,20 +64,31 @@ public class ChargeBar implements GameObject {
     //TODO: Change that...
     private void makeRect(){
         // Distinguish on which side the player starts and initialize symmetrically
-        if(side == 1) {
-            // display on left side
-            rectBorder = new Rect(gapSide, gapTop,
-                    gapSide + 2*BORDER_SIZE + backgroundWidth, gapTop + backgroundHeight + 2*BORDER_SIZE);
-            rectCharge = new Rect(gapSide + BORDER_SIZE, gapTop + BORDER_SIZE,
-                    gapSide + BORDER_SIZE + chargeWidth, gapTop + BORDER_SIZE + backgroundHeight);
-        } else {
-            // display on right side
-            rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2*BORDER_SIZE - backgroundWidth, gapTop,
-                    Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2*BORDER_SIZE);
-            /*rectCharge = new Rect(Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth, gapTop + BORDER_SIZE,
-                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + chargeWidth, gapTop + BORDER_SIZE + backgroundHeight);*/
-            rectCharge = new Rect (Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - chargeWidth, gapTop + BORDER_SIZE,
-                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE, gapTop + BORDER_SIZE + backgroundHeight);
+        switch (side) {
+            case 1:
+                rectBorder = new Rect(gapSide, gapTop,
+                        gapSide + 2* borderSize + backgroundWidth, gapTop + backgroundHeight + 2* borderSize);
+                rectCharge = new Rect(gapSide + borderSize, gapTop + borderSize,
+                        gapSide + borderSize + chargeWidth, gapTop + borderSize + backgroundHeight);
+                break;
+            case 2:
+                rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2* borderSize - backgroundWidth, gapTop,
+                        Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2* borderSize);
+                rectCharge = new Rect (Constants.SCREEN_WIDTH - gapSide - borderSize - chargeWidth, gapTop + borderSize,
+                        Constants.SCREEN_WIDTH - gapSide - borderSize, gapTop + borderSize + backgroundHeight);
+                break;
+            case 3:
+                rectBorder = new Rect(gapSide, gapTopLow,
+                        gapSide + 2* borderSize + backgroundWidth, gapTopLow + backgroundHeight + 2* borderSize);
+                rectCharge = new Rect(gapSide + borderSize, gapTopLow + borderSize,
+                        gapSide + borderSize + chargeWidth, gapTopLow + borderSize + backgroundHeight);
+                break;
+            case 4:
+                rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2* borderSize - backgroundWidth, gapTopLow,
+                        Constants.SCREEN_WIDTH - gapSide, gapTopLow + backgroundHeight + 2* borderSize);
+                rectCharge = new Rect (Constants.SCREEN_WIDTH - gapSide - borderSize - chargeWidth, gapTopLow + borderSize,
+                        Constants.SCREEN_WIDTH - gapSide - borderSize, gapTopLow + borderSize + backgroundHeight);
+                break;
         }
     }
 
@@ -99,9 +108,9 @@ public class ChargeBar implements GameObject {
     public void update() {
         currCharge = player.getCurrentCharge();
         chargeWidth = currCharge* backgroundWidth / MaxCharge;
-        if (side == 1)
-            rectCharge.right = gapSide + BORDER_SIZE + chargeWidth;
+        if (side == 1 || side == 3)
+            rectCharge.right = gapSide + borderSize + chargeWidth;
         else
-            rectCharge.left = Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - chargeWidth;
+            rectCharge.left = Constants.SCREEN_WIDTH - gapSide - borderSize - chargeWidth;
     }
 }
