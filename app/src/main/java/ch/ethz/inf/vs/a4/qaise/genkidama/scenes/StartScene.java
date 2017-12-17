@@ -133,7 +133,7 @@ public class StartScene implements Scene {
                                 @Override
                                 public void run() {
                                     TextView textView = (TextView) activity.findViewById(Constants.TEXT_V);
-                                    textView.setText("");
+                                    textView.setText(" ");
                                     textView.setHint("Waiting for some action...");
                                     nextScene = Constants.Join_GAME_SCENE;
                                     terminate();
@@ -151,7 +151,7 @@ public class StartScene implements Scene {
                                 @Override
                                 public void run() {
                                     TextView textView = (TextView) activity.findViewById(Constants.TEXT_VIEW);
-                                    textView.setText("");
+                                    textView.setText(" ");
                                     textView.setHint("Waiting for some action...");
                                     nextScene = Constants.CREATE_GAME_SCENE;
                                     terminate();

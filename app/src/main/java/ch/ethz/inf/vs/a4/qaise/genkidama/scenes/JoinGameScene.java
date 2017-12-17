@@ -64,27 +64,11 @@ public class JoinGameScene implements Scene {
 
     Animation loadAnimation;
 
-//    private Drawable genkidamaLogo;
-//    private int top, right, left, bottom;
-
-
 
     public JoinGameScene(Activity activity) {
         this.activity = activity;
 
-//        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
-//            top = 5;
-//        } else {
-//            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
-//        }
-//
-//        // Scale rest of genkidamaLogo drawable
-//        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
-//        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
-//        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
 
-//        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
-//        genkidamaLogo.setBounds(left, top, right, bottom);
 
         loadAnimation = new Animation(
                 activity, R.drawable.color_pattern_clone_32,
@@ -95,6 +79,13 @@ public class JoinGameScene implements Scene {
         loadAnimation.setFrameDuration(50);
     }
 
+    public static void reset(){
+        setEnabled = false;
+        connect = false;
+        checkConnection = false;
+        isConnected = false;
+        backToStart = false;
+    }
 
     @Override
     public void update() {
@@ -318,14 +309,6 @@ public class JoinGameScene implements Scene {
                 SceneManager.ACTIVE_SCENE = nextScene;
             }
         });
-    }
-
-    public static void reset(){
-        setEnabled = false;
-        connect = false;
-        checkConnection = false;
-        isConnected = false;
-        backToStart = false;
     }
 
     @Override
