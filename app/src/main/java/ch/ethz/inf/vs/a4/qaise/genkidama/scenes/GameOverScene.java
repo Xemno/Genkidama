@@ -141,13 +141,16 @@ public class GameOverScene implements Scene {
                 RelativeLayout gameOverUI = (RelativeLayout) activity.findViewById(Constants.GAME_OVER_UI);
                 gameOverUI.setVisibility(View.GONE);
                 SceneManager.ACTIVE_SCENE = nextScene;
+
                 btn_active = false;
                 termination = false;
                 waiting = false;
                 firstcall = false;
+
                 if (nextScene == Constants.START_SCENE){
+                    StartScene.backToStart = true;
                     if (KryoServer.server != null){
-                        KryoServer.server.close();
+//                        KryoServer.server.close();
                         activity.stopService(new Intent(activity, KryoServer.class));
                         CreateGameScene.reset();
                     } else {
@@ -160,21 +163,14 @@ public class GameOverScene implements Scene {
                         JoinGameScene.reset();
                     }
                 }
-                /*if (nextScene == Constants.LOGIN_SCENE) {
-                    Toast.makeText(activity.getApplication(), "Your opponent didn't want to play anymore", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(activity.getApplication(), "Restarting game...", Toast.LENGTH_SHORT).show();
-                }*/
+
             }
         });
     }
 
     @Override
     public void receiveTouch(MotionEvent event) {
-        //TODO: I think nothing todo here? we dont touch each other
-        //only have to implement the onclick button methods
-        //change background, do medals, maybe music or something like that
-
+        // empty
     }
 
 

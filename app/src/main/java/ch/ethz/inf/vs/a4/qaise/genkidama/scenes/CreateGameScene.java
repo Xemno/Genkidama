@@ -96,13 +96,6 @@ public class CreateGameScene implements Scene{
         loadingAnimation.setFrameDuration(50);
     }
 
-    public static void reset(){
-        serviceStarted = false;
-        clientConnect = false;
-        setEnabled = false;
-        loadAnimating = false;
-        backToStart = false; //not sure if needed
-    }
     @Override
     public void update() {
 
@@ -305,6 +298,14 @@ public class CreateGameScene implements Scene{
                 SceneManager.ACTIVE_SCENE = nextScene;
             }
         });
+    }
+
+    public static void reset(){
+        serviceStarted = false;
+        clientConnect = false;
+        setEnabled = false;
+        loadAnimating = false;
+        backToStart = false; //not sure if needed -- TODO changed
     }
 
     @Override

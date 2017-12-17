@@ -197,7 +197,7 @@ public class GamePlayScene implements Scene {
             });
         }
 
-        if (!CLIENT_CONNECTED)  { // TODO: test this
+        if (!CLIENT_CONNECTED)  {
             nextScene = Constants.START_SCENE;
             terminate();
         }
@@ -273,7 +273,6 @@ public class GamePlayScene implements Scene {
         layer6 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer6);
         layer6.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
         layer6.draw(canvas);
-
 
     }
 

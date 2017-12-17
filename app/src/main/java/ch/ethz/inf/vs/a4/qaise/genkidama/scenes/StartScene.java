@@ -31,13 +31,12 @@ public class StartScene implements Scene {
 
     private static final String TAG = "#StartScene#";
 
-
     private Activity activity;
     private Button join_btn, create_btn;
 
     private boolean btn_active = false;
     private int nextScene;
-    public static boolean backToStart = false; // TODO: [*] not sure if needed
+    public static boolean backToStart = false;
 
     private int top, right, left, bottom;
 

@@ -43,9 +43,6 @@ public class MainActivity extends AppCompatActivity {
     public static Context context;
     //declaration for sound here
     private MediaPlayer backgroundsound;
-    //public static MediaPlayer attacksound;
-    //public static MediaPlayer specialattacksound;
-    //initialize mediaplayers here and used in gameplayscene
     private Equalizer mEqualizer;
 
     @Override
@@ -510,6 +507,23 @@ public class MainActivity extends AppCompatActivity {
         KryoClient.close();
 
         if (backgroundsound != null) {
+            backgroundsound.pause();
+//            backgroundsound.release();
+//            backgroundsound = null;
+        }
+
+
+        // stop the server
+        stopService(new Intent(this, KryoServer.class));
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        KryoClient.close();
+
+        if (backgroundsound != null) {
             backgroundsound.stop();
             backgroundsound.release();
             backgroundsound = null;
@@ -529,15 +543,17 @@ public class MainActivity extends AppCompatActivity {
 
         // stop the server
         stopService(new Intent(this, KryoServer.class));
-
     }
 
-
- @Override
+    @Override
     protected void onResume() {
         super.onResume();
-        if ((KryoClient.getClient() == null) || !KryoClient.getClient().isConnected()) {
-            KryoClient.getInstance().connect(); //TODO: test this, newly added
+//        if ((KryoClient.getClient() == null) || !KryoClient.getClient().isConnected()) {
+//            KryoClient.getInstance().connect();
+//        }
+
+        if (backgroundsound != null) {
+            backgroundsound.start();
         }
     }
 

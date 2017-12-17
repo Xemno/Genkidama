@@ -95,13 +95,6 @@ public class JoinGameScene implements Scene {
         loadAnimation.setFrameDuration(50);
     }
 
-    public static void reset(){
-        setEnabled = false;
-        connect = false;
-        checkConnection = false;
-        isConnected = false;
-        backToStart = false;
-    }
 
     @Override
     public void update() {
@@ -325,6 +318,14 @@ public class JoinGameScene implements Scene {
                 SceneManager.ACTIVE_SCENE = nextScene;
             }
         });
+    }
+
+    public static void reset(){
+        setEnabled = false;
+        connect = false;
+        checkConnection = false;
+        isConnected = false;
+        backToStart = false;
     }
 
     @Override
