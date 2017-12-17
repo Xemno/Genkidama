@@ -84,10 +84,25 @@ public class GamePlayScene implements Scene {
             if (myPlayer().id == player.id) {
                 PointF new_point;
                 int count = 4;
-                if (side % 2 != 0) { // draw on left side
+                /*if (side % 2 != 0) { // draw on left side
                     new_point = new PointF(side * SCREEN_WIDTH/count, Constants.fixDist);
                 } else {  // draw on right side
                     new_point = new PointF(SCREEN_WIDTH - ((side) * SCREEN_WIDTH/count) , Constants.fixDist);
+                }*/
+                switch (side) {
+                    case 1:
+                        new_point = new PointF(SCREEN_WIDTH/5, Constants.fixDist);
+                        break;
+                    case 2:
+                        new_point = new PointF(4*SCREEN_WIDTH/5, Constants.fixDist);
+                        break;
+                    case 3:
+                        new_point = new PointF(2*SCREEN_WIDTH/5, Constants.fixDist);
+                        break;
+                    case 4:
+                        new_point = new PointF(3*SCREEN_WIDTH/5, Constants.fixDist);
+                        break;
+                    default: new_point = new PointF(3*SCREEN_WIDTH/5, Constants.fixDist);
                 }
                 System.out.println("my pos: " + (new_point.x /SCREEN_WIDTH) + ", " + (new_point.y /SCREEN_HEIGHT ));
                 KryoClient.send(new PointF(new_point.x / SCREEN_WIDTH, new_point.y/ SCREEN_HEIGHT));
@@ -205,6 +220,9 @@ public class GamePlayScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
+        if(new_game){
+            update();
+        }
         layer1_5 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer1_5);
         layer1_5.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
         layer1_5.draw(canvas);

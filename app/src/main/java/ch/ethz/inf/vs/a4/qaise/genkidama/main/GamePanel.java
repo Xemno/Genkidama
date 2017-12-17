@@ -29,6 +29,7 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.CHARGE_AMOUNT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.MAX_CHARGE;
+import static ch.ethz.inf.vs.a4.qaise.genkidama.scenes.GameOverScene.termination;
 
 
 /**
@@ -119,7 +120,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     /***** SETUP *****/
     public static HashMap<Integer, Player> players = new HashMap();
 
-    private static HashMap<Integer, Integer> voteResults = new HashMap<>();
+    public static HashMap<Integer, Integer> voteResults = new HashMap<>();
     // Voting on replay works the following:
     // 1 is rematch
     // 2 is no rematch
