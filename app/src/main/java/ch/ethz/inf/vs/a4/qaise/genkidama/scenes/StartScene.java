@@ -13,9 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import ch.ethz.inf.vs.a4.qaise.genkidama.R;
 import ch.ethz.inf.vs.a4.qaise.genkidama.animation.Animation;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
+import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
 
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_HEIGHT;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants.SCREEN_WIDTH;
@@ -40,11 +43,17 @@ public class StartScene implements Scene {
 
     private Animation coinAnimation;
 
-    private Drawable genkidamaLogo;
+    static Drawable genkidamaLogo;
+
+    private RelativeLayout createGameUI;
+    private RelativeLayout joinGameUI;
 
 
     public StartScene(Activity activity) {
         this.activity = activity;
+
+        createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
+        joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
 
         // Scale top of genkidamaLogo drawable
         if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
@@ -58,13 +67,15 @@ public class StartScene implements Scene {
         left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
         bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
 
+        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
+        genkidamaLogo.setBounds(left, top, right, bottom);
 
         coinAnimation = new Animation(
                 activity, R.drawable.coins,
                 15, 16,
                 8,
                 Constants.SCREEN_WIDTH/4,
-                Constants.SCREEN_HEIGHT/3,5, 5, false);
+                top,5, 5, false);
         coinAnimation.setFrameDuration(65);
 
     }
@@ -73,29 +84,31 @@ public class StartScene implements Scene {
     @Override
     public void update() {
 
-//        if (backToStart) {
-//            RelativeLayout createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
-//            if (createGameUI.getVisibility() == View.VISIBLE) {
-//                Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");
-//            }
-//            createGameUI.setVisibility(View.GONE);
-//
-//            RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
-//            if (joinGameUI.getVisibility() == View.VISIBLE) {
-//                Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");
-//            }
-//            joinGameUI.setVisibility(View.GONE);
-//            backToStart = false;
-//        }
-
-        RelativeLayout createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
-        if (createGameUI.getVisibility() == View.VISIBLE) {
-            Log.e(TAG, "VIEW BACK TO VISIBLE");
+        if (backToStart) {
+            createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
+            joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
+            backToStart = false;
         }
 
-        RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
-        if (joinGameUI.getVisibility() == View.VISIBLE) {
-            Log.e(TAG, "VIEW BACK TO VISIBLE");
+        if (createGameUI != null && createGameUI.getVisibility() == View.VISIBLE) {
+            Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    createGameUI.setVisibility(View.GONE);
+                }
+            });
+
+        }
+
+        if (joinGameUI != null && joinGameUI.getVisibility() == View.VISIBLE) {
+            Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    joinGameUI.setVisibility(View.GONE);
+                }
+            });
         }
 
         // TODO: check for internet connection here
@@ -155,6 +168,16 @@ public class StartScene implements Scene {
             });
         }
 
+        if (coinAnimation == null) {
+            coinAnimation = new Animation(
+                    activity, R.drawable.coins,
+                    15, 16,
+                    8,
+                    Constants.SCREEN_WIDTH/4,
+                    top,5, 5, false);
+            coinAnimation.setFrameDuration(65);
+        }
+
     }
 
     @Override
@@ -162,14 +185,16 @@ public class StartScene implements Scene {
         canvas.drawColor(Color.rgb(240, 230, 140)); // BACKGROUND color khaki
 
         // Draw Genkidama Text, centered and scales accordingly to the screen size
-        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
-        genkidamaLogo.setBounds(left, top, right, bottom);
         genkidamaLogo.draw(canvas);
 
-        coinAnimation.setWhereToDraw(left - 40, (bottom - top) - 30);
-        coinAnimation.draw(canvas);
-        coinAnimation.setWhereToDraw(right + 20, (bottom - top) - 30);
-        coinAnimation.draw(canvas);
+
+        if (coinAnimation != null) {
+            coinAnimation.setWhereToDraw(left - 40, (top < 75) ? (bottom - 40) : ((bottom - top) - 30));
+            coinAnimation.draw(canvas);
+            coinAnimation.setWhereToDraw(right + 20, (top < 75) ? (bottom - 40) : ((bottom - top) - 30));
+            coinAnimation.draw(canvas);
+        }
+
 
     }
 
@@ -182,8 +207,8 @@ public class StartScene implements Scene {
                 startUI.setVisibility(View.GONE);
                 btn_active = false;
                 SceneManager.ACTIVE_SCENE = nextScene;
-//                coinAnimation.recycle();
-
+                coinAnimation.recycle();
+                coinAnimation = null;
             }
         });
     }

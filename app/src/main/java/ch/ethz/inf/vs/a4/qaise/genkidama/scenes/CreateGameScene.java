@@ -50,7 +50,7 @@ public class CreateGameScene implements Scene{
     private TextView textView;
 
     private int nextScene;
-    private int top, right, left, bottom;
+//    private int top, right, left, bottom;
     private int playersSize = 0;
 
     private boolean btn_active = false;
@@ -65,7 +65,7 @@ public class CreateGameScene implements Scene{
     HashSet<String> names = new HashSet<>();
 
 
-    private Drawable genkidamaLogo;
+//    private Drawable genkidamaLogo;
     private Animation loadingAnimation;
 
 
@@ -73,16 +73,19 @@ public class CreateGameScene implements Scene{
         this.activity = activity;
 
         // Scale top of genkidamaLogo drawable
-        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
-            top = 5;
-        } else {
-            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
-        }
+//        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
+//            top = 5;
+//        } else {
+//            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
+//        }
 
         // Scale rest of genkidamaLogo drawable
-        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
-        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
-        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
+//        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
+//        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
+//        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
+
+//        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
+//        genkidamaLogo.setBounds(left, top, right, bottom);
 
         loadingAnimation = new Animation(
                 activity, R.drawable.loading_32,
@@ -128,7 +131,7 @@ public class CreateGameScene implements Scene{
                                 serviceStarted = true;
 
                             } else if(serviceStarted) {
-                                Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -142,9 +145,9 @@ public class CreateGameScene implements Scene{
                                 KryoClient.startGame();
                                 terminate();
                             } else {
-                                Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\nmyPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\nmyPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_SHORT).show();
                                 if (KryoClient.getClient().isConnected()) {
-                                    Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(activity.getApplication(), "no connection", Toast.LENGTH_LONG).show();
                                 }
@@ -219,15 +222,25 @@ public class CreateGameScene implements Scene{
 
                     if (playersSize > 1) loadAnimating = false;
 
-                    textView.append("Players [" + playersSize + "]: [|");
+                    textView.append("Players [" + playersSize + "]: [ | ");
                     for (Player player : players.values()) {
                         names.add(player.name);
-                        textView.append(player.name + "|");
+                        textView.append(player.name + " | ");
                     }
                     textView.append("]\n");
 
                 }
             });
+        }
+
+        if (loadingAnimation == null) {
+            loadingAnimation = new Animation(
+                    activity, R.drawable.loading_32,
+                    32, 32,
+                    16,
+                    Constants.SCREEN_WIDTH - 32*4 - 50,
+                    50, 4, 4, false);
+            loadingAnimation.setFrameDuration(50);
         }
     }
 
@@ -236,11 +249,9 @@ public class CreateGameScene implements Scene{
         canvas.drawColor(Color.rgb(255,215,0)); // BACKGROUND color gold
 
         // Draw Genkidama Text, centered and scales accordingly to the screen size
-        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
-        genkidamaLogo.setBounds(left, top, right, bottom);
-        genkidamaLogo.draw(canvas);
+        StartScene.genkidamaLogo.draw(canvas);
 
-        if (serviceStarted && loadAnimating) loadingAnimation.draw(canvas);
+        if (serviceStarted && loadAnimating && (loadingAnimation != null)) loadingAnimation.draw(canvas);
     }
 
     @Override
@@ -266,14 +277,20 @@ public class CreateGameScene implements Scene{
                 btn_active = false;
                 loadAnimating = false;
 
-//                loadingAnimation.recycle();
+                loadingAnimation.recycle();
+                loadingAnimation = null;
 
                 if (backToStart) {
                     serviceStarted = false;
                     clientConnect = false;
                     setEnabled = false;
-                    KryoClient.close(); // close client connection
-                    if (isMyServiceRunning(KryoServer.class)) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            KryoClient.close(); // close client connection
+                        }
+                    }).start();
+                    if (isMyServiceRunning(KryoServer.class, activity)) {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -281,8 +298,9 @@ public class CreateGameScene implements Scene{
                             }
                         }).start();
                     }
-                    backToStart = false;
+//                    backToStart = false;
                 }
+                backToStart = false;
 
                 SceneManager.ACTIVE_SCENE = nextScene;
             }
@@ -299,19 +317,19 @@ public class CreateGameScene implements Scene{
         String port = edit_port.getText().toString();
 
         if (!isValidString(name)){
-            Toast.makeText(activity.getApplication(), "Invalid Name! Only Characters allowed", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Name! Only Characters allowed", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (!isPort(port) || Integer.parseInt(port) < 1024 || Integer.parseInt(port) > 65535) {
-            Toast.makeText(activity.getApplication(), "Invalid Port or not in range of [1024, 65535].", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Port or not in range of [1024, 65535].", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         try {
             Constants.PORT_NUMBER = Integer.parseInt(port);
         } catch (NumberFormatException nfe){
-            Toast.makeText(activity.getApplication(), "Invalid Port Number!", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Port Number!", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -319,7 +337,7 @@ public class CreateGameScene implements Scene{
         return true;
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
+    static boolean isMyServiceRunning(Class<?> serviceClass, Activity activity) {
         ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {

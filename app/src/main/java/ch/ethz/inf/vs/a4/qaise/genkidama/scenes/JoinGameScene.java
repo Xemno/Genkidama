@@ -64,24 +64,27 @@ public class JoinGameScene implements Scene {
 
     Animation loadAnimation;
 
-    private Drawable genkidamaLogo;
-    private int top, right, left, bottom;
+//    private Drawable genkidamaLogo;
+//    private int top, right, left, bottom;
 
 
 
     public JoinGameScene(Activity activity) {
         this.activity = activity;
 
-        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
-            top = 5;
-        } else {
-            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
-        }
+//        if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
+//            top = 5;
+//        } else {
+//            top = SCREEN_HEIGHT/20 - SCREEN_WIDTH/16;
+//        }
+//
+//        // Scale rest of genkidamaLogo drawable
+//        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
+//        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
+//        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
 
-        // Scale rest of genkidamaLogo drawable
-        right = SCREEN_WIDTH/2 + SCREEN_WIDTH/4;
-        left = SCREEN_WIDTH/2 - SCREEN_WIDTH/4;
-        bottom = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16;
+//        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
+//        genkidamaLogo.setBounds(left, top, right, bottom);
 
         loadAnimation = new Animation(
                 activity, R.drawable.color_pattern_clone_32,
@@ -133,6 +136,13 @@ public class JoinGameScene implements Scene {
                                             lastTime = System.currentTimeMillis();
                                         }
                                     });
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            KryoClient.getInstance().connect();
+                                            connect = true;
+                                        }
+                                    }).start();
                                 } else {
                                     activity.runOnUiThread(new Runnable() {
                                         @Override
@@ -141,14 +151,6 @@ public class JoinGameScene implements Scene {
                                         }
                                     });
                                 }
-
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        KryoClient.getInstance().connect();
-                                        connect = true;
-                                    }
-                                }).start();
 
                                 setEnabled = true;
                                 checkConnection = true;
@@ -166,9 +168,9 @@ public class JoinGameScene implements Scene {
                                 nextScene = Constants.GAMEPLAY_SCENE;
                                 terminate();
                             } else {
-                                Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\nmyPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity.getApplication(), "PlayerSize: " + players.size() + "\nmyPlayer added : " + (myPlayer()!=null) , Toast.LENGTH_SHORT).show();
                                 if (KryoClient.getClient().isConnected()) {
-                                    Toast.makeText(activity.getApplication(), "already connected...", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity.getApplication(), "Group Leader can only start the game", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(activity.getApplication(), "no connection", Toast.LENGTH_LONG).show();
                                 }
@@ -249,12 +251,21 @@ public class JoinGameScene implements Scene {
 
             }
 
-
         }
 
         if (START_GAME) {
             nextScene = Constants.GAMEPLAY_SCENE;
             terminate();
+        }
+
+        if (loadAnimation == null) {
+            loadAnimation = new Animation(
+                    activity, R.drawable.color_pattern_clone_32,
+                    32, 32,
+                    23,
+                    Constants.SCREEN_WIDTH - 32*4 - 25,
+                    25,4, 4, false);
+            loadAnimation.setFrameDuration(50);
         }
 
     }
@@ -264,11 +275,9 @@ public class JoinGameScene implements Scene {
         canvas.drawColor(Color.rgb(238,232,170)); // BACKGROUND color pale golden rod
 
         // Draw Genkidama Text, centered and scales accordingly to the screen size
-        genkidamaLogo = activity.getBaseContext().getResources().getDrawable(R.drawable.genkidama_splash);
-        genkidamaLogo.setBounds(left, top, right, bottom);
-        genkidamaLogo.draw(canvas);
+        StartScene.genkidamaLogo.draw(canvas);
 
-        if (checkConnection) loadAnimation.draw(canvas);
+        if (checkConnection && (loadAnimation != null)) loadAnimation.draw(canvas);
 
     }
 
@@ -279,6 +288,9 @@ public class JoinGameScene implements Scene {
             public void run() {
                 RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
                 joinGameUI.setVisibility(View.GONE);
+
+                loadAnimation.recycle();
+                loadAnimation = null;
 
                 switch (joinGameUI.getVisibility()) {
                     case View.VISIBLE :
@@ -295,6 +307,7 @@ public class JoinGameScene implements Scene {
                 btn_active = false;
                 setEnabled = false;
                 checkConnection = false;
+                START_GAME = false;
 
                 if (backToStart) {
                     new Thread(new Runnable() {
@@ -305,8 +318,9 @@ public class JoinGameScene implements Scene {
                     }).start();
                     isConnected = false;
                     connect = false;
-                    backToStart = false;
+//                    backToStart = false;
                 }
+                backToStart = false;
 
                 SceneManager.ACTIVE_SCENE = nextScene;
             }
@@ -324,22 +338,22 @@ public class JoinGameScene implements Scene {
         String port = port_number.getText().toString();
 
         if (!isValidString(name)){
-            Toast.makeText(activity.getApplication(), "Invalid Name! Only Characters allowed", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Name! Only Characters allowed", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!isIP(ip)){
-            Toast.makeText(activity.getApplication(), "Invalid IP format!", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid IP format!", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!isPort(port) || Integer.parseInt(port) < 1024 || Integer.parseInt(port) > 65535) {
-            Toast.makeText(activity.getApplication(), "Invalid Port or not in range of [1024, 65535].", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Port or not in range of [1024, 65535].", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         try {
             Constants.PORT_NUMBER = Integer.parseInt(port);
         } catch (NumberFormatException nfe){
-            Toast.makeText(activity.getApplication(), "Invalid Port Number!", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplication(), "Invalid Port Number!", Toast.LENGTH_SHORT).show();
             return false;
         }
 

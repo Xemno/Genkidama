@@ -15,12 +15,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
-
 import ch.ethz.inf.vs.a4.qaise.genkidama.gameobjects.Player;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel;
@@ -28,6 +22,8 @@ import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoClient;
 import ch.ethz.inf.vs.a4.qaise.genkidama.network.KryoServer;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.myPlayer;
 import static ch.ethz.inf.vs.a4.qaise.genkidama.main.GamePanel.players;
+
+import static ch.ethz.inf.vs.a4.qaise.genkidama.scenes.CreateGameScene.isMyServiceRunning;
 
 /**
  * Created by Qais on 26-Nov-17.
@@ -155,7 +151,12 @@ public class GameOverScene implements Scene {
                         activity.stopService(new Intent(activity, KryoServer.class));
                         CreateGameScene.reset();
                     } else {
-                        KryoClient.close();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                KryoClient.close();
+                            }
+                        }).start();
                         JoinGameScene.reset();
                     }
                 }

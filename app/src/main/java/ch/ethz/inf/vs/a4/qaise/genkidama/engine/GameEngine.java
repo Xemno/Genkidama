@@ -17,7 +17,7 @@ public class GameEngine extends Thread{
     public static final String TAG = "###MainThread### -> ";
     public static final int MAX_FPS = 30;   // limit FPS, otherwise too many unnecessary calls to the game loop
     private double averageFPS;
-    private SurfaceHolder surfaceHolder;
+    private final SurfaceHolder surfaceHolder;
     private GamePanel gamePanel;
     private boolean running; // if you want to make this public then make it volatile!
     public static Canvas canvas;

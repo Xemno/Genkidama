@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
+import android.graphics.Typeface;
 
 import ch.ethz.inf.vs.a4.qaise.genkidama.main.Constants;
 
@@ -33,22 +33,28 @@ public class HealthBar implements GameObject {
     private final int ALPHA_BORDER = 200;      // [0...255] // missing health
 
     // fixed position values, i.e. percentage of screen something should be
-    /*private final int GAP_SIDE_PART = 16; // e.g. gap is one 16th of the screen
-    private final int GAP_TOP_PART = 8;
-    private final int BACKGROUND_WIDTH_PART = 3;
-    private final int BACKGROUND_HEIGHT_PART = 12;
-    private final int BORDER_SIZE = 10;*/
+
     private final int GAP_SIDE_PART = 20; // e.g. gap is one 16th of the screen
     private final int GAP_TOP_PART = 16;
     private final int BACKGROUND_WIDTH_PART = 3;
-    private final int BACKGROUND_HEIGHT_PART = 14;
-    private final int BORDER_SIZE = 6;
+    private final int BACKGROUND_HEIGHT_PART = 20; //14
+    private final int borderSize; // = 6;
+
+    //TODO: set values in a nice looking way
+    private final int GAP_TOP_PART_LOW  = 4;
 
     // relative position values:
-    private int gapSide, gapTop;                                // parameters for drawing: position and size
+    private int gapSide, gapTop, gapTopLow;                                // parameters for drawing: position and size
     private int backgroundWidth, backgroundHeight, healthWidth;
 
     private int side;
+
+
+    // for the name:
+    private int gapTopText, gapTopTextLow;
+    final int fontSize = Constants.SCREEN_HEIGHT/24;
+    Typeface font = Typeface.create("Arial", Typeface.BOLD);
+    private String name;
 
 
     public HealthBar(Player player) {
@@ -65,38 +71,94 @@ public class HealthBar implements GameObject {
         // Scaling size and position of the background part with final parameters above
         gapSide = Constants.SCREEN_WIDTH/GAP_SIDE_PART;        // where you want the healthbar
         gapTop = Constants.SCREEN_HEIGHT/GAP_TOP_PART;
+        gapTopLow = Constants.SCREEN_HEIGHT/GAP_TOP_PART_LOW;
+        borderSize = Constants.SCREEN_HEIGHT/180;
+
         backgroundWidth = Constants.SCREEN_WIDTH/ BACKGROUND_WIDTH_PART;         // how large it should be
         backgroundHeight = Constants.SCREEN_HEIGHT/BACKGROUND_HEIGHT_PART;
 
         // Health part has 2 pixel border and following width
         healthWidth = currHealth* backgroundWidth /MaxHealth;
 
+        // for the name text
+        gapTopText = Constants.SCREEN_HEIGHT/20;
+        gapTopTextLow = 19*Constants.SCREEN_HEIGHT/80;    // /4;
+        this.name = player.name;
+
         makeRect();
     }
 
     //TODO: Change that...work with ID instead of 'side'
+    // TODO: But why?, ID could have distances bigger than 1, so modulus wouldn't work anymore
     private void makeRect(){
         // Distinguish on which side the player starts and initialize symmetrically
-        if(side == 1) {
+
+        switch (side) {
+            case 1: // top left
+                rectBorder = new Rect(gapSide, gapTop,
+                        gapSide + 2* borderSize + backgroundWidth, gapTop + backgroundHeight + 2* borderSize);
+                rectHealth = new Rect(gapSide + borderSize, gapTop + borderSize,
+                        gapSide + borderSize + healthWidth, gapTop + borderSize + backgroundHeight);
+                break;
+            case 2: // top right
+                rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2* borderSize - backgroundWidth, gapTop,
+                        Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2* borderSize);
+                rectHealth = new Rect (Constants.SCREEN_WIDTH - gapSide - borderSize - healthWidth, gapTop + borderSize,
+                        Constants.SCREEN_WIDTH - gapSide - borderSize, gapTop + borderSize + backgroundHeight);
+                break;
+            case 3: // bottom left
+                rectBorder = new Rect(gapSide, gapTopLow,
+                        gapSide + 2* borderSize + backgroundWidth, gapTopLow + backgroundHeight + 2* borderSize);
+                rectHealth = new Rect(gapSide + borderSize, gapTopLow + borderSize,
+                        gapSide + borderSize + healthWidth, gapTopLow + borderSize + backgroundHeight);
+                break;
+            case 4: // bottom right
+                rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2* borderSize - backgroundWidth, gapTopLow,
+                        Constants.SCREEN_WIDTH - gapSide, gapTopLow + backgroundHeight + 2* borderSize);
+                rectHealth = new Rect (Constants.SCREEN_WIDTH - gapSide - borderSize - healthWidth, gapTopLow + borderSize,
+                        Constants.SCREEN_WIDTH - gapSide - borderSize, gapTopLow + borderSize + backgroundHeight);
+                break;
+        }
+
+        /*if(side == 1) {
             // display on left side
             rectBorder = new Rect(gapSide, gapTop,
-                    gapSide + 2*BORDER_SIZE + backgroundWidth, gapTop + backgroundHeight + 2*BORDER_SIZE);
-            rectHealth = new Rect(gapSide + BORDER_SIZE, gapTop + BORDER_SIZE,
-                    gapSide + BORDER_SIZE + healthWidth, gapTop + BORDER_SIZE + backgroundHeight);
-        } else /*if(side == 2)*/ {
+                    gapSide + 2*borderSize + backgroundWidth, gapTop + backgroundHeight + 2*borderSize);
+            rectHealth = new Rect(gapSide + borderSize, gapTop + borderSize,
+                    gapSide + borderSize + healthWidth, gapTop + borderSize + backgroundHeight);
+        } else  {
             // display on right side
-            rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2*BORDER_SIZE - backgroundWidth, gapTop,
-                    Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2*BORDER_SIZE);
-            /*rectHealth = new Rect(Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth, gapTop + BORDER_SIZE,
-                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - backgroundWidth + healthWidth, gapTop + BORDER_SIZE + backgroundHeight);*/
-            rectHealth = new Rect (Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - healthWidth, gapTop + BORDER_SIZE,
-                    Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE, gapTop + BORDER_SIZE + backgroundHeight);
-        }
+            rectBorder = new Rect(Constants.SCREEN_WIDTH - gapSide - 2*borderSize - backgroundWidth, gapTop,
+                    Constants.SCREEN_WIDTH - gapSide, gapTop + backgroundHeight + 2*borderSize);
+            rectHealth = new Rect (Constants.SCREEN_WIDTH - gapSide - borderSize - healthWidth, gapTop + borderSize,
+                    Constants.SCREEN_WIDTH - gapSide - borderSize, gapTop + borderSize + backgroundHeight);
+        }*/
     }
 
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
+
+        paint.setColor(Color.BLACK);
+        paint.setTypeface(font);
+        paint.setTextSize(fontSize);
+        paint.setAntiAlias(true);
+
+        switch (side) {
+            case 1:
+                canvas.drawText(name, gapSide, gapTopText, paint);
+                break;
+            case 2:
+                canvas.drawText(name, Constants.SCREEN_WIDTH - gapSide - backgroundWidth, gapTopText, paint);
+                break;
+            case 3:
+                canvas.drawText(name, gapSide, gapTopTextLow, paint);
+                break;
+            case 4:
+                canvas.drawText(name, Constants.SCREEN_WIDTH - gapSide - backgroundWidth, gapTopTextLow, paint);
+                break;
+        }
+
         paint.setColor(COLOR_BORDER);
         paint.setAlpha(ALPHA_BORDER);
         canvas.drawRect(rectBorder, paint);
@@ -117,10 +179,10 @@ public class HealthBar implements GameObject {
 
         healthWidth = currHealth* backgroundWidth /MaxHealth;
 
-        if(side == 1)
-            rectHealth.right = gapSide + BORDER_SIZE + healthWidth;
+        if(side == 1 || side == 3)
+            rectHealth.right = gapSide + borderSize + healthWidth;
         else
-            rectHealth.left = Constants.SCREEN_WIDTH - gapSide - BORDER_SIZE - healthWidth;
+            rectHealth.left = Constants.SCREEN_WIDTH - gapSide - borderSize - healthWidth;
     }
 }
 
