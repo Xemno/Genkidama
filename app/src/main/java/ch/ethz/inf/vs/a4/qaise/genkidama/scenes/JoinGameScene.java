@@ -242,7 +242,6 @@ public class JoinGameScene implements Scene {
 
             }
 
-
         }
 
         if (START_GAME) {

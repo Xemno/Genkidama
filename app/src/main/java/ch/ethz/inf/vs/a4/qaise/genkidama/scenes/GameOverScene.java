@@ -76,7 +76,12 @@ public class GameOverScene implements Scene {
                                         activity.stopService(new Intent(activity, KryoServer.class));
                                         Toast.makeText(activity.getApplication(), "Server stopped.", Toast.LENGTH_LONG).show();
                                     } else {
-                                        KryoClient.close();
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                KryoClient.close();
+                                            }
+                                        }).start();
                                     }
                                 }
                             //ugly loop to wait for termination
@@ -97,11 +102,21 @@ public class GameOverScene implements Scene {
                             //startActivity(new Intent(this, MainActivity.class));
                             nextScene = Constants.START_SCENE;
                             if (KryoServer.server != null){
-                                KryoServer.server.close();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        KryoServer.server.close();
+                                    }
+                                }).start();
                                 activity.stopService(new Intent(activity, KryoServer.class));
                                 Toast.makeText(activity.getApplication(), "Server stopped.", Toast.LENGTH_LONG).show();
                             } else {
-                                KryoClient.close();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        KryoClient.close();
+                                    }
+                                }).start();
                             }
                             terminate();
 
@@ -145,7 +160,12 @@ public class GameOverScene implements Scene {
                         KryoServer.server.close();
                         activity.stopService(new Intent(activity, KryoServer.class));
                     } else {
-                        KryoClient.close();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                KryoClient.close();
+                            }
+                        }).start();
                     }
                 }
                 termination = false;

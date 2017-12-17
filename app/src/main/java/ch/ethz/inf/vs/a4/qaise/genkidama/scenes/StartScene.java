@@ -42,9 +42,15 @@ public class StartScene implements Scene {
 
     private Drawable genkidamaLogo;
 
+    private RelativeLayout createGameUI;
+    private RelativeLayout joinGameUI;
+
 
     public StartScene(Activity activity) {
         this.activity = activity;
+
+        createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
+        joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
 
         // Scale top of genkidamaLogo drawable
         if ((SCREEN_HEIGHT/20 - SCREEN_WIDTH/16) <= 5) {
@@ -73,30 +79,27 @@ public class StartScene implements Scene {
     @Override
     public void update() {
 
-//        if (backToStart) {
-//            RelativeLayout createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
-//            if (createGameUI.getVisibility() == View.VISIBLE) {
-//                Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");
-//            }
-//            createGameUI.setVisibility(View.GONE);
-//
-//            RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
-//            if (joinGameUI.getVisibility() == View.VISIBLE) {
-//                Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");
-//            }
-//            joinGameUI.setVisibility(View.GONE);
-//            backToStart = false;
+
+        if (createGameUI != null && createGameUI.getVisibility() == View.VISIBLE) {
+            Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");
+            createGameUI.setVisibility(View.GONE);
+        }
+
+        if (joinGameUI != null && joinGameUI.getVisibility() == View.VISIBLE) {
+            Log.e(TAG, "ERROR: VIEW BACK TO VISIBLE");
+            joinGameUI.setVisibility(View.GONE);
+        }
+
+
+//        RelativeLayout createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
+//        if (createGameUI.getVisibility() == View.VISIBLE) {
+//            Log.e(TAG, "VIEW BACK TO VISIBLE");
 //        }
-
-        RelativeLayout createGameUI = (RelativeLayout) activity.findViewById(Constants.CREATE_GAME_UI);
-        if (createGameUI.getVisibility() == View.VISIBLE) {
-            Log.e(TAG, "VIEW BACK TO VISIBLE");
-        }
-
-        RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
-        if (joinGameUI.getVisibility() == View.VISIBLE) {
-            Log.e(TAG, "VIEW BACK TO VISIBLE");
-        }
+//
+//        RelativeLayout joinGameUI = (RelativeLayout) activity.findViewById(Constants.JOIN_GAME_UI);
+//        if (joinGameUI.getVisibility() == View.VISIBLE) {
+//            Log.e(TAG, "VIEW BACK TO VISIBLE");
+//        }
 
         // TODO: check for internet connection here
 

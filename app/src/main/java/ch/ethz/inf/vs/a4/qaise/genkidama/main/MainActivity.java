@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         Typeface typefaceCDEF = Typeface.createFromAsset(getAssets(), "fonts/CDEF.ttf"); // custom font
         Typeface typefaceBandit = Typeface.createFromAsset(getAssets(), "fonts/Bandit.ttf"); // custom font
 
-        float textSize = 20;
+        float textSize = 25;
         float btnTextSize = 40;
 
 
@@ -126,13 +126,13 @@ public class MainActivity extends AppCompatActivity {
         startSceneUI.setVisibility(View.GONE);
 
         // Layout gameUI
-        RelativeLayout.LayoutParams joinParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams joinParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 //        joinParams.topMargin = SCREEN_HEIGHT/20 + SCREEN_WIDTH/16; // set to same as bottom of genkidamaLogo
         joinParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         joinParams.addRule(RelativeLayout.CENTER_VERTICAL);
         join_btn.setLayoutParams(joinParams);
 
-        RelativeLayout.LayoutParams createParams = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams createParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         createParams.addRule(RelativeLayout.BELOW, Constants.JOIN_BUTTON);
         createParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         createParams.topMargin = 10;
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         textV.setMovementMethod(ScrollingMovementMethod.getInstance());
         textV.setId(Constants.TEXT_V);
 
-        RelativeLayout.LayoutParams tV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/2, 3*Constants.SCREEN_HEIGHT/5); // TODO added
+        RelativeLayout.LayoutParams tV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/2, 3*Constants.SCREEN_HEIGHT/5);
         tV_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         tV_params.addRule(RelativeLayout.CENTER_IN_PARENT);
         tV_params.rightMargin = 10;
@@ -208,29 +208,29 @@ public class MainActivity extends AppCompatActivity {
 
         joinGameUI.setGravity(Gravity.CENTER);
 
-        RelativeLayout.LayoutParams user_params = new RelativeLayout.LayoutParams(600, 200);
-        user_params.topMargin = Constants.SCREEN_HEIGHT/5;
+        RelativeLayout.LayoutParams user_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        user_params.topMargin = Constants.SCREEN_HEIGHT/4;
         user_params.leftMargin = 20;
         username.setLayoutParams(user_params);
 
-        RelativeLayout.LayoutParams ip_params = new RelativeLayout.LayoutParams(600, 200);
+        RelativeLayout.LayoutParams ip_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ip_params.addRule(RelativeLayout.BELOW, Constants.USERNAME_ID);
         ip_params.leftMargin = 20;
         ip.setLayoutParams(ip_params);
 
-        RelativeLayout.LayoutParams port_params = new RelativeLayout.LayoutParams(600, 200);
+        RelativeLayout.LayoutParams port_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         port_params.addRule(RelativeLayout.BELOW, Constants.IP_ID);
         port_params.leftMargin = 20;
         port.setLayoutParams(port_params);
 
-        RelativeLayout.LayoutParams enter_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams enter_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         enter_params.leftMargin = 10;
         enter_params.bottomMargin = 10;
         enter_params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         enter_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         join_game_btn.setLayoutParams(enter_params);
 
-        RelativeLayout.LayoutParams start_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams start_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         start_params.rightMargin = 10;
         start_params.bottomMargin = 10;
         start_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -243,8 +243,8 @@ public class MainActivity extends AppCompatActivity {
         btn_back_J.setTextSize(btnTextSize);
         btn_back_J.setId(Constants.BTN_BACK_J);
 
-        RelativeLayout.LayoutParams btn_back_J_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
-        btn_back_J_params.rightMargin = 10;
+        RelativeLayout.LayoutParams btn_back_J_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        btn_back_J_params.leftMargin = 10;
         btn_back_J_params.topMargin = 10;
         btn_back_J_params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         btn_back_J_params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setMovementMethod(ScrollingMovementMethod.getInstance());
         textView.setId(Constants.TEXT_VIEW);
 
-        RelativeLayout.LayoutParams textV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/2, 3*Constants.SCREEN_HEIGHT/5); // TODO added
+        RelativeLayout.LayoutParams textV_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/2, 3*Constants.SCREEN_HEIGHT/5);
         textV_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         textV_params.addRule(RelativeLayout.CENTER_IN_PARENT);
         textV_params.rightMargin = 10;
@@ -297,8 +297,8 @@ public class MainActivity extends AppCompatActivity {
         usrname.setTextSize(textSize);
         usrname.setId(Constants.USERNAME2_ID);
 
-        RelativeLayout.LayoutParams usr_params = new RelativeLayout.LayoutParams(600, 200);
-        usr_params.topMargin = Constants.SCREEN_HEIGHT/4;
+        RelativeLayout.LayoutParams usr_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        usr_params.topMargin = Constants.SCREEN_HEIGHT/3;
         usr_params.leftMargin = 20;
         usrname.setLayoutParams(usr_params);
 
@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
         portET.setId(Constants.PORT_ET);
         portET.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        RelativeLayout.LayoutParams portET_params = new RelativeLayout.LayoutParams(600, 200);
+        RelativeLayout.LayoutParams portET_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         portET_params.addRule(RelativeLayout.BELOW, Constants.USERNAME2_ID);
         portET_params.leftMargin = 20;
         portET.setLayoutParams(portET_params);
@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
         create_game_btn.setTextSize(btnTextSize);
         create_game_btn.setId(Constants.CREATE2_BUTTON);
 
-        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params1.leftMargin = 10;
         params1.bottomMargin = 10;
         params1.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
         start_game_btn2.setId(Constants.START2_BTN);
         start_game_btn2.setEnabled(false);
 
-        RelativeLayout.LayoutParams start2_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams start2_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         start2_params.rightMargin = 10;
         start2_params.bottomMargin = 10;
         start2_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -345,8 +345,8 @@ public class MainActivity extends AppCompatActivity {
         btn_back_C.setTextSize(btnTextSize);
         btn_back_C.setId(Constants.BTN_BACK_C);
 
-        RelativeLayout.LayoutParams btn_back_C_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
-        btn_back_C_params.rightMargin = 10;
+        RelativeLayout.LayoutParams btn_back_C_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        btn_back_C_params.leftMargin = 10;
         btn_back_C_params.topMargin = 10;
         btn_back_C_params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         btn_back_C_params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -419,14 +419,15 @@ public class MainActivity extends AppCompatActivity {
         backToLogin_btn.setTypeface(typeface);
         backToLogin_btn.setTextSize(btnTextSize);
 
-        RelativeLayout.LayoutParams restart_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams restart_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         restart_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         restartGame_btn.setLayoutParams(restart_params);
         restartGame_btn.setBackgroundResource(R.drawable.button);
 
-        RelativeLayout.LayoutParams login_params = new RelativeLayout.LayoutParams(Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/6);
+        RelativeLayout.LayoutParams login_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         login_params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         login_params.addRule(RelativeLayout.BELOW, Constants.RESTARTGAME_BTN);
+        login_params.topMargin = 10;
         backToLogin_btn.setLayoutParams(login_params);
         backToLogin_btn.setBackgroundResource(R.drawable.button);
 
