@@ -255,6 +255,10 @@ public class GamePlayScene implements Scene {
 
                     for (Player pl : players.values()) { // draw all players. Cannot use players from above, because the loop stops when loser is found
                         if (pl != null && !pl.isLoser) pl.draw(temp_canvas); // changed this to check for null object
+                        else if (pl.isLoser){
+                            pl.chargebar.draw(temp_canvas);
+                            pl.healthbar.draw(temp_canvas);
+                        }
                     }
 
                     layer6 = activity.getBaseContext().getResources().getDrawable(R.drawable.layer6);

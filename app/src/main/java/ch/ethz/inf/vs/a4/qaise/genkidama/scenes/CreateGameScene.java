@@ -239,7 +239,7 @@ public class CreateGameScene implements Scene{
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawColor(Color.rgb(255,215,0)); // BACKGROUND color gold
+        canvas.drawColor(Color.rgb(238,232,170)); // BACKGROUND color pale golden rod
 
         // Draw Genkidama Text, centered and scales accordingly to the screen size
         StartScene.genkidamaLogo.draw(canvas);

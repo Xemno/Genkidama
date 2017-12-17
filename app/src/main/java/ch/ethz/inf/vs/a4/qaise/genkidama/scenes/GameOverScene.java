@@ -73,7 +73,7 @@ public class GameOverScene implements Scene {
                     else {
                         for (Player player : players.values()) {
                             if (player.id != myPlayer().id && player.isWinner)
-                                winner_msg.setText(player.id + " has won!");
+                                winner_msg.setText(player.name + " has won!");
                         }
                     }
                     btn_active = true;
@@ -107,14 +107,15 @@ public class GameOverScene implements Scene {
         if (waiting){ //TODO update timer, so people know how long to wait for next game
             long startTime = System.currentTimeMillis();
             long waitTime;
-            while (!termination){
+            if (termination){
                 waitTime = System.currentTimeMillis() - startTime;
                 /*if (waitTime >= 15000) { //wait 15 seconds for all answers
                     nextScene = Constants.START_SCENE;
                     termination = true;
                 }*/
+                terminate();
             }
-            terminate();
+
         }
     }
 
