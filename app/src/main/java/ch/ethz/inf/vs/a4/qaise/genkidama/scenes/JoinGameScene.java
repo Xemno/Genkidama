@@ -51,11 +51,11 @@ public class JoinGameScene implements Scene {
     private int nextScene;
 
     private boolean btn_active = false;
-    private boolean setEnabled = false;
-    private boolean connect = false;
-    private boolean checkConnection = false;
-    private boolean isConnected = false;
-    private boolean backToStart = false;
+    private static boolean setEnabled = false;
+    private static boolean connect = false;
+    private static boolean checkConnection = false;
+    private static boolean isConnected = false;
+    private static boolean backToStart = false;
 
     // TODO: make static variable startGame that is set from the Client by the server
 
@@ -95,6 +95,13 @@ public class JoinGameScene implements Scene {
         loadAnimation.setFrameDuration(50);
     }
 
+    public static void reset(){
+        setEnabled = false;
+        connect = false;
+        checkConnection = false;
+        isConnected = false;
+        backToStart = false;
+    }
 
     @Override
     public void update() {

@@ -124,7 +124,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     // 1 is rematch
     // 2 is no rematch
 
-    public static int PLAYERCOUNT = 2;
+    private static int playercount; //number of players reaching gameoverscene
+
+    public static void setPlayercount(int count){
+        playercount = count;
+    }
 
     public static Player myPlayer () {
         if (Constants.ID == 999) return null;
@@ -156,7 +160,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (x < 0.f)
             player.update(new PointF(0.f, y));
         else if (x > Constants.SCREEN_WIDTH)
-            player.update(new PointF((float) Constants.SCREEN_WIDTH, y));
+            player.update(new PointF((float) Constants.SCREEN_WIDTH , y));
         else
             player.update(new PointF(x, y));
 
@@ -255,24 +259,33 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         int ans = msg.answer;
         if (!voteResults.containsKey(id)) { //only add vote if client hasn't voted yet.
             voteResults.put(id, ans);
-            int cnt = 0;
+            int yes_cnt = 0;
+            int no_cnt = 0;
             for (Player player : players.values()) {
                 if (voteResults.containsKey(player.id)) {
                     int res = voteResults.get(player.id);
                     if (res == 2) {
-                        //TODO disconnect from Server
-                        GameOverScene.setNextScene(Constants.START_SCENE);
-                        GameOverScene.termination = true;
-                        voteResults = new HashMap<>();
-                        break;
+                        no_cnt++;
                     } else if (res == 1) {
-                        cnt++;
-                        if (cnt == PLAYERCOUNT) {
-                            GameOverScene.setNextScene(Constants.GAMEPLAY_SCENE);
-                            GameOverScene.termination = true;
-                            voteResults = new HashMap<>();
-                        }
+                        yes_cnt++;
                     }
+                }
+            }
+            if (yes_cnt + no_cnt  == playercount){
+                if (yes_cnt >= 2){
+                    GameOverScene.setNextScene(Constants.GAMEPLAY_SCENE);
+                    GameOverScene.termination = true;
+                    voteResults = new HashMap<>();
+                } else {
+                    GameOverScene.setNextScene(Constants.START_SCENE);
+                    GameOverScene.termination = true;
+                    voteResults = new HashMap<>();
+                }
+            } else { //if not all players vote the scene will be decided, but only changed after the timer is over
+                if (yes_cnt >= 2){
+                    GameOverScene.setNextScene(Constants.GAMEPLAY_SCENE);
+                } else {
+                    GameOverScene.setNextScene(Constants.START_SCENE);
                 }
             }
         }
